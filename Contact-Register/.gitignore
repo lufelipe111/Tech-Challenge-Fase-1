@@ -1,0 +1,150 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Ll]og/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# Rider
+.idea/
+*.sln.iml
+
+# MonoDevelop
+*.userprefs
+
+# Build artifacts
+*.dll
+*.exe
+*.app
+*.apk
+*.log
+*.dmg
+*.pkg
+*.map
+*.pdb
+
+# NuGet
+*.nupkg
+**/packages/*
+# Except build/, which is used as an MSBuild target.
+!**/packages/build/
+# Uncomment if necessary however generally it will be regenerated when needed
+#!**/packages/repositories.config
+
+# Npm packages
+node_modules/
+
+# npm package lock
+package-lock.json
+yarn.lock
+
+# Docker files
+docker-compose.override.yml
+docker-compose.*.yml
+Dockerfile.*
+*.dockerignore
+
+# Database files
+*.mdf
+*.ldf
+*.ndf
+
+# Azure Function settings
+local.settings.json
+
+# User secrets
+**/secrets.json
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+
+# Visual Studio cache files
+ipch/
+*.aps
+*.ncb
+*.opensdf
+*.sdf
+*.cachefile
+
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+
+# Visual Studio Trace Files
+*.trace
+
+# Visual Studio Temporary Files
+~$*
+
+# Visual Studio 6 build log
+*.plg
+
+# Visual Studio 6 workspace options file
+*.opt
+
+# Visual Studio LightSwitch build output
+**/*.HTMLClient/GeneratedArtifacts/*
+**/*.DesktopClient/GeneratedArtifacts/*
+**/*.DesktopClient/ModelManifest.xml
+**/*.Server/GeneratedArtifacts/*
+**/*.Server/ModelManifest.xml
+_Pvt_Extensions
+
+# Don't ignore exceptions folder
+!Shared/Exceptions/
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# StyleCop
+StyleCopReport.xml
+StyleCopCache.cache
+
+# MSTest test results
+[Tt]est[Rr]esult*
+[Bb]uild[Ll]og.*
+
+# NUnit
+*.VisualState.xml
+TestResult.xml
+
+# Coverage Results
+coverage*.json
+coverage*.xml
+coverage*.info
+coverage*.html
+coverage*.cobertura.xml
+
+# Coverlet
+coverage*.dat
+
+# DotCover
+*.dcvr
+
+# OpenCover
+*.opencover.xml
+
+# MFractor (Xamarin productivity tool)
+.mfractor/
+
+# Local History for Visual Studio
+.localhistory/
+
+# Backup & report files from converting an old project file to a newer
+# Visual Studio version. Backup files are not needed, bec
