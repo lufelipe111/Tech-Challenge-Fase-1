@@ -1,8 +1,58 @@
+using ContactRegister.Domain.Entities.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace ContactRegister.Infrastructure.Persistence;
 
 public class AppDbContext : DbContext
 {
+    public AppDbContext() { }
     
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+    }
+    
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    {
+    }
+
+    public override int SaveChanges()
+    {
+        UpdateTimestamps();
+        return base.SaveChanges();
+    }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        UpdateTimestamps();
+        return await base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void UpdateTimestamps()
+    {
+        var entries = ChangeTracker
+            .Entries()
+            .Where(e => e.Entity.GetType().IsSubclassOf(typeof(AbstractEntity<>)))
+            .ToList();
+
+        foreach (var entry in entries)
+        {
+            if (entry.Entity is IAbstractEntity entity) 
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entity.CreatedAt = DateTime.UtcNow;
+                    entity.UpdatedAt = DateTime.UtcNow;
+                }
+                else if (entry.State == EntityState.Modified)
+                {
+                    entry.Property("CreatedAt").IsModified = false; 
+                    entity.UpdatedAt = DateTime.UtcNow;
+                }
+            }
+        }
+    }
 }
