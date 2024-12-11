@@ -14,5 +14,7 @@ public class DddMapper : IEntityTypeConfiguration<Ddd>
         
         builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
         builder.Property(x => x.Code).HasColumnName("code");
+        builder.Property(x => x.CreatedAt).HasColumnName("created_at");
+        builder.Property(x => x.UpdatedAt).HasColumnName("updated_at");
     }
 }

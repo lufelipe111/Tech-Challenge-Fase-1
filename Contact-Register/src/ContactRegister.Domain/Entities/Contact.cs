@@ -3,22 +3,32 @@ using ContactRegister.Domain.ValueObjects;
 
 namespace ContactRegister.Domain.Entities;
 
-public class Contact(
-    string firstName,
-    string lastName,
-    string email,
-    Address address,
-    Phone? homeNumber,
-    Phone? mobileNumber)
-    : AbstractEntity<ulong>
+public class Contact : AbstractEntity<ulong>
 {
-    public string FirstName { get; set; } = firstName;
-    public string LastName { get; set; } = lastName;
-    public string Email { get; set; } = email;
-    public Address Address { get; set; } = address;
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string Email { get; set; }
+    public Address Address { get; set; }
     public Ddd DddCode { get; set; } = default!;
-    public Phone? HomeNumber { get; set; } = homeNumber;
-    public Phone? MobileNumber { get; set; } = mobileNumber;
+    public Phone HomeNumber { get; set; }
+    public Phone MobileNumber { get; set; }
+
+    public Contact() { }
+
+    public Contact(string firstName,
+        string lastName,
+        string email,
+        Address address,
+        Phone homeNumber,
+        Phone mobileNumber)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Email = email;
+        Address = address;
+        HomeNumber = homeNumber;
+        MobileNumber = mobileNumber;
+    }
 
     public void Update(
         string firstName,

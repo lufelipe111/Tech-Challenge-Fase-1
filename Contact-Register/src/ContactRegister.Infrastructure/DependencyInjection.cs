@@ -9,7 +9,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var connectionString = configuration.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
         
         services.AddDatabase(connectionString);
         return services;
@@ -17,9 +18,6 @@ public static class DependencyInjection
 
     private static void AddDatabase(this IServiceCollection services, string? connectionString)
     {
-        if (string.IsNullOrWhiteSpace(connectionString))
-            throw new NullReferenceException($"{nameof(connectionString)} is null or empty");
-        
         services.AddDbContextFactory<AppDbContext>(opt =>
         {
             opt.UseSqlServer(connectionString);
