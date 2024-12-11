@@ -25,11 +25,11 @@ public class ContactDto
     public static ContactDto FromEntity(Contact contactEntity)
     {
         var homeNumber = contactEntity.HomeNumber != null 
-            ? new PhoneDto { Number = contactEntity.HomeNumber.Number, Ddd = contactEntity.HomeNumber.Ddd }
+            ? new PhoneDto { Number = contactEntity.HomeNumber.Number }
             : null;
             
         var mobileNumber = contactEntity.MobileNumber != null 
-            ? new PhoneDto { Number = contactEntity.MobileNumber.Number, Ddd = contactEntity.MobileNumber.Ddd }
+            ? new PhoneDto { Number = contactEntity.MobileNumber.Number }
             : null;
 
         var dto = new ContactDto
