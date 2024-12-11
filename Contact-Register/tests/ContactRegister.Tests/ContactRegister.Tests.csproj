@@ -11,8 +11,6 @@
       <ProjectReference Include="..\..\shared\ContactRegister.Shared\ContactRegister.Shared.csproj" />
       <ProjectReference Include="..\..\src\ContactRegister.Api\ContactRegister.Api.csproj" />
       <ProjectReference Include="..\..\src\ContactRegister.Application\ContactRegister.Application.csproj" />
-      <ProjectReference Include="..\..\src\ContactRegister.Domain\ContactRegister.Domain.csproj" />
-      <ProjectReference Include="..\..\src\ContactRegister.Infrastructure\ContactRegister.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>

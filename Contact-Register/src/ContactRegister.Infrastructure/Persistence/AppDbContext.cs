@@ -1,6 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace ContactRegister.Infrastructure.Persistence;
 
-public class AppDbContext
+public class AppDbContext : DbContext
 {
     
 }

@@ -111,7 +111,7 @@ docker-compose logs -f Contact.Register.Api
 
 You can connect to the SQL Server instance using SQL Server Management Studio (SSMS) or any other SQL client.
 
-- **Server**: `localhost,1433`
+- **Server**: `localhost:1433`
 - **Username**: `sa`
 - **Password**: `Password_123`
 
