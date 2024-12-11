@@ -9,6 +9,6 @@ public class PhoneDto
 
     public Phone ToPhone()
     {
-        return new Phone(Ddd, Number);
+        return new Phone(Number);
     }
 }

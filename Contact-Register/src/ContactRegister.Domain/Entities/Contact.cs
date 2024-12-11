@@ -16,6 +16,7 @@ public class Contact(
     public string LastName { get; set; } = lastName;
     public string Email { get; set; } = email;
     public Address Address { get; set; } = address;
+    public Ddd DddCode { get; set; } = default!;
     public Phone? HomeNumber { get; set; } = homeNumber;
     public Phone? MobileNumber { get; set; } = mobileNumber;
 
@@ -23,6 +24,7 @@ public class Contact(
         string firstName,
         string lastName,
         string email,
+        Ddd ddd,
         Address address,
         Phone? homeNumber,
         Phone? mobileNumber)
@@ -33,6 +35,7 @@ public class Contact(
         Address = address;
         HomeNumber = homeNumber;
         MobileNumber = mobileNumber;
+        DddCode = ddd;
     }
     public bool Validate(out IList<string> errors)
     {
