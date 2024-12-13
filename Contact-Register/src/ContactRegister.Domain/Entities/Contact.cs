@@ -9,6 +9,7 @@ public class Contact : AbstractEntity<ulong>
     public string LastName { get; set; }
     public string Email { get; set; }
     public Address Address { get; set; }
+    public int DddId { get; set; }
     public Ddd DddCode { get; set; } = default!;
     public Phone HomeNumber { get; set; }
     public Phone MobileNumber { get; set; }
