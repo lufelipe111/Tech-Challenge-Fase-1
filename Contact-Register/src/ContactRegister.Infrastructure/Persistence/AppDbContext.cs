@@ -7,8 +7,9 @@ namespace ContactRegister.Infrastructure.Persistence;
 
 public class AppDbContext : DbContext
 {
-    public DbSet<Contact> _contacts { get; set; }
-    public DbSet<Ddd> _ddds { get; set; }   
+    public DbSet<Contact> contacts { get; set; }
+    public DbSet<Ddd> ddds { get; set; }
+    
     public AppDbContext() { }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)

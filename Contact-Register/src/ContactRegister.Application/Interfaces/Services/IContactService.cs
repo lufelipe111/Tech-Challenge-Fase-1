@@ -1,7 +1,7 @@
 using ContactRegister.Application.DTOs;
 using ErrorOr;
 
-namespace ContactRegister.Application.Interfaces;
+namespace ContactRegister.Application.Interfaces.Services;
 
 public interface IContactService
 {

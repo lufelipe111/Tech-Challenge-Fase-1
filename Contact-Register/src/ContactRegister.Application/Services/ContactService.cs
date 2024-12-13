@@ -1,6 +1,7 @@
 using ContactRegister.Application.DTOs;
 using ContactRegister.Application.Interfaces;
 using ContactRegister.Application.Interfaces.Repositories;
+using ContactRegister.Application.Interfaces.Services;
 using ErrorOr;
 using Microsoft.Extensions.Logging;
 
