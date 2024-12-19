@@ -1,7 +1,7 @@
 using ContactRegister.Domain.Entities;
 using ContactRegister.Domain.Entities.Abstractions;
+using ContactRegister.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace ContactRegister.Infrastructure.Persistence;
 
@@ -39,7 +39,7 @@ public class AppDbContext : DbContext
     {
         var entries = ChangeTracker
             .Entries()
-            .Where(e => e.Entity.GetType().IsSubclassOf(typeof(AbstractEntity<>)))
+            .Where(e => e.Entity.GetType().IsSubclassOfRawGeneric(typeof(AbstractEntity<>)))
             .ToList();
 
         foreach (var entry in entries)
@@ -53,7 +53,7 @@ public class AppDbContext : DbContext
                 }
                 else if (entry.State == EntityState.Modified)
                 {
-                    entry.Property("CreatedAt").IsModified = false; 
+                    entry.Property("created_at").IsModified = false; 
                     entity.UpdatedAt = DateTime.UtcNow;
                 }
             }

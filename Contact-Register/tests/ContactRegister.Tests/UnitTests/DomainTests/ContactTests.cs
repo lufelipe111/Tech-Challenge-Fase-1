@@ -15,8 +15,8 @@ public class ContactTests
             "São Paulo", 
             "SP", 
             "012345-678");
-        var homePhone = new Phone(11111111);
-        var mobilePhone = new Phone(922222222);
+        var homePhone = new Phone("11111111");
+        var mobilePhone = new Phone("922222222");
         IEnumerable<Phone> additionalPhones = [];
 
         var contact = new Domain.Entities.Contact(
@@ -47,7 +47,7 @@ public class ContactTests
             "SP", 
             "012345-678");
         
-        var homePhone = new Phone(11111111);
+        var homePhone = new Phone("11111111");
         
         var contact = new Domain.Entities.Contact(
             firstName: "Jane",
@@ -77,7 +77,7 @@ public class ContactTests
             "SP", 
             "012345-678");
         
-        var mobilePhone = new Phone(911111111);
+        var mobilePhone = new Phone("911111111");
         
         var contact = new Domain.Entities.Contact(
             firstName: "Jane",
@@ -135,8 +135,8 @@ public class ContactTests
             "SP", 
             "012345-678");
         
-        var homePhone = new Phone(11111111);
-        var mobilePhone = new Phone(911111111);
+        var homePhone = new Phone("11111111");
+        var mobilePhone = new Phone("911111111");
         
         var contact = new Domain.Entities.Contact(
             firstName: "John",
@@ -159,7 +159,6 @@ public class ContactTests
     public void Validate_ShouldFail_WhenEmailBeginsWithNumber()
     {
         // Arrange
-        // Arrange
         var address = new Address(
             "Rua teste, 123", 
             "Predio A, Apartamento 42", 
@@ -167,8 +166,8 @@ public class ContactTests
             "SP", 
             "012345-678");
         
-        var homePhone = new Phone(11111111);
-        var mobilePhone = new Phone(911111111);
+        var homePhone = new Phone("11111111");
+        var mobilePhone = new Phone("911111111");
         
         var contact = new Domain.Entities.Contact(
             firstName: "John",
@@ -191,7 +190,6 @@ public class ContactTests
     public void Validate_ShouldFail_WhenEmailDomainIsNumeric()
     {
         // Arrange
-        // Arrange
         var address = new Address(
             "Rua teste, 123", 
             "Predio A, Apartamento 42", 
@@ -199,8 +197,8 @@ public class ContactTests
             "SP", 
             "012345-678");
         
-        var homePhone = new Phone(11111111);
-        var mobilePhone = new Phone(911111111);
+        var homePhone = new Phone("11111111");
+        var mobilePhone = new Phone("911111111");
         
         var contact = new Domain.Entities.Contact(
             firstName: "John",
@@ -224,7 +222,6 @@ public class ContactTests
     {
         // Arrange
         // Missing MobileNumber and invalid email
-        // Arrange
         var address = new Address(
             "Rua teste, 123", 
             "Predio A, Apartamento 42", 

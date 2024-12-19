@@ -1,3 +1,3 @@
 namespace ContactRegister.Domain.ValueObjects;
 
-public record Phone(int Number);
+public record Phone(string Number);
