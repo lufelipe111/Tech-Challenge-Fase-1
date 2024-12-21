@@ -7,9 +7,11 @@ namespace ContactRegister.Infrastructure.Persistence.Repositories;
 public class ContactRepository : IContactRepository
 {
     private DbSet<Contact> _contacts;
+    private readonly AppDbContext _context;
 
     public ContactRepository(AppDbContext context)
     {
+        _context = context;
         _contacts = context.contacts;
     }
     
@@ -18,9 +20,10 @@ public class ContactRepository : IContactRepository
         throw new NotImplementedException();
     }
 
-    public Task<Contact?> GetContactByIdAsync(long id)
+    public async Task<Contact?> GetContactByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        var e = await _contacts.FindAsync(id);
+        return e;
     }
 
     public Task<List<Contact>> GetContactsAsync()
@@ -33,7 +36,7 @@ public class ContactRepository : IContactRepository
         throw new NotImplementedException();
     }
 
-    public Task DeleteContactAsync(long id)
+    public Task DeleteContactAsync(int id)
     {
         throw new NotImplementedException();
     }

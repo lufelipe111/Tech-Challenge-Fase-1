@@ -3,7 +3,7 @@ using ContactRegister.Domain.ValueObjects;
 
 namespace ContactRegister.Domain.Entities;
 
-public class Contact : AbstractEntity<ulong>
+public class Contact : AbstractEntity<int>
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }

@@ -1,3 +1,4 @@
+using ContactRegister.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ContactRegister.API.Controllers;
@@ -7,16 +8,22 @@ namespace ContactRegister.API.Controllers;
 public class ContactController : ControllerBase
 {
     private readonly ILogger<ContactController> _logger;
+    private readonly IContactService _contactService;
 
-    public ContactController(ILogger<ContactController> logger)
+    public ContactController(ILogger<ContactController> logger, IContactService contactService)
     {
         _logger = logger;
+        _contactService = contactService;
     }
 
-    [HttpGet("[action]")]
-    public async Task<IActionResult> Get()
+    [HttpGet("[action]/{id:int}")]
+    public async Task<IActionResult> GetContact(int id)
     {
-        _logger.LogInformation("Teste");
-        return Ok("OK");
+        var contact = await _contactService.GetContactByIdAsync(id);
+        if(contact.Value == null)
+        {
+            return NotFound();
+        }
+        return Ok();
     }
 }

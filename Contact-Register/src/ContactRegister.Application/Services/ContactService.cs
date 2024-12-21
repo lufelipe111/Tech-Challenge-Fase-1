@@ -45,7 +45,7 @@ public class ContactService : IContactService
     }
     
 
-    public async Task<ErrorOr<ContactDto?>> GetContactByIdAsync(long id)
+    public async Task<ErrorOr<ContactDto?>> GetContactByIdAsync(int id)
     {
         try
         {
@@ -80,7 +80,7 @@ public class ContactService : IContactService
         }
     }
 
-    public async Task<ErrorOr<Success>> UpdateContactAsync(long id, ContactDto contact)
+    public async Task<ErrorOr<Success>> UpdateContactAsync(int id, ContactDto contact)
     {
         try
         {
@@ -114,7 +114,7 @@ public class ContactService : IContactService
         }
     }
 
-    public async Task<ErrorOr<Success>> DeleteContactAsync(long id)
+    public async Task<ErrorOr<Success>> DeleteContactAsync(int id)
     {
         try
         {

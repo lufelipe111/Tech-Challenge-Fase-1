@@ -26,7 +26,7 @@ public class ContactMapper : IEntityTypeConfiguration<Contact>
             .Property(a => a.AddressLine1).HasColumnName("address_line1");
         builder
             .ComplexProperty(x => x.Address)
-            .Property(a => a.AddressLine2).HasColumnName("address_line2");
+            .Property(a => a.AddressLine2).HasColumnName("address_line2").IsRequired(false);
         builder
             .ComplexProperty(x => x.Address)
             .Property(a => a.City).HasColumnName("city");
@@ -44,7 +44,7 @@ public class ContactMapper : IEntityTypeConfiguration<Contact>
         builder
             .ComplexProperty(x => x.HomeNumber)
             .Property(h => h.Number).HasColumnName("tx_home_number")
-            .IsRequired();
+            .IsRequired(false);
         
         #endregion
         
