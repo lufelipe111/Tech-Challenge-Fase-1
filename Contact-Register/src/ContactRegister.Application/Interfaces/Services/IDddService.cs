@@ -4,6 +4,6 @@ namespace ContactRegister.Application.Interfaces.Services;
 
 public interface IDddService
 {
-    Task AddDdd(DddDto dddDto);
-    Task<DddDto?> GetDddById(int id);
+	Task<List<DddDto>> GetDdd();
+	Task<DddDto?> GetDddByCode(int code);
 }
