@@ -24,6 +24,6 @@ public class ContactController : ControllerBase
         {
             return NotFound();
         }
-        return Ok();
+        return Ok(contact.Value);
     }
 }

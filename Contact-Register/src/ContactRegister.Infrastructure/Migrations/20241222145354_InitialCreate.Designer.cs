@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContactRegister.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241211213205_InitialCreate")]
+    [Migration("20241222145354_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -28,19 +28,20 @@ namespace ContactRegister.Infrastructure.Migrations
 
             modelBuilder.Entity("ContactRegister.Domain.Entities.Contact", b =>
                 {
-                    b.Property<decimal>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(20,0)")
+                        .HasColumnType("int")
                         .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("created_at");
 
-                    b.Property<int>("DddCodeId")
-                        .HasColumnType("int");
+                    b.Property<int>("DddId")
+                        .HasColumnType("int")
+                        .HasColumnName("ddd_id");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -71,7 +72,6 @@ namespace ContactRegister.Infrastructure.Migrations
                                 .HasColumnName("address_line1");
 
                             b1.Property<string>("AddressLine2")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("address_line2");
 
@@ -95,8 +95,8 @@ namespace ContactRegister.Infrastructure.Migrations
                         {
                             b1.IsRequired();
 
-                            b1.Property<int>("Number")
-                                .HasColumnType("int")
+                            b1.Property<string>("Number")
+                                .HasColumnType("nvarchar(max)")
                                 .HasColumnName("tx_home_number");
                         });
 
@@ -104,15 +104,16 @@ namespace ContactRegister.Infrastructure.Migrations
                         {
                             b1.IsRequired();
 
-                            b1.Property<int>("Number")
-                                .HasColumnType("int")
+                            b1.Property<string>("Number")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
                                 .HasColumnName("tx_mobile_number");
                         });
 
                     b.HasKey("Id")
                         .HasName("id");
 
-                    b.HasIndex("DddCodeId");
+                    b.HasIndex("DddId");
 
                     b.ToTable("tb_contact", (string)null);
                 });
@@ -151,7 +152,7 @@ namespace ContactRegister.Infrastructure.Migrations
                 {
                     b.HasOne("ContactRegister.Domain.Entities.Ddd", "DddCode")
                         .WithMany()
-                        .HasForeignKey("DddCodeId")
+                        .HasForeignKey("DddId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -22,8 +22,7 @@ public class ContactRepository : IContactRepository
 
     public async Task<Contact?> GetContactByIdAsync(int id)
     {
-        var e = await _contacts.FindAsync(id);
-        return e;
+        return await _contacts.FindAsync(id);
     }
 
     public Task<List<Contact>> GetContactsAsync()
