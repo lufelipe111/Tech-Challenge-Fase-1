@@ -65,12 +65,35 @@ public class ContactService : IContactService
         }
     }
 
-    public async Task<ErrorOr<List<ContactDto>>> GetContactsAsync()
+    public async Task<ErrorOr<IEnumerable<ContactDto>>> GetContactsAsync(
+        string firstName,
+        string lastName,
+        string email,
+        int dddCode,
+        string city,
+        string state,
+        string postalCode,
+        string addressLine1,
+        string addressLine2,
+        string homeNumber,
+        string mobileNumber)
     {
         try
         {
-            var contacts = await _contactRepository.GetContactsAsync();
-            var dtos = contacts.Select(ContactDto.FromEntity).ToList();
+            var contactsQuery = await _contactRepository.GetContactsAsync();
+            if (!string.IsNullOrEmpty(firstName)) { contactsQuery = contactsQuery.Where(c => c.FirstName.Contains(firstName)); }
+            if (!string.IsNullOrEmpty(lastName)) { contactsQuery = contactsQuery.Where(c => c.LastName.Contains(lastName)); }
+            if (!string.IsNullOrEmpty(email)) { contactsQuery = contactsQuery.Where(c => c.Email.Contains(email)); }
+            if (dddCode > 0) { contactsQuery = contactsQuery.Where(c => c.DddId == dddCode); }
+            if (!string.IsNullOrEmpty(city)) { contactsQuery = contactsQuery.Where(c => c.Address.City.Contains(city)); }
+            if (!string.IsNullOrEmpty(state)) { contactsQuery = contactsQuery.Where(c => c.Address.State.Contains(state)); }
+            if (!string.IsNullOrEmpty(postalCode)) { contactsQuery = contactsQuery.Where(c => c.Address.PostalCode.Contains(postalCode)); }
+            if (!string.IsNullOrEmpty(addressLine1)) { contactsQuery = contactsQuery.Where(c => c.Address.AddressLine1.Contains(addressLine1)); }
+            if (!string.IsNullOrEmpty(addressLine2)) { contactsQuery = contactsQuery.Where(c => c.Address.AddressLine2.Contains(addressLine2)); }
+            if (!string.IsNullOrEmpty(homeNumber)) { contactsQuery = contactsQuery.Where(c => c.HomeNumber.Number.Contains(homeNumber)); }
+            if (!string.IsNullOrEmpty(mobileNumber)) { contactsQuery = contactsQuery.Where(c => c.MobileNumber.Number.Contains(mobileNumber)); }
+
+            var dtos = contactsQuery.Select(ContactDto.FromEntity).ToList();
             return dtos;
         }
         catch (Exception e)

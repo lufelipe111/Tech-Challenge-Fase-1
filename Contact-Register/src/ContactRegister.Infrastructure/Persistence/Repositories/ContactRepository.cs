@@ -1,6 +1,7 @@
 using ContactRegister.Application.Interfaces.Repositories;
 using ContactRegister.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace ContactRegister.Infrastructure.Persistence.Repositories;
 
@@ -25,9 +26,9 @@ public class ContactRepository : IContactRepository
         return await _contacts.FindAsync(id);
     }
 
-    public Task<List<Contact>> GetContactsAsync()
+    public async Task<IEnumerable<Contact>> GetContactsAsync()
     {
-        throw new NotImplementedException();
+        return await _contacts.Include(e => e.Ddd).ToListAsync();
     }
 
     public Task UpdateContactAsync(Contact contact)

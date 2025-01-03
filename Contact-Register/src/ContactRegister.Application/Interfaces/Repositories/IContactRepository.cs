@@ -6,7 +6,7 @@ public interface IContactRepository
 {
     public Task AddContactAsync(Contact contact);
     public Task<Contact?> GetContactByIdAsync(int id);
-    public Task<List<Contact>> GetContactsAsync();
+    public Task<IEnumerable<Contact>> GetContactsAsync();
     public Task UpdateContactAsync(Contact contact);
     public Task DeleteContactAsync(int id);
 }

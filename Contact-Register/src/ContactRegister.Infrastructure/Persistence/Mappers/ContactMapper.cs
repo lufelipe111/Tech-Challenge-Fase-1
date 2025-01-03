@@ -60,7 +60,7 @@ public class ContactMapper : IEntityTypeConfiguration<Contact>
         #region Navigations
         
         builder
-            .HasOne(c => c.DddCode)
+            .HasOne(c => c.Ddd)
             .WithMany()
             .HasForeignKey(x => x.DddId)
             .IsRequired();

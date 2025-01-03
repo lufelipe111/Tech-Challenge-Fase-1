@@ -26,4 +26,28 @@ public class ContactController : ControllerBase
         }
         return Ok(contact.Value);
     }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetContacts(
+        [FromQuery] string? firstName,
+        [FromQuery] string? lastName,
+        [FromQuery] string? email,
+        [FromQuery] string? city,
+        [FromQuery] string? state,
+        [FromQuery] string? postalCode,
+        [FromQuery] string? addressLine1,
+        [FromQuery] string? addressLine2,
+        [FromQuery] string? homeNumber,
+        [FromQuery] string? mobileNumber,
+        [FromQuery] int dddCode = 0,
+        [FromQuery] int skip = 0,
+        [FromQuery] int take = 50)
+    {
+        var contact = await _contactService.GetContactsAsync(firstName, lastName, email, dddCode, city, state, postalCode, addressLine1, addressLine2, homeNumber, mobileNumber);
+        if (contact.Value == null)
+        {
+            return NotFound();
+        }
+        return Ok(contact.Value.Skip(skip).Take(take));
+    }
 }

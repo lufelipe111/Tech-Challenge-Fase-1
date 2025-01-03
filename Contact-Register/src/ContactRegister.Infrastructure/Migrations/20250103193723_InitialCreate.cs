@@ -18,7 +18,8 @@ namespace ContactRegister.Infrastructure.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     code = table.Column<int>(type: "int", nullable: false),
-                    Region = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    state = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    region = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -62,6 +63,12 @@ namespace ContactRegister.Infrastructure.Migrations
                 name: "IX_tb_contact_ddd_id",
                 table: "tb_contact",
                 column: "ddd_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tb_ddd_code",
+                table: "tb_ddd",
+                column: "code",
+                unique: true);
         }
 
         /// <inheritdoc />

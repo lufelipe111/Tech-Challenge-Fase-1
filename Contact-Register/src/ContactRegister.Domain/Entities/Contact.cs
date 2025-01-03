@@ -10,7 +10,7 @@ public class Contact : AbstractEntity<int>
     public string Email { get; set; }
     public Address Address { get; set; }
     public int DddId { get; set; }
-    public Ddd DddCode { get; set; } = default!;
+    public Ddd Ddd { get; set; } = default!;
     public Phone HomeNumber { get; set; }
     public Phone MobileNumber { get; set; }
 
@@ -21,7 +21,8 @@ public class Contact : AbstractEntity<int>
         string email,
         Address address,
         Phone homeNumber,
-        Phone mobileNumber)
+        Phone mobileNumber,
+        Ddd ddd)
     {
         FirstName = firstName;
         LastName = lastName;
@@ -29,6 +30,7 @@ public class Contact : AbstractEntity<int>
         Address = address;
         HomeNumber = homeNumber;
         MobileNumber = mobileNumber;
+        Ddd = ddd;
     }
 
     public void Update(
@@ -46,7 +48,7 @@ public class Contact : AbstractEntity<int>
         Address = address;
         HomeNumber = homeNumber;
         MobileNumber = mobileNumber;
-        DddCode = ddd;
+        Ddd = ddd;
     }
     public bool Validate(out IList<string> errors)
     {

@@ -10,6 +10,7 @@ public class ContactDto
     public AddressDto Address { get; set; } = default!;
     public PhoneDto? HomeNumber { get; set; } = null;
     public PhoneDto? MobileNumber { get; set; } = null;
+    public DddDto? Ddd { get; set; } = null;
 
     public Contact ToContact()
     {
@@ -19,7 +20,8 @@ public class ContactDto
             Email,
             Address.ToAddress(),
             HomeNumber?.ToPhone(),
-            MobileNumber?.ToPhone());
+            MobileNumber?.ToPhone(),
+            Ddd?.ToDdd());
     }
 
     public static ContactDto FromEntity(Contact contactEntity)
@@ -30,6 +32,10 @@ public class ContactDto
             
         var mobileNumber = contactEntity.MobileNumber != null 
             ? new PhoneDto { Number = contactEntity.MobileNumber.Number }
+            : null;
+
+        var ddd = contactEntity.Ddd != null
+            ? new DddDto { Code = contactEntity.Ddd.Code, Region = contactEntity.Ddd.Region }
             : null;
 
         var dto = new ContactDto
@@ -47,6 +53,7 @@ public class ContactDto
             Email = contactEntity.Email,
             LastName = contactEntity.LastName,
             FirstName = contactEntity.FirstName,
+            Ddd = ddd,
         };
         
         return dto;
