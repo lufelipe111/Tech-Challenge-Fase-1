@@ -4,9 +4,7 @@ namespace ContactRegister.Application.Interfaces.Repositories;
 
 public interface IDddRepository
 {
-    Task AddDdd(Ddd ddd);
-    Task UpdateDdd(Ddd ddd);
-    Task DeleteDdd(Ddd ddd);
+    Task<int> AddDdd(Ddd ddd);
     Task<List<Ddd>> GetDdds();
-    Task<Ddd?> GetDddsById(int id);
+    Task<Ddd?> GetDddByCode(int code);
 }

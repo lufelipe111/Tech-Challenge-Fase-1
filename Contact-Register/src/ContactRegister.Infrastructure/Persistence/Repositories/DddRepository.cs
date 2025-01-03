@@ -1,6 +1,7 @@
 using ContactRegister.Application.Interfaces.Repositories;
 using ContactRegister.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Polly;
 
 namespace ContactRegister.Infrastructure.Persistence.Repositories;
 
@@ -9,44 +10,26 @@ public class DddRepository : IDddRepository
     private readonly DbSet<Ddd> _ddds;
     private readonly AppDbContext _context;
 
-    public DddRepository(AppDbContext context)
+	public DddRepository(AppDbContext context)
+	{
+		_context = context;
+		_ddds = context.ddds;
+	}
+
+	public async Task<int> AddDdd(Ddd ddd)
+	{
+		_ = await _ddds.AddAsync(ddd);
+		return await _context.SaveChangesAsync();
+	}
+
+	public async Task<List<Ddd>> GetDdds()
     {
-        _context = context;
-        _ddds = context.ddds;
-    }
-    
-    public async Task AddDdd(Ddd ddd)
-    {
-        try
-        {
-            _ddds.Add(ddd);
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        return await _ddds.ToListAsync();
     }
 
-    public Task UpdateDdd(Ddd ddd)
+    public async Task<Ddd?> GetDddByCode(int code)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteDdd(Ddd ddd)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<Ddd>> GetDdds()
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<Ddd?> GetDddsById(int id)
-    {
-        var e = await _ddds.FindAsync(id);
-        return e;
+        var ddd = await _ddds.FirstOrDefaultAsync(ddd => ddd.Code == code);
+        return ddd;
     }
 }

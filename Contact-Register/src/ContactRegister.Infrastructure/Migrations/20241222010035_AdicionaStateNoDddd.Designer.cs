@@ -5,6 +5,7 @@ using ContactRegister.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,9 +13,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContactRegister.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241222010035_AdicionaStateNoDddd")]
+    partial class AdicionaStateNoDddd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,12 +28,12 @@ namespace ContactRegister.Infrastructure.Migrations
 
             modelBuilder.Entity("ContactRegister.Domain.Entities.Contact", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<decimal>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("decimal(20,0)")
                         .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2")
@@ -69,6 +72,7 @@ namespace ContactRegister.Infrastructure.Migrations
                                 .HasColumnName("address_line1");
 
                             b1.Property<string>("AddressLine2")
+                                .IsRequired()
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("address_line2");
 
@@ -93,6 +97,7 @@ namespace ContactRegister.Infrastructure.Migrations
                             b1.IsRequired();
 
                             b1.Property<string>("Number")
+                                .IsRequired()
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("tx_home_number");
                         });
