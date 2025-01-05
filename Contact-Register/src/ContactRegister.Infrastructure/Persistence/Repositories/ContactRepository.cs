@@ -1,7 +1,6 @@
 using ContactRegister.Application.Interfaces.Repositories;
 using ContactRegister.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace ContactRegister.Infrastructure.Persistence.Repositories;
 
@@ -16,14 +15,16 @@ public class ContactRepository : IContactRepository
         _contacts = context.contacts;
     }
     
-    public Task AddContactAsync(Contact contact)
+    public async Task AddContactAsync(Contact contact)
     {
-        throw new NotImplementedException();
+        contact.Ddd = await _context.ddds.FirstAsync(ddd => ddd.Code == contact.Ddd.Code);
+		_ = await _contacts.AddAsync(contact);
+        _ = await _context.SaveChangesAsync();
     }
 
     public async Task<Contact?> GetContactByIdAsync(int id)
     {
-        return await _contacts.FindAsync(id);
+        return await _contacts.Include(c => c.Ddd).FirstOrDefaultAsync(c => c.Id == id);
     }
 
     public async Task<IEnumerable<Contact>> GetContactsAsync()
@@ -31,9 +32,12 @@ public class ContactRepository : IContactRepository
         return await _contacts.Include(e => e.Ddd).ToListAsync();
     }
 
-    public Task UpdateContactAsync(Contact contact)
+    public async Task UpdateContactAsync(Contact contact)
     {
-        throw new NotImplementedException();
+		contact.Ddd = await _context.ddds.FirstAsync(ddd => ddd.Code == contact.Ddd.Code);
+        contact.DddId = contact.Ddd.Id;
+		_contacts.Update(contact);
+        _ = await _context.SaveChangesAsync();
     }
 
     public Task DeleteContactAsync(int id)

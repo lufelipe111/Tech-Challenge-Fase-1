@@ -1,5 +1,4 @@
 using ContactRegister.Application.DTOs;
-using ContactRegister.Application.Interfaces;
 using ContactRegister.Application.Interfaces.Repositories;
 using ContactRegister.Application.Interfaces.Services;
 using ErrorOr;
@@ -11,22 +10,28 @@ public class ContactService : IContactService
 {
     private readonly ILogger<ContactService> _logger;
     private readonly IContactRepository _contactRepository;
+    private readonly IDddService _dddService;
 
-    public ContactService(
-        ILogger<ContactService> logger, 
-        IContactRepository contactRepository)
-    {
-        _logger = logger;
-        _contactRepository = contactRepository;
-    }
+	public ContactService(ILogger<ContactService> logger, IContactRepository contactRepository, IDddService dddService)
+	{
+		_logger = logger;
+		_contactRepository = contactRepository;
+		_dddService = dddService;
+	}
 
-    public async Task<ErrorOr<Success>> AddContactAsync(ContactDto contact)
+	public async Task<ErrorOr<Success>> AddContactAsync(ContactDto contact)
     {
         try
         {
-            var contactEntity = contact.ToContact();
+            var ddd = await _dddService.GetDddByCode(contact.Ddd?.Code ?? 0);
 
-            if (contactEntity.Validate(out var errors))
+            if (ddd.IsError) return ddd.Errors;
+
+            contact.Ddd = ddd.Value;
+
+			var contactEntity = contact.ToContact();
+
+            if (!contactEntity.Validate(out var errors))
             {
                 return errors
                     .Select(e => Error.Failure("Contact.Validation", e))
@@ -42,8 +47,7 @@ public class ContactService : IContactService
             _logger.LogError(e, e.Message);
             return Error.Failure("Contact.Add.Exception", e.Message);
         }
-    }
-    
+    }    
 
     public async Task<ErrorOr<ContactDto?>> GetContactByIdAsync(int id)
     {
@@ -119,7 +123,13 @@ public class ContactService : IContactService
             targetContact.LastName = contact.LastName;
             targetContact.Email = contact.Email;
 
-            if (targetContact.Validate(out var errors))
+			var ddd = await _dddService.GetDddByCode(contact.Ddd?.Code ?? 0);
+
+			if (ddd.IsError) return ddd.Errors;
+
+			targetContact.Ddd = ddd.Value!.ToDdd();
+
+			if (!targetContact.Validate(out var errors))
             {
                 return errors
                     .Select(e => Error.Failure("Contact.Validation", e))
@@ -133,7 +143,7 @@ public class ContactService : IContactService
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
-            return Error.Failure("Contact.Get.Exception", e.Message);
+            return Error.Failure("Contact.Update.Exception", e.Message);
         }
     }
 

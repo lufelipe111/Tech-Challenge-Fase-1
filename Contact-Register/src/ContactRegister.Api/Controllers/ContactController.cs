@@ -1,3 +1,4 @@
+using ContactRegister.Application.DTOs;
 using ContactRegister.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -50,4 +51,26 @@ public class ContactController : ControllerBase
         }
         return Ok(contact.Value.Skip(skip).Take(take));
     }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> CreateContact([FromBody] ContactDto contact)
+    {
+        var result = await _contactService.AddContactAsync(contact);
+
+        if (result.IsError)
+            return BadRequest(result.Errors);
+
+        return Ok();
+    }
+
+	[HttpPut("[action]/{id:int}")]
+	public async Task<IActionResult> UpdateContact([FromRoute] int id, [FromBody] ContactDto contact)
+	{
+		var result = await _contactService.UpdateContactAsync(id, contact);
+
+		if (result.IsError)
+			return BadRequest(result.Errors);
+
+		return Ok();
+	}
 }

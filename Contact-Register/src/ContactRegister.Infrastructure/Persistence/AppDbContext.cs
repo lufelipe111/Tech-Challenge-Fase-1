@@ -18,12 +18,12 @@ public class AppDbContext : DbContext
         
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
-    
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+
+	public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }
 
-    public override int SaveChanges()
+	public override int SaveChanges()
     {
         UpdateTimestamps();
         return base.SaveChanges();
@@ -53,7 +53,7 @@ public class AppDbContext : DbContext
                 }
                 else if (entry.State == EntityState.Modified)
                 {
-                    entry.Property("created_at").IsModified = false; 
+                    entry.Property("CreatedAt").IsModified = false; 
                     entity.UpdatedAt = DateTime.UtcNow;
                 }
             }

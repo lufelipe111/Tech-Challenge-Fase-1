@@ -17,12 +17,22 @@ public class DddController : ControllerBase
 	[HttpGet("[action]")]
 	public async Task<IActionResult> GetDdd()
 	{
-		return Ok(await _dddService.GetDdd());
+		var result = await _dddService.GetDdd();
+
+		if (result.IsError)
+			return BadRequest(result.Errors);
+
+		return Ok(result.Value);
 	}
 
 	[HttpGet("[action]/{code:int}")]
     public async Task<IActionResult> GetDdd(int code)
     {
-        return Ok(await _dddService.GetDddByCode(code));
-    }
+        var result = await _dddService.GetDddByCode(code);
+
+		if (result.IsError)
+			return BadRequest(result.Errors);
+
+		return Ok(result.Value);
+	}
 }

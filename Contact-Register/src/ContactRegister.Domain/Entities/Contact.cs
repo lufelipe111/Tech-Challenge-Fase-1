@@ -55,6 +55,12 @@ public class Contact : AbstractEntity<int>
         bool result = true;
         errors = [];    
 
+        if (ValidateDdd(Ddd))
+        {
+			errors.Add($"Invalid {nameof(Ddd)}");
+			result = false;
+		}
+
         if (ValidatePhones(HomeNumber, MobileNumber))
         {
             errors.Add($"{nameof(HomeNumber)} and {nameof(MobileNumber)} can't not both be null");
@@ -67,7 +73,12 @@ public class Contact : AbstractEntity<int>
         return result;
     }
 
-    private bool ValidatePhones(Phone? home, Phone? mobile)
+	private bool ValidateDdd(Ddd? ddd)
+	{
+		return ddd == null;
+	}
+
+	private bool ValidatePhones(Phone? home, Phone? mobile)
     {
         return home == null && mobile == null;
     }

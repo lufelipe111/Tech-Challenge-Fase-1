@@ -35,7 +35,7 @@ public class ContactDto
             : null;
 
         var ddd = contactEntity.Ddd != null
-            ? new DddDto { Code = contactEntity.Ddd.Code, Region = contactEntity.Ddd.Region }
+            ? new DddDto { Code = contactEntity.Ddd.Code, State = contactEntity.Ddd.State, Region = contactEntity.Ddd.Region }
             : null;
 
         var dto = new ContactDto
