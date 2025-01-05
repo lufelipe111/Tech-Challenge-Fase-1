@@ -4,6 +4,7 @@ namespace ContactRegister.Application.DTOs;
 
 public class ContactDto
 {
+    public int Id { get; set; } = 0;
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
@@ -54,6 +55,7 @@ public class ContactDto
             LastName = contactEntity.LastName,
             FirstName = contactEntity.FirstName,
             Ddd = ddd,
+            Id = contactEntity.Id,
         };
         
         return dto;

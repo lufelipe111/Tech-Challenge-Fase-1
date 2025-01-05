@@ -88,7 +88,7 @@ public class ContactService : IContactService
             if (!string.IsNullOrEmpty(firstName)) { contactsQuery = contactsQuery.Where(c => c.FirstName.Contains(firstName)); }
             if (!string.IsNullOrEmpty(lastName)) { contactsQuery = contactsQuery.Where(c => c.LastName.Contains(lastName)); }
             if (!string.IsNullOrEmpty(email)) { contactsQuery = contactsQuery.Where(c => c.Email.Contains(email)); }
-            if (dddCode > 0) { contactsQuery = contactsQuery.Where(c => c.DddId == dddCode); }
+            if (dddCode > 0) { contactsQuery = contactsQuery.Where(c => c.Ddd.Code == dddCode); }
             if (!string.IsNullOrEmpty(city)) { contactsQuery = contactsQuery.Where(c => c.Address.City.Contains(city)); }
             if (!string.IsNullOrEmpty(state)) { contactsQuery = contactsQuery.Where(c => c.Address.State.Contains(state)); }
             if (!string.IsNullOrEmpty(postalCode)) { contactsQuery = contactsQuery.Where(c => c.Address.PostalCode.Contains(postalCode)); }
@@ -156,7 +156,7 @@ public class ContactService : IContactService
             if (targetContact == null)
                 return Error.NotFound("Contact.NotFound", $"Contact {id} not found");
 
-            await _contactRepository.DeleteContactAsync(id);
+            await _contactRepository.DeleteContactAsync(targetContact);
             return Result.Success;
         }
         catch (Exception e)

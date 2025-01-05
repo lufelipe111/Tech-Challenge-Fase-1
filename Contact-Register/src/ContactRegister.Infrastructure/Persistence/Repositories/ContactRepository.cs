@@ -40,8 +40,9 @@ public class ContactRepository : IContactRepository
         _ = await _context.SaveChangesAsync();
     }
 
-    public Task DeleteContactAsync(int id)
+    public async Task DeleteContactAsync(Contact contact)
     {
-        throw new NotImplementedException();
+        _contacts.Remove(contact); 
+        await _context.SaveChangesAsync();
     }
 }

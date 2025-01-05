@@ -18,7 +18,7 @@ public class ContactController : ControllerBase
     }
 
     [HttpGet("[action]/{id:int}")]
-    public async Task<IActionResult> GetContact(int id)
+    public async Task<IActionResult> GetContact([FromRoute] int id)
     {
         var contact = await _contactService.GetContactByIdAsync(id);
         if(contact.Value == null)
@@ -73,4 +73,15 @@ public class ContactController : ControllerBase
 
 		return Ok();
 	}
+
+    [HttpDelete("[action]/{id:int}")]
+    public async Task<IActionResult> DeleteContact([FromRoute] int id)
+    {
+        var result = await _contactService.DeleteContactAsync(id);
+
+        if (result.IsError)
+            return BadRequest(result.Errors);
+
+        return Ok();
+    }
 }
