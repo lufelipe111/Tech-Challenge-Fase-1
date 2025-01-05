@@ -7,8 +7,9 @@ public class Ddd : AbstractEntity<int>
     public int Code { get; set; }
 	public string State { get; set; }
 	public string Region { get; set; }
+    public virtual ICollection<Contact> Contacts { get; set; } = new List<Contact>();
 
-    public Ddd() { }
+	public Ddd() { }
     
     public Ddd(int code, string state, string region)
     {

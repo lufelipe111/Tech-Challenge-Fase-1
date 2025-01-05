@@ -54,14 +54,14 @@ public class ContactMapper : IEntityTypeConfiguration<Contact>
             .ComplexProperty(x => x.MobileNumber)
             .Property(h => h.Number).HasColumnName("tx_mobile_number")
             .IsRequired();
-        
-        #endregion
-        
-        #region Navigations
-        
-        builder
-            .HasOne(c => c.Ddd)
-            .WithMany()
+
+		#endregion
+
+		#region Navigations
+
+		builder
+			.HasOne(c => c.Ddd)
+            .WithMany(d => d.Contacts)
             .HasForeignKey(x => x.DddId)
             .IsRequired();
         

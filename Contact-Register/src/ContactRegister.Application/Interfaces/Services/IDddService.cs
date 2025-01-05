@@ -1,9 +1,10 @@
 using ContactRegister.Application.DTOs;
+using ErrorOr;
 
 namespace ContactRegister.Application.Interfaces.Services;
 
 public interface IDddService
 {
-	Task<List<DddDto>> GetDdd();
-	Task<DddDto?> GetDddByCode(int code);
+	Task<ErrorOr<List<DddDto>>> GetDdd();
+	Task<ErrorOr<DddDto?>> GetDddByCode(int code);
 }

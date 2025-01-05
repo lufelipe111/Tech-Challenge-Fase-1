@@ -1,5 +1,4 @@
 using ContactRegister.Application.Interfaces.Repositories;
-using ContactRegister.Application.Interfaces.Services;
 using ContactRegister.Infrastructure.Persistence;
 using ContactRegister.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
