@@ -25,12 +25,12 @@ namespace ContactRegister.Infrastructure.Migrations
 
             modelBuilder.Entity("ContactRegister.Domain.Entities.Contact", b =>
                 {
-                    b.Property<decimal>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(20,0)")
+                        .HasColumnType("int")
                         .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2")
@@ -69,7 +69,6 @@ namespace ContactRegister.Infrastructure.Migrations
                                 .HasColumnName("address_line1");
 
                             b1.Property<string>("AddressLine2")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("address_line2");
 
@@ -94,7 +93,6 @@ namespace ContactRegister.Infrastructure.Migrations
                             b1.IsRequired();
 
                             b1.Property<string>("Number")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("tx_home_number");
                         });
