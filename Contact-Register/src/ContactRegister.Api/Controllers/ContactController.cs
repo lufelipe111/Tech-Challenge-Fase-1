@@ -10,21 +10,35 @@ public class ContactController : ControllerBase
 {
     private readonly ILogger<ContactController> _logger;
     private readonly IContactService _contactService;
+    private readonly ICacheService _cacheService;
 
-    public ContactController(ILogger<ContactController> logger, IContactService contactService)
+    public ContactController(ILogger<ContactController> logger, IContactService contactService, ICacheService cacheService)
     {
         _logger = logger;
         _contactService = contactService;
+        _cacheService = cacheService;
     }
 
     [HttpGet("[action]/{id:int}")]
     public async Task<IActionResult> GetContact([FromRoute] int id)
     {
+        var key = $"GetContact-{id}";
+        var cachedContacts = _cacheService.Get(key);
+
+        if (cachedContacts != null)
+        {
+            return Ok(cachedContacts);
+        }
+
         var contact = await _contactService.GetContactByIdAsync(id);
+
         if(contact.Value == null)
         {
             return NotFound();
         }
+
+        _cacheService.Set(key, contact.Value);
+
         return Ok(contact.Value);
     }
 
@@ -44,7 +58,20 @@ public class ContactController : ControllerBase
         [FromQuery] int skip = 0,
         [FromQuery] int take = 50)
     {
-        var contact = await _contactService.GetContactsAsync(firstName, lastName, email, dddCode, city, state, postalCode, addressLine1, addressLine2, homeNumber, mobileNumber);
+
+        var contact = await _contactService.GetContactsAsync(
+            firstName,
+            lastName,
+            email,
+            dddCode,
+            city,
+            state,
+            postalCode,
+            addressLine1,
+            addressLine2,
+            homeNumber,
+            mobileNumber);
+        
         if (contact.Value == null)
         {
             return NotFound();

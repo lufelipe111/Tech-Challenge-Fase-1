@@ -1,4 +1,5 @@
 using ContactRegister.Application;
+using ContactRegister.Application.Interfaces.Services;
 using ContactRegister.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-
+builder.Services.AddMemoryCache();
+builder.Services.AddTransient<ICacheService, MemCacheService>();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
