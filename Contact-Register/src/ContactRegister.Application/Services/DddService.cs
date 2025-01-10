@@ -54,6 +54,13 @@ public class DddService : IDddService
 					return new List<Error> { Error.Failure("Ddd.Validation", dddApiResponseDto.Error.Message) };
 			}
 
+			if (!ddd!.Validate(out var errors))
+			{
+				return errors
+					.Select(e => Error.Failure("Ddd.Validation", e))
+					.ToList();
+			}
+
 			return _mapper.Map<DddDto?>(ddd);
 		}
 		catch (Exception e)

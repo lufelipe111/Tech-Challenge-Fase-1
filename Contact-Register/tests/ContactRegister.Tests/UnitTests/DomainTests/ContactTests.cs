@@ -49,8 +49,40 @@ public class ContactTests
             "São Paulo", 
             "SP", 
             "012345-678");
-        
-        var homePhone = new Phone("11111111");
+
+		var mobilePhone = new Phone("911111111");
+		var ddd = new Ddd(11, "SP", "EMBU, VÁRZEA PAULISTA, VARGEM GRANDE PAULISTA, VARGEM, TUIUTI, TABOÃO DA SERRA, SUZANO, SÃO ROQUE, SÃO PAULO, SÃO LOURENÇO DA SERRA, SÃO CAETANO DO SUL, SÃO BERNARDO DO CAMPO, SANTO ANDRÉ, SANTANA DE PARNAÍBA, SANTA ISABEL, SALTO, SALESÓPOLIS, RIO GRANDE DA SERRA, RIBEIRÃO PIRES, POÁ, PIRAPORA DO BOM JESUS, PIRACAIA, PINHALZINHO, PEDRA BELA, OSASCO, NAZARÉ PAULISTA, MORUNGABA, MOGI DAS CRUZES, MAUÁ, MAIRIPORÃ, MAIRINQUE, JUQUITIBA, JUNDIAÍ, JOANÓPOLIS, JARINU, JANDIRA, ITUPEVA, ITU, ITATIBA, ITAQUAQUECETUBA, ITAPEVI, ITAPECERICA DA SERRA, IGARATÁ, GUARULHOS, GUARAREMA, FRANCO DA ROCHA, FRANCISCO MORATO, FERRAZ DE VASCONCELOS, EMBU-GUAÇU, DIADEMA, COTIA, CARAPICUÍBA, CAMPO LIMPO PAULISTA, CAJAMAR, CAIEIRAS, CABREÚVA, BRAGANÇA PAULISTA, BOM JESUS DOS PERDÕES, BIRITIBA-MIRIM, BARUERI, ATIBAIA, ARUJÁ, ARAÇARIGUAMA, ALUMÍNIO");
+
+		var contact = new Domain.Entities.Contact(
+            firstName: "Jane",
+            lastName: "Doe",
+            email: "jane.doe@example.com",
+            address: address,
+            homeNumber: null,
+            mobileNumber: mobilePhone,
+            ddd: ddd
+        );
+
+        // Act
+        bool result = contact.Validate(out IList<string> errors);
+
+        // Assert
+        Assert.True(result, "Expected validation to pass with only HomeNumber missing");
+        Assert.Empty(errors);
+    }
+
+    [Fact]
+    public void Validate_ShouldPass_WhenOnlyMobileNumberIsNull()
+    {
+        // Arrange
+        var address = new Address(
+            "Rua teste, 123", 
+            "Predio A, Apartamento 42", 
+            "São Paulo", 
+            "SP", 
+            "012345-678");
+
+		var homePhone = new Phone("11111111");
 		var ddd = new Ddd(11, "SP", "EMBU, VÁRZEA PAULISTA, VARGEM GRANDE PAULISTA, VARGEM, TUIUTI, TABOÃO DA SERRA, SUZANO, SÃO ROQUE, SÃO PAULO, SÃO LOURENÇO DA SERRA, SÃO CAETANO DO SUL, SÃO BERNARDO DO CAMPO, SANTO ANDRÉ, SANTANA DE PARNAÍBA, SANTA ISABEL, SALTO, SALESÓPOLIS, RIO GRANDE DA SERRA, RIBEIRÃO PIRES, POÁ, PIRAPORA DO BOM JESUS, PIRACAIA, PINHALZINHO, PEDRA BELA, OSASCO, NAZARÉ PAULISTA, MORUNGABA, MOGI DAS CRUZES, MAUÁ, MAIRIPORÃ, MAIRINQUE, JUQUITIBA, JUNDIAÍ, JOANÓPOLIS, JARINU, JANDIRA, ITUPEVA, ITU, ITATIBA, ITAQUAQUECETUBA, ITAPEVI, ITAPECERICA DA SERRA, IGARATÁ, GUARULHOS, GUARAREMA, FRANCO DA ROCHA, FRANCISCO MORATO, FERRAZ DE VASCONCELOS, EMBU-GUAÇU, DIADEMA, COTIA, CARAPICUÍBA, CAMPO LIMPO PAULISTA, CAJAMAR, CAIEIRAS, CABREÚVA, BRAGANÇA PAULISTA, BOM JESUS DOS PERDÕES, BIRITIBA-MIRIM, BARUERI, ATIBAIA, ARUJÁ, ARAÇARIGUAMA, ALUMÍNIO");
 
 		var contact = new Domain.Entities.Contact(
@@ -67,39 +99,7 @@ public class ContactTests
         bool result = contact.Validate(out IList<string> errors);
 
         // Assert
-        Assert.True(result, "Expected validation to fail due to missing HomeNumber");
-        Assert.Empty(errors);
-    }
-
-    [Fact]
-    public void Validate_ShouldPass_WhenOnlyMobileNumberIsNull()
-    {
-        // Arrange
-        var address = new Address(
-            "Rua teste, 123", 
-            "Predio A, Apartamento 42", 
-            "São Paulo", 
-            "SP", 
-            "012345-678");
-        
-        var mobilePhone = new Phone("911111111");
-		var ddd = new Ddd(11, "SP", "EMBU, VÁRZEA PAULISTA, VARGEM GRANDE PAULISTA, VARGEM, TUIUTI, TABOÃO DA SERRA, SUZANO, SÃO ROQUE, SÃO PAULO, SÃO LOURENÇO DA SERRA, SÃO CAETANO DO SUL, SÃO BERNARDO DO CAMPO, SANTO ANDRÉ, SANTANA DE PARNAÍBA, SANTA ISABEL, SALTO, SALESÓPOLIS, RIO GRANDE DA SERRA, RIBEIRÃO PIRES, POÁ, PIRAPORA DO BOM JESUS, PIRACAIA, PINHALZINHO, PEDRA BELA, OSASCO, NAZARÉ PAULISTA, MORUNGABA, MOGI DAS CRUZES, MAUÁ, MAIRIPORÃ, MAIRINQUE, JUQUITIBA, JUNDIAÍ, JOANÓPOLIS, JARINU, JANDIRA, ITUPEVA, ITU, ITATIBA, ITAQUAQUECETUBA, ITAPEVI, ITAPECERICA DA SERRA, IGARATÁ, GUARULHOS, GUARAREMA, FRANCO DA ROCHA, FRANCISCO MORATO, FERRAZ DE VASCONCELOS, EMBU-GUAÇU, DIADEMA, COTIA, CARAPICUÍBA, CAMPO LIMPO PAULISTA, CAJAMAR, CAIEIRAS, CABREÚVA, BRAGANÇA PAULISTA, BOM JESUS DOS PERDÕES, BIRITIBA-MIRIM, BARUERI, ATIBAIA, ARUJÁ, ARAÇARIGUAMA, ALUMÍNIO");
-
-		var contact = new Domain.Entities.Contact(
-            firstName: "Jane",
-            lastName: "Doe",
-            email: "jane.doe@example.com",
-            address: address,
-            homeNumber: mobilePhone,
-            mobileNumber: null,
-            ddd: ddd
-        );
-
-        // Act
-        bool result = contact.Validate(out IList<string> errors);
-
-        // Assert
-        Assert.True(result, "Expected validation to fail due to missing MobileNumber");
+        Assert.True(result, "Expected validation to pass when only MobileNumber is missing");
         Assert.Empty(errors);
     }
     
@@ -134,7 +134,39 @@ public class ContactTests
         Assert.Contains($"{nameof(contact.HomeNumber)} and {nameof(contact.MobileNumber)} can't not both be null", errors);
     }
 
-    [Fact]
+	[Fact]
+	public void Validate_ShouldFail_WhenDddIsNull()
+	{
+		// Arrange
+		var address = new Address(
+			"Rua teste, 123",
+			"Predio A, Apartamento 42",
+			"São Paulo",
+			"SP",
+			"012345-678");
+
+		var homePhone = new Phone("11111111");
+		var mobilePhone = new Phone("911111111");
+
+		var contact = new Domain.Entities.Contact(
+			firstName: "Jane",
+			lastName: "Doe",
+			email: "jane.doe@example.com",
+			address: address,
+			homeNumber: homePhone,
+			mobileNumber: mobilePhone,
+			ddd: null
+		);
+
+		// Act
+		bool result = contact.Validate(out IList<string> errors);
+
+		// Assert
+		Assert.False(result, "Expected validation to fail due to missing DDD");
+		Assert.Contains($"Invalid {nameof(contact.Ddd)}", errors);
+	}
+
+	[Fact]
     public void Validate_ShouldFail_WhenEmailHasNoAtSymbol()
     {
         // Arrange
@@ -237,15 +269,13 @@ public class ContactTests
     public void Validate_ShouldAccumulateMultipleErrors()
     {
         // Arrange
-        // Missing MobileNumber and invalid email
+        // Missing HomeNumber, MobileNumber, Ddd and invalid email
         var address = new Address(
             "Rua teste, 123", 
             "Predio A, Apartamento 42", 
             "São Paulo", 
             "SP", 
             "012345-678");
-
-		var ddd = new Ddd(11, "SP", "EMBU, VÁRZEA PAULISTA, VARGEM GRANDE PAULISTA, VARGEM, TUIUTI, TABOÃO DA SERRA, SUZANO, SÃO ROQUE, SÃO PAULO, SÃO LOURENÇO DA SERRA, SÃO CAETANO DO SUL, SÃO BERNARDO DO CAMPO, SANTO ANDRÉ, SANTANA DE PARNAÍBA, SANTA ISABEL, SALTO, SALESÓPOLIS, RIO GRANDE DA SERRA, RIBEIRÃO PIRES, POÁ, PIRAPORA DO BOM JESUS, PIRACAIA, PINHALZINHO, PEDRA BELA, OSASCO, NAZARÉ PAULISTA, MORUNGABA, MOGI DAS CRUZES, MAUÁ, MAIRIPORÃ, MAIRINQUE, JUQUITIBA, JUNDIAÍ, JOANÓPOLIS, JARINU, JANDIRA, ITUPEVA, ITU, ITATIBA, ITAQUAQUECETUBA, ITAPEVI, ITAPECERICA DA SERRA, IGARATÁ, GUARULHOS, GUARAREMA, FRANCO DA ROCHA, FRANCISCO MORATO, FERRAZ DE VASCONCELOS, EMBU-GUAÇU, DIADEMA, COTIA, CARAPICUÍBA, CAMPO LIMPO PAULISTA, CAJAMAR, CAIEIRAS, CABREÚVA, BRAGANÇA PAULISTA, BOM JESUS DOS PERDÕES, BIRITIBA-MIRIM, BARUERI, ATIBAIA, ARUJÁ, ARAÇARIGUAMA, ALUMÍNIO");
 
 		var contact = new Domain.Entities.Contact(
             firstName: "John",
@@ -254,7 +284,7 @@ public class ContactTests
             address: address,
             homeNumber: null,
             mobileNumber: null,
-            ddd: ddd
+            ddd: null
         );
 
         // Act
@@ -265,5 +295,6 @@ public class ContactTests
         Assert.Contains($"{nameof(contact.HomeNumber)} and {nameof(contact.MobileNumber)} can't not both be null", errors);
         Assert.Contains("Email can't begin with number", errors);
         Assert.Contains("Email host can't be numeric", errors);
+        Assert.Contains($"Invalid {nameof(contact.Ddd)}", errors);
     }
 }
