@@ -21,4 +21,5 @@ public interface IContactService
         string mobileNumber);
     public Task<ErrorOr<Success>> UpdateContactAsync(int id, ContactDto contact);
     public Task<ErrorOr<Success>> DeleteContactAsync(int id);
+    public Task<ErrorOr<IEnumerable<ContactDto>>> GetContactsByDdd(int[] dddCodes);
 }

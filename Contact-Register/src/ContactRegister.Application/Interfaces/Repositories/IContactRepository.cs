@@ -9,4 +9,5 @@ public interface IContactRepository
     public Task<IEnumerable<Contact>> GetContactsAsync();
     public Task UpdateContactAsync(Contact contact);
     public Task DeleteContactAsync(Contact contact);
+    public Task<List<Contact>> GetContactsByDdd(int[] codes);
 }

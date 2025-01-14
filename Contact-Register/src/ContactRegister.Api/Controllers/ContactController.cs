@@ -42,6 +42,18 @@ public class ContactController : ControllerBase
         return Ok(contact.Value);
     }
 
+    [HttpPost("[action]")]
+    public async Task<IActionResult> GetContactsByDddCodes([FromBody] int[] dddCodes)
+    {
+        var contacts = await _contactService.GetContactsByDdd(dddCodes);
+        
+        return contacts.Match<IActionResult>(
+            c => c.Any() 
+                ? Ok(c) 
+                : NotFound()
+            , BadRequest);
+    }
+
     [HttpGet("[action]")]
     public async Task<IActionResult> GetContacts(
         [FromQuery] string? firstName,
