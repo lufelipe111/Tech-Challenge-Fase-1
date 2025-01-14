@@ -43,7 +43,8 @@ public class ContactMapper : IEntityTypeConfiguration<Contact>
         
         builder
             .ComplexProperty(x => x.HomeNumber)
-            .Property(h => h.Number).HasColumnName("tx_home_number")
+            .Property(h => h.Number)
+            .HasColumnName("tx_home_number")
             .IsRequired(false);
         
         #endregion
@@ -52,7 +53,8 @@ public class ContactMapper : IEntityTypeConfiguration<Contact>
         
         builder
             .ComplexProperty(x => x.MobileNumber)
-            .Property(h => h.Number).HasColumnName("tx_mobile_number")
+            .Property(h => h.Number)
+            .HasColumnName("tx_mobile_number")
             .IsRequired();
 
 		#endregion

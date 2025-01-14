@@ -45,4 +45,10 @@ public class ContactRepository : IContactRepository
         _contacts.Remove(contact); 
         await _context.SaveChangesAsync();
     }
+
+    public async Task<List<Contact>> GetContactsByDdd(int[] codes) =>
+        await _contacts
+            .Include(c => c.Ddd)
+            .Where(c => codes.Contains(c.Ddd.Code))
+            .ToListAsync();
 }

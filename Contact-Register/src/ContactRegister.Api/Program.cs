@@ -1,6 +1,7 @@
 using ContactRegister.Application;
 using ContactRegister.Application.Interfaces.Services;
 using ContactRegister.Infrastructure;
+using ContactRegister.Infrastructure.Cache;
 
 var builder = WebApplication.CreateBuilder(args);
 

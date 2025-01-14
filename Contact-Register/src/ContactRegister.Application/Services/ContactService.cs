@@ -11,13 +11,19 @@ public class ContactService : IContactService
     private readonly ILogger<ContactService> _logger;
     private readonly IContactRepository _contactRepository;
     private readonly IDddService _dddService;
+    private readonly ICacheService _cacheService;
 
-	public ContactService(ILogger<ContactService> logger, IContactRepository contactRepository, IDddService dddService)
+	public ContactService(
+        ILogger<ContactService> logger,
+        IContactRepository contactRepository,
+        IDddService dddService,
+        ICacheService cacheService)
 	{
 		_logger = logger;
 		_contactRepository = contactRepository;
 		_dddService = dddService;
-	}
+        _cacheService = cacheService;
+    }
 
 	public async Task<ErrorOr<Success>> AddContactAsync(ContactDto contact)
     {
@@ -164,5 +170,13 @@ public class ContactService : IContactService
             _logger.LogError(e, e.Message);
             return Error.Failure("Contact.Get.Exception", e.Message);
         }
+    }
+
+    public async Task<ErrorOr<IEnumerable<ContactDto>>> GetContactsByDdd(int[] dddCodes)
+    {
+        var contacts = await _cacheService.GetOrCreateAsync(
+            $"{nameof(GetContactByIdAsync)}:{string.Join(",", dddCodes)}", 
+            async () => await _contactRepository.GetContactsByDdd(dddCodes));
+        return contacts.Select(ContactDto.FromEntity).ToList();
     }
 }
