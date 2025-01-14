@@ -1,4 +1,3 @@
-using AutoMapper;
 using ContactRegister.Application.DTOs;
 using ContactRegister.Application.Interfaces.Repositories;
 using ContactRegister.Application.Interfaces.Services;
@@ -12,14 +11,12 @@ public class DddService : IDddService
 {
 	private readonly ILogger<DddService> _logger;
 	private readonly IDddRepository _dddRepository;
-    private readonly IMapper _mapper;
     private readonly IDddApiService _dddApiService;
 
-	public DddService(ILogger<DddService> logger, IDddRepository dddRepository, IMapper mapper, IDddApiService dddApiService)
+	public DddService(ILogger<DddService> logger, IDddRepository dddRepository, IDddApiService dddApiService)
 	{
 		_logger = logger;
 		_dddRepository = dddRepository;
-		_mapper = mapper;
 		_dddApiService = dddApiService;
 	}
 
@@ -29,7 +26,7 @@ public class DddService : IDddService
 		{
 			var ddds = await _dddRepository.GetDdds();
 
-			return _mapper.Map<List<DddDto>>(ddds);
+			return ddds.Select(x => DddDto.FromEntity(x)).ToList();
 		}
 		catch (Exception e)
 		{
@@ -61,7 +58,7 @@ public class DddService : IDddService
 					.ToList();
 			}
 
-			return _mapper.Map<DddDto?>(ddd);
+			return DddDto.FromEntity(ddd);
 		}
 		catch (Exception e)
 		{

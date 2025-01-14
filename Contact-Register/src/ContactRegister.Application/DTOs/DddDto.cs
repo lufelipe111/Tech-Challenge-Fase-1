@@ -12,4 +12,14 @@ public class DddDto
     {
         return new Ddd(Code, State, Region);
     }
+
+    public static DddDto FromEntity(Ddd entity)
+    {
+        return new DddDto
+        {
+            Code = entity.Code,
+            State = entity.State,
+            Region = entity.Region
+        };
+    }
 }
