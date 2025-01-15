@@ -45,17 +45,22 @@ public class DddService : IDddService
 			{
 				var dddApiResponseDto = await _dddApiService.GetByCode(code);
 
-				if (dddApiResponseDto.Result != null) ddd = await AddDdd(code, dddApiResponseDto.Result.State, string.Join(", ", dddApiResponseDto.Result.Cities));
+				if (dddApiResponseDto.Result != null)
+				{
+					ddd = new Ddd(code, dddApiResponseDto.Result.State, string.Join(", ", dddApiResponseDto.Result.Cities));
+
+					if (!ddd.Validate(out var errors))
+					{
+						return errors
+							.Select(e => Error.Failure("Ddd.Validation", e))
+							.ToList();
+					}
+
+					_ = await _dddRepository.AddDdd(ddd);
+				}
 
 				if (dddApiResponseDto.Error != null)
-					return new List<Error> { Error.Failure("Ddd.Validation", dddApiResponseDto.Error.Message) };
-			}
-
-			if (!ddd!.Validate(out var errors))
-			{
-				return errors
-					.Select(e => Error.Failure("Ddd.Validation", e))
-					.ToList();
+					return new List<Error> { Error.Failure("Ddd.ExternalApi", dddApiResponseDto.Error.Message) };
 			}
 
 			return DddDto.FromEntity(ddd);
@@ -66,13 +71,4 @@ public class DddService : IDddService
 			return Error.Failure("Ddd.Get.Exception", e.Message);
 		}
     }
-
-	private async Task<Ddd> AddDdd(int code, string state, string region)
-	{
-		var ddd = new Ddd(code, state, region);
-
-		_ = await _dddRepository.AddDdd(ddd);
-
-		return ddd;
-	}
 }

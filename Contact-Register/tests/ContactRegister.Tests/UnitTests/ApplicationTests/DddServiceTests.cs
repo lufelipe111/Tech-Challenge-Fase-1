@@ -1,4 +1,5 @@
 ﻿using ContactRegister.Application.DTOs;
+using ContactRegister.Application.DTOs.BrasilApiDTOs;
 using ContactRegister.Application.Interfaces.Repositories;
 using ContactRegister.Application.Interfaces.Services;
 using ContactRegister.Application.Services;
@@ -14,6 +15,12 @@ public class DddServiceTests
 	private readonly Mock<ILogger<DddService>> _loggerMock = new();
 	private readonly Mock<IDddRepository> _dddRepositoryMock = new();
 	private readonly Mock<IDddApiService> _dddApiServiceMock = new();
+	private readonly DddService _dddService;
+
+	public DddServiceTests()
+	{
+		_dddService = new(_loggerMock.Object, _dddRepositoryMock.Object, _dddApiServiceMock.Object);
+	}
 
 	[Fact]
 	public async Task GetDdd_ShouldReturnList_WhenSuccessfulRunWithResults()
@@ -42,10 +49,9 @@ public class DddServiceTests
 		};
 		_dddRepositoryMock.Setup(x => x.GetDdds()).ReturnsAsync(baseResult);
 		var expectedResult = baseResult.Select(x => DddDto.FromEntity(x)).ToList();
-		var dddService = new DddService(_loggerMock.Object, _dddRepositoryMock.Object, _dddApiServiceMock.Object);
 
 		//Act
-		var actualResult = (await dddService.GetDdd()).Value;
+		var actualResult = (await _dddService.GetDdd()).Value;
 
 		//Assert
 		Assert.Equal(actualResult.Count, expectedResult.Count);
@@ -60,10 +66,9 @@ public class DddServiceTests
 		var baseResult = new List<Ddd>();
 		_dddRepositoryMock.Setup(x => x.GetDdds()).ReturnsAsync(baseResult);
 		var expectedResult = baseResult.Select(x => DddDto.FromEntity(x)).ToList();
-		var dddService = new DddService(_loggerMock.Object, _dddRepositoryMock.Object, _dddApiServiceMock.Object);
 
 		//Act
-		var actualResult = (await dddService.GetDdd()).Value;
+		var actualResult = (await _dddService.GetDdd()).Value;
 
 		//Assert
 		Assert.Equal(actualResult.Count, expectedResult.Count);
@@ -71,18 +76,164 @@ public class DddServiceTests
 	}
 
 	[Fact]
-	public async Task GetDdd_ShouldReturnError_WhenExceptionThrown()
+	public async Task GetDdd_ShouldReturnError_WhenExceptionThrows()
 	{
 		//Arrange
 		var expectedError = "Exception throw when calling repository.";
 		_dddRepositoryMock.Setup(x => x.GetDdds()).ThrowsAsync(new Exception(expectedError));
-		var dddService = new DddService(_loggerMock.Object, _dddRepositoryMock.Object, _dddApiServiceMock.Object);
 
 		//Act
-		var result = await dddService.GetDdd();
+		var result = await _dddService.GetDdd();
 
 		//Assert
 		Assert.True(result.IsError, "Expected error not returned when repository throws");
+		Assert.Single(result.Errors);
+		Assert.Equal(expectedError, result.FirstError.Description);
+	}
+
+	[Fact]
+	public async Task GetDddByCode_ShouldReturnDto_WhenFoundInDatabase()
+	{
+		//Arrange
+		var baseResult = new Ddd
+		{
+			Id = 2,
+			CreatedAt = DateTime.UtcNow,
+			UpdatedAt = DateTime.UtcNow,
+			Code = 21,
+			State = "RJ",
+			Region = "TERESÓPOLIS, TANGUÁ,SEROPÉDICA, SÃO JOÃO DE MERITI, SÃO GONÇALO, RIO DE JANEIRO, RIO BONITO, QUEIMADOS, PARACAMBI, NOVA IGUAÇU, NITERÓI, NILÓPOLIS, MESQUITA, MARICÁ, MANGARATIBA, MAGÉ, JAPERI, ITAGUAÍ, ITABORAÍ, GUAPIMIRIM, DUQUE DE CAXIAS, CACHOEIRAS DE MACACU, BELFORD ROXO"
+		};
+		var expectedResult = DddDto.FromEntity(baseResult);
+		_dddRepositoryMock.Setup(x => x.GetDddByCode(It.IsAny<int>())).ReturnsAsync(baseResult);
+
+		//Act
+		var actualResult = (await _dddService.GetDddByCode(It.IsAny<int>())).Value;
+
+		//Assert
+		Assert.NotNull(actualResult);
+		Assert.Equal(expectedResult.Code, actualResult.Code);
+		Assert.Equal(expectedResult.State, actualResult.State);
+		Assert.Equal(expectedResult.Region, actualResult.Region);
+	}
+
+	[Fact]
+	public async Task GetDddByCode_ShouldAddInDatabaseAndReturnDto_WhenNotInDatabaseButFoundInApi()
+	{
+		//Arrange
+		var code = 21;
+		Ddd? dbResult = null;
+		var apiResult = new DddApiResponseDto(new DddApiSuccessResponseDto
+		{
+			State = "RJ",
+			Cities = new List<string>
+			{
+				"TERESÓPOLIS","TANGUÁ","SEROPÉDICA","SÃO JOÃO DE MERITI","SÃO GONÇALO","RIO DE JANEIRO","RIO BONITO","QUEIMADOS","PARACAMBI","NOVA IGUAÇU","NITERÓI","NILÓPOLIS","MESQUITA","MARICÁ","MANGARATIBA","MAGÉ","JAPERI","ITAGUAÍ","ITABORAÍ","GUAPIMIRIM","DUQUE DE CAXIAS","CACHOEIRAS DE MACACU","BELFORD ROXO"
+			}
+		}, null);
+		var expectedResult = new DddDto
+		{
+			Code = code,
+			State = apiResult.Result!.State,
+			Region = string.Join(", ", apiResult.Result.Cities)
+		};
+		_dddRepositoryMock.Setup(x => x.GetDddByCode(It.IsAny<int>())).ReturnsAsync(dbResult);
+		_dddApiServiceMock.Setup(x => x.GetByCode(It.IsAny<int>())).ReturnsAsync(apiResult);
+		_dddRepositoryMock.Setup(x => x.AddDdd(It.IsAny<Ddd>())).ReturnsAsync(1);
+
+		//Act
+		var actualResult = (await _dddService.GetDddByCode(code)).Value;
+
+		//Assert
+		Assert.NotNull(actualResult);
+		Assert.Equal(expectedResult.Code, actualResult.Code);
+		Assert.Equal(expectedResult.State, actualResult.State);
+		Assert.Equal(expectedResult.Region, actualResult.Region);
+	}
+
+	[Fact]
+	public async Task GetDddByCode_ShouldReturnError_WhenNotInDatabaseNorInApi()
+	{
+		//Arrange
+		Ddd? dbResult = null;
+		var apiResult = new DddApiResponseDto(null, new DddApiErrorResponseDto
+		{
+			Message = "DDD não encontrado",
+			Name = "DDD_NOT_FOUND",
+			Type = "ddd_error"
+		});
+		_dddRepositoryMock.Setup(x => x.GetDddByCode(It.IsAny<int>())).ReturnsAsync(dbResult);
+		_dddApiServiceMock.Setup(x => x.GetByCode(It.IsAny<int>())).ReturnsAsync(apiResult);
+
+		//Act
+		var result = await _dddService.GetDddByCode(It.IsAny<int>());
+
+		//Assert
+		Assert.True(result.IsError, "Expected error not returned when ddd was not found in db or API");
+		Assert.Single(result.Errors);
+		Assert.Equal("Ddd.ExternalApi", result.FirstError.Code);
+		Assert.Equal("DDD não encontrado", result.FirstError.Description);
+	}
+
+	[Fact]
+	public async Task GetDddByCode_ShouldReturnError_WhenApiIsInError()
+	{
+		//Arrange
+		Ddd? dbResult = null;
+		var apiResult = new DddApiResponseDto(null, new DddApiErrorResponseDto
+		{
+			Message = "Todos os serviços de DDD retornaram erro.",
+			Name = "ddd_error",
+			Type = "service_error"
+		});
+		_dddRepositoryMock.Setup(x => x.GetDddByCode(It.IsAny<int>())).ReturnsAsync(dbResult);
+		_dddApiServiceMock.Setup(x => x.GetByCode(It.IsAny<int>())).ReturnsAsync(apiResult);
+
+		//Act
+		var result = await _dddService.GetDddByCode(It.IsAny<int>());
+
+		//Assert
+		Assert.True(result.IsError, "Expected error not returned when API is in error");
+		Assert.Single(result.Errors);
+		Assert.Equal("Ddd.ExternalApi", result.FirstError.Code);
+		Assert.Equal("Todos os serviços de DDD retornaram erro.", result.FirstError.Description);
+	}
+
+	[Fact]
+	public async Task GetDddByCode_ShouldReturnError_WhenValidationFails()
+	{
+		//Arrange
+		Ddd? dbResult = null;
+		var apiResult = new DddApiResponseDto(new DddApiSuccessResponseDto
+		{
+			State = "JR",
+			Cities = new List<string>()
+		}, null);
+		_dddRepositoryMock.Setup(x => x.GetDddByCode(It.IsAny<int>())).ReturnsAsync(dbResult);
+		_dddApiServiceMock.Setup(x => x.GetByCode(It.IsAny<int>())).ReturnsAsync(apiResult);
+
+		//Act
+		var result = await _dddService.GetDddByCode(0);
+
+		//Assert
+		Assert.True(result.IsError, "Expected errors not returned when validation fails");
+		Assert.Contains(result.Errors, x => x.Code == "Ddd.Validation" && x.Description == $"{nameof(Ddd.Code)} must be greater than 10 and lesser than 100");
+		Assert.Contains(result.Errors, x => x.Code == "Ddd.Validation" && x.Description == $"{nameof(Ddd.State)} is invalid");
+		Assert.Contains(result.Errors, x => x.Code == "Ddd.Validation" && x.Description == $"{nameof(Ddd.Region)} can't be null");
+	}
+
+	[Fact]
+	public async Task GetDddByCode_ShouldReturnError_WhenExceptionThrows()
+	{
+		//Arrange
+		var expectedError = "Exception throw when calling repository.";
+		_dddRepositoryMock.Setup(x => x.GetDddByCode(It.IsAny<int>())).ThrowsAsync(new Exception(expectedError));
+
+		//Act
+		var result = await _dddService.GetDddByCode(It.IsAny<int>());
+
+		//Assert
+		Assert.True(result.IsError, "Expected error not returned when exception throws");
 		Assert.Single(result.Errors);
 		Assert.Equal(expectedError, result.FirstError.Description);
 	}

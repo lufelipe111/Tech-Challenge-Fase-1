@@ -44,22 +44,22 @@ public class Ddd : AbstractEntity<int>
 		return result;
 	}
 
-	private bool ValidateCode(int code)
+	private static bool ValidateCode(int code)
 	{
 		return code > 10 && code < 100;
 	}
 
-	private bool ValidateState(string state)
+	private static bool ValidateState(string state)
 	{
 		return GetAllUfs().Contains(state);
 	}
 
-	private bool ValidateRegion(string region)
+	private static bool ValidateRegion(string region)
 	{
 		return !string.IsNullOrWhiteSpace(region);
 	}
 
-	private IEnumerable<string> GetAllUfs()
+	private static List<string> GetAllUfs()
 	{
 		var ret = new List<string>
 		{
