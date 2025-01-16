@@ -79,7 +79,7 @@ public class DddServiceTests
 	public async Task GetDdd_ShouldReturnError_WhenExceptionThrows()
 	{
 		//Arrange
-		var expectedError = "Exception throw when calling repository.";
+		var expectedError = "Exception throws when calling repository.";
 		_dddRepositoryMock.Setup(x => x.GetDdds()).ThrowsAsync(new Exception(expectedError));
 
 		//Act
@@ -139,13 +139,14 @@ public class DddServiceTests
 		};
 		_dddRepositoryMock.Setup(x => x.GetDddByCode(It.IsAny<int>())).ReturnsAsync(dbResult);
 		_dddApiServiceMock.Setup(x => x.GetByCode(It.IsAny<int>())).ReturnsAsync(apiResult);
-		_dddRepositoryMock.Setup(x => x.AddDdd(It.IsAny<Ddd>())).ReturnsAsync(1);
+		_dddRepositoryMock.Setup(x => x.AddDdd(It.IsAny<Ddd>())).ReturnsAsync(1).Verifiable();
 
 		//Act
 		var actualResult = (await _dddService.GetDddByCode(code)).Value;
 
 		//Assert
 		Assert.NotNull(actualResult);
+		_dddRepositoryMock.Verify(x => x.AddDdd(It.IsAny<Ddd>()), Times.Once());
 		Assert.Equal(expectedResult.Code, actualResult.Code);
 		Assert.Equal(expectedResult.State, actualResult.State);
 		Assert.Equal(expectedResult.Region, actualResult.Region);
@@ -226,7 +227,7 @@ public class DddServiceTests
 	public async Task GetDddByCode_ShouldReturnError_WhenExceptionThrows()
 	{
 		//Arrange
-		var expectedError = "Exception throw when calling repository.";
+		var expectedError = "Exception throws when calling repository.";
 		_dddRepositoryMock.Setup(x => x.GetDddByCode(It.IsAny<int>())).ThrowsAsync(new Exception(expectedError));
 
 		//Act
@@ -235,6 +236,7 @@ public class DddServiceTests
 		//Assert
 		Assert.True(result.IsError, "Expected error not returned when exception throws");
 		Assert.Single(result.Errors);
+		Assert.Equal("Ddd.Get.Exception", result.FirstError.Code);
 		Assert.Equal(expectedError, result.FirstError.Description);
 	}
 }
