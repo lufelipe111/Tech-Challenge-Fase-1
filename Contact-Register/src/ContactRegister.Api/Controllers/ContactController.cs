@@ -9,12 +9,10 @@ namespace ContactRegister.API.Controllers;
 public class ContactController : ControllerBase
 {
     private readonly IContactService _contactService;
-    private readonly ICacheService _cacheService;
 
-    public ContactController(IContactService contactService, ICacheService cacheService)
+    public ContactController(IContactService contactService)
     {
         _contactService = contactService;
-        _cacheService = cacheService;
 	}
 
 	/// <summary>
@@ -55,13 +53,6 @@ public class ContactController : ControllerBase
 	[HttpGet("[action]/{id:int}")]
     public async Task<IActionResult> GetContact([FromRoute] int id)
     {
-        var key = $"GetContact-{id}";
-        var cachedContacts = _cacheService.Get(key);
-
-        if (cachedContacts != null)
-        {
-            return Ok(cachedContacts);
-        }
 
         var contact = await _contactService.GetContactByIdAsync(id);
 
@@ -69,8 +60,6 @@ public class ContactController : ControllerBase
         {
             return NotFound(null);
         }
-
-        _cacheService.Set(key, contact.Value);
 
         return Ok(contact.Value);
     }
@@ -270,26 +259,63 @@ public class ContactController : ControllerBase
         return Ok(contact.Value.Skip(skip).Take(take));
     }
 
+    /// <summary>
+    /// Cria um novo contato.
+    /// </summary>
+    /// <response code="201">Criado com sucesso</response>
+    /// <response code="400">
+    /// Exemplo de erro ao criar um contato:
+    /// 
+    ///     POST /Contact/UpdateContact
+    ///     [
+    ///       {
+    ///         "code": "Ddd.ExternalApi",
+    ///         "description": "DDD não encontrado",
+    ///         "type": 0,
+    ///         "numericType": 0,
+    ///         "metadata": null
+    ///       }
+    ///     ]
+    /// </response>
     [HttpPost("[action]")]
     public async Task<IActionResult> CreateContact([FromBody] ContactDto contact)
     {
         var result = await _contactService.AddContactAsync(contact);
 
         if (result.IsError)
-            return BadRequest(result.Errors);
+            return BadRequest(null);
 
-        return Ok();
+        return Created();
     }
 
-	[HttpPut("[action]/{id:int}")]
+    /// <summary>
+    /// Atualiza um Contato a partir do seu ID único informado.
+    /// </summary>
+    /// <param name="id">Identificador único (ID) do contato a ser excluído.</param>
+    /// <response code="204">Atualização realizada com sucesso</response>
+    /// <response code="400">
+    /// Exemplo de erro ao atualizar o contato:
+    /// 
+    ///     PUT /Contact/UpdateContact/{id}
+    ///     [
+    ///       {
+    ///         "code": "Ddd.ExternalApi",
+    ///         "description": "DDD não encontrado",
+    ///         "type": 0,
+    ///         "numericType": 0,
+    ///         "metadata": null
+    ///       }
+    ///     ]
+    /// </response>
+    [HttpPut("[action]/{id:int}")]
 	public async Task<IActionResult> UpdateContact([FromRoute] int id, [FromBody] ContactDto contact)
 	{
 		var result = await _contactService.UpdateContactAsync(id, contact);
 
 		if (result.IsError)
-			return BadRequest(result.Errors);
+			return BadRequest(null);
 
-		return Ok();
+		return NoContent();
 	}
 
 	/// <summary>
@@ -297,7 +323,7 @@ public class ContactController : ControllerBase
 	/// </summary>
 	/// <param name="id">Identificador único (ID) do contato a ser excluído.</param>
 	/// <returns>A confirmação de exclusão do Contato, ou uma lista de erros.</returns>
-	/// <response code="200">Exclusão realizada com sucesso</response>
+	/// <response code="204">Exclusão realizada com sucesso</response>
 	/// <response code="400">
 	/// Erro ao excluir contato. Exemplo de retorno:
 	/// 
@@ -318,8 +344,8 @@ public class ContactController : ControllerBase
         var result = await _contactService.DeleteContactAsync(id);
 
         if (result.IsError)
-            return BadRequest(result.Errors);
+            return BadRequest(null);
 
-        return Ok();
+        return NoContent();
     }
 }
