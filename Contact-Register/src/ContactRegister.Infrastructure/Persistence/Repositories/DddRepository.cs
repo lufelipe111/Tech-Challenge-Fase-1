@@ -1,7 +1,6 @@
 using ContactRegister.Application.Interfaces.Repositories;
 using ContactRegister.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Polly;
 
 namespace ContactRegister.Infrastructure.Persistence.Repositories;
 

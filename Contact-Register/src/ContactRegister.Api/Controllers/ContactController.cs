@@ -72,10 +72,10 @@ public class ContactController : ControllerBase
     {
 
         var contact = await _contactService.GetContactsAsync(
-            firstName,
+			dddCode,
+			firstName,
             lastName,
             email,
-            dddCode,
             city,
             state,
             postalCode,

@@ -1,4 +1,3 @@
-using AutoMapper;
 using ContactRegister.Application.DTOs;
 using ContactRegister.Application.Interfaces.Repositories;
 using ContactRegister.Application.Interfaces.Services;
@@ -12,14 +11,12 @@ public class DddService : IDddService
 {
 	private readonly ILogger<DddService> _logger;
 	private readonly IDddRepository _dddRepository;
-    private readonly IMapper _mapper;
     private readonly IDddApiService _dddApiService;
 
-	public DddService(ILogger<DddService> logger, IDddRepository dddRepository, IMapper mapper, IDddApiService dddApiService)
+	public DddService(ILogger<DddService> logger, IDddRepository dddRepository, IDddApiService dddApiService)
 	{
 		_logger = logger;
 		_dddRepository = dddRepository;
-		_mapper = mapper;
 		_dddApiService = dddApiService;
 	}
 
@@ -29,7 +26,7 @@ public class DddService : IDddService
 		{
 			var ddds = await _dddRepository.GetDdds();
 
-			return _mapper.Map<List<DddDto>>(ddds);
+			return ddds.Select(x => DddDto.FromEntity(x)).ToList();
 		}
 		catch (Exception e)
 		{
@@ -48,13 +45,25 @@ public class DddService : IDddService
 			{
 				var dddApiResponseDto = await _dddApiService.GetByCode(code);
 
-				if (dddApiResponseDto.Result != null) ddd = await AddDdd(code, dddApiResponseDto.Result.State, string.Join(", ", dddApiResponseDto.Result.Cities));
+				if (dddApiResponseDto.Result != null)
+				{
+					ddd = new Ddd(code, dddApiResponseDto.Result.State, string.Join(", ", dddApiResponseDto.Result.Cities));
+
+					if (!ddd.Validate(out var errors))
+					{
+						return errors
+							.Select(e => Error.Failure("Ddd.Validation", e))
+							.ToList();
+					}
+
+					_ = await _dddRepository.AddDdd(ddd);
+				}
 
 				if (dddApiResponseDto.Error != null)
-					return new List<Error> { Error.Failure("Ddd.Validation", dddApiResponseDto.Error.Message) };
+					return new List<Error> { Error.Failure("Ddd.ExternalApi", dddApiResponseDto.Error.Message) };
 			}
 
-			return _mapper.Map<DddDto?>(ddd);
+			return DddDto.FromEntity(ddd);
 		}
 		catch (Exception e)
 		{
@@ -62,13 +71,4 @@ public class DddService : IDddService
 			return Error.Failure("Ddd.Get.Exception", e.Message);
 		}
     }
-
-	private async Task<Ddd> AddDdd(int code, string state, string region)
-	{
-		var ddd = new Ddd(code, state, region);
-
-		_ = await _dddRepository.AddDdd(ddd);
-
-		return ddd;
-	}
 }
