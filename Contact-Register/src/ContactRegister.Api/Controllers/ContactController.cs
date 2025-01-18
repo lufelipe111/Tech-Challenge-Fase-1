@@ -1,4 +1,4 @@
-using ContactRegister.Application.DTOs;
+using ContactRegister.Application.Inputs;
 using ContactRegister.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -278,7 +278,7 @@ public class ContactController : ControllerBase
     ///     ]
     /// </response>
     [HttpPost("[action]")]
-    public async Task<IActionResult> CreateContact([FromBody] ContactDto contact)
+    public async Task<IActionResult> CreateContact([FromBody] ContactInput contact)
     {
         var result = await _contactService.AddContactAsync(contact);
 
@@ -308,7 +308,7 @@ public class ContactController : ControllerBase
     ///     ]
     /// </response>
     [HttpPut("[action]/{id:int}")]
-	public async Task<IActionResult> UpdateContact([FromRoute] int id, [FromBody] ContactDto contact)
+	public async Task<IActionResult> UpdateContact([FromRoute] int id, [FromBody] ContactInput contact)
 	{
 		var result = await _contactService.UpdateContactAsync(id, contact);
 

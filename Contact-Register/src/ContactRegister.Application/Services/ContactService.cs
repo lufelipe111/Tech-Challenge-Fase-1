@@ -1,4 +1,5 @@
 using ContactRegister.Application.DTOs;
+using ContactRegister.Application.Inputs;
 using ContactRegister.Application.Interfaces.Repositories;
 using ContactRegister.Application.Interfaces.Services;
 using ErrorOr;
@@ -25,11 +26,13 @@ public class ContactService : IContactService
         _cacheService = cacheService;
     }
 
-	public async Task<ErrorOr<Success>> AddContactAsync(ContactDto contact)
+	public async Task<ErrorOr<Success>> AddContactAsync(ContactInput contactInput)
     {
         try
         {
-            var ddd = await _dddService.GetDddByCode(contact.Ddd?.Code ?? 0);
+            var contact = contactInput.ToDto();
+
+			var ddd = await _dddService.GetDddByCode(contact.Ddd?.Code ?? 0);
 
             if (ddd.IsError) return ddd.Errors;
 
@@ -113,11 +116,13 @@ public class ContactService : IContactService
         }
     }
 
-    public async Task<ErrorOr<Success>> UpdateContactAsync(int id, ContactDto contact)
+    public async Task<ErrorOr<Success>> UpdateContactAsync(int id, ContactInput contactInput)
     {
         try
         {
-            var targetContact = await _contactRepository.GetContactByIdAsync(id);
+            var contact = contactInput.ToDto();
+
+			var targetContact = await _contactRepository.GetContactByIdAsync(id);
             
             if (targetContact == null)
                 return Error.NotFound("Contact.NotFound", $"Contact {id} not found");

@@ -1,4 +1,5 @@
 using ContactRegister.Application.DTOs;
+using ContactRegister.Application.Inputs;
 using ContactRegister.Application.Interfaces.Repositories;
 using ContactRegister.Application.Interfaces.Services;
 using ContactRegister.Application.Services;
@@ -18,7 +19,7 @@ public class ContactServiceTests
 	private readonly Mock<IDddService> _dddServiceMock = new();
 	private readonly Mock<ICacheService> _cacheServiceMock = new();
 	private readonly ContactService _contactService;
-	private readonly ContactDto _contactDto;
+	private readonly ContactInput _contactInput;
 	private readonly DddDto _dddDto;
 	private readonly Contact _contact;
 	private readonly List<Contact> _allContacts;
@@ -26,13 +27,12 @@ public class ContactServiceTests
 	public ContactServiceTests()
 	{
 		_contactService = new(_loggerMock.Object, _contactRepositoryMock.Object, _dddServiceMock.Object, _cacheServiceMock.Object);
-		_contactDto = new ContactDto
+		_contactInput = new ContactInput
 		{
-			Id = 0,
 			FirstName = "Silvana",
 			LastName = "Andreia Lavínia Souza",
 			Email = "silvanaandreiasouza@cbb.com.br",
-			Address = new AddressDto
+			Address = new AddressInput
 			{
 				AddressLine1 = "5ª Travessa da Batalha nº 330, Jordão",
 				AddressLine2 = "",
@@ -40,18 +40,9 @@ public class ContactServiceTests
 				State = "PE",
 				PostalCode = "51260-215"
 			},
-			HomeNumber = new PhoneDto
-			{
-				Number = "(81) 2644-3282"
-			},
-			MobileNumber = new PhoneDto
-			{
-				Number = "(81) 99682-5038"
-			},
-			Ddd = new DddDto
-			{
-				Code = 21
-			}
+			HomeNumber = "(81) 2644-3282",
+			MobileNumber = "(81) 99682-5038",
+			Ddd = 21
 		};
 		_dddDto = new DddDto
 		{
@@ -117,7 +108,7 @@ public class ContactServiceTests
 		_contactRepositoryMock.Setup(x => x.AddContactAsync(It.IsAny<Contact>())).Verifiable();
 
 		//Act
-		var result = await _contactService.AddContactAsync(_contactDto);
+		var result = await _contactService.AddContactAsync(_contactInput);
 
 		//Assert
 		Assert.Equal(Result.Success, result);
@@ -135,7 +126,7 @@ public class ContactServiceTests
 		_dddServiceMock.Setup(x => x.GetDddByCode(It.IsAny<int>())).ReturnsAsync(expectedResult);
 
 		//Act
-		var actualResult = await _contactService.AddContactAsync(_contactDto);
+		var actualResult = await _contactService.AddContactAsync(_contactInput);
 
 		//Assert
 		Assert.True(actualResult.IsError, "Expected error not returned when DDD Service returns error");
@@ -152,7 +143,7 @@ public class ContactServiceTests
 		_dddServiceMock.Setup(x => x.GetDddByCode(It.IsAny<int>())).ReturnsAsync(dddDto);
 
 		//Act
-		var result = await _contactService.AddContactAsync(_contactDto);
+		var result = await _contactService.AddContactAsync(_contactInput);
 
 		//Assert
 		Assert.True(result.IsError, "Expected errors not returned when validation fails");
@@ -167,7 +158,7 @@ public class ContactServiceTests
 		_dddServiceMock.Setup(x => x.GetDddByCode(It.IsAny<int>())).ThrowsAsync(new Exception(expectedError));
 
 		//Act
-		var result = await _contactService.AddContactAsync(_contactDto);
+		var result = await _contactService.AddContactAsync(_contactInput);
 
 		//Assert
 		Assert.True(result.IsError, "Expected error not returned when exception throws");
@@ -315,7 +306,7 @@ public class ContactServiceTests
 		_contactRepositoryMock.Setup(x => x.UpdateContactAsync(It.IsAny<Contact>())).Verifiable();
 
 		//Act
-		var result = await _contactService.UpdateContactAsync(It.IsAny<int>(), _contactDto);
+		var result = await _contactService.UpdateContactAsync(It.IsAny<int>(), _contactInput);
 
 		//Assert
 		Assert.Equal(Result.Success, result);
@@ -331,7 +322,7 @@ public class ContactServiceTests
 		var id = 1;
 
 		//Act
-		var result = await _contactService.UpdateContactAsync(id, _contactDto);
+		var result = await _contactService.UpdateContactAsync(id, _contactInput);
 
 		//Assert
 		Assert.True(result.IsError, "Expected error not returned when contact not found");
@@ -352,7 +343,7 @@ public class ContactServiceTests
 		_dddServiceMock.Setup(x => x.GetDddByCode(It.IsAny<int>())).ReturnsAsync(expectedResult);
 
 		//Act
-		var actualResult = await _contactService.UpdateContactAsync(It.IsAny<int>(), _contactDto);
+		var actualResult = await _contactService.UpdateContactAsync(It.IsAny<int>(), _contactInput);
 
 		//Assert
 		Assert.True(actualResult.IsError, "Expected error not returned when DDD Service returns error");
@@ -367,10 +358,10 @@ public class ContactServiceTests
 		//Arrange
 		_contactRepositoryMock.Setup(x => x.GetContactByIdAsync(It.IsAny<int>())).ReturnsAsync(_contact);
 		_dddServiceMock.Setup(x => x.GetDddByCode(It.IsAny<int>())).ReturnsAsync(_dddDto);
-		_contactDto.Email = _contactDto.Email.Replace("@", string.Empty);
+		_contactInput.Email = _contactInput.Email.Replace("@", string.Empty);
 
 		//Act
-		var result = await _contactService.UpdateContactAsync(It.IsAny<int>(), _contactDto);
+		var result = await _contactService.UpdateContactAsync(It.IsAny<int>(), _contactInput);
 
 		//Assert
 		Assert.True(result.IsError, "Expected errors not returned when validation fails");
@@ -385,7 +376,7 @@ public class ContactServiceTests
 		_contactRepositoryMock.Setup(x => x.GetContactByIdAsync(It.IsAny<int>())).ThrowsAsync(new Exception(expectedError));
 
 		//Act
-		var result = await _contactService.UpdateContactAsync(It.IsAny<int>(), _contactDto);
+		var result = await _contactService.UpdateContactAsync(It.IsAny<int>(), _contactInput);
 
 		//Assert
 		Assert.True(result.IsError, "Expected error not returned when exception throws");
