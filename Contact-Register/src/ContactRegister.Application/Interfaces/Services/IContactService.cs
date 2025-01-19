@@ -1,11 +1,12 @@
 using ContactRegister.Application.DTOs;
+using ContactRegister.Application.Inputs;
 using ErrorOr;
 
 namespace ContactRegister.Application.Interfaces.Services;
 
 public interface IContactService
 {
-    public Task<ErrorOr<Success>> AddContactAsync(ContactDto contact);
+    public Task<ErrorOr<Success>> AddContactAsync(ContactInput contactInput);
     public Task<ErrorOr<ContactDto?>> GetContactByIdAsync(int id);
     public Task<ErrorOr<IEnumerable<ContactDto>>> GetContactsAsync(
 		int dddCode,
@@ -19,7 +20,7 @@ public interface IContactService
         string? addressLine2 = null,
         string? homeNumber = null,
         string? mobileNumber = null);
-    public Task<ErrorOr<Success>> UpdateContactAsync(int id, ContactDto contact);
+    public Task<ErrorOr<Success>> UpdateContactAsync(int id, ContactInput contactInput);
     public Task<ErrorOr<Success>> DeleteContactAsync(int id);
     public Task<ErrorOr<IEnumerable<ContactDto>>> GetContactsByDdd(int[] dddCodes);
 }
