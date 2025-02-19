@@ -4,14 +4,14 @@ services:
   contact.register.api:
     build:
       context: .
-      dockerfile: src/Contact.Register.Api/Dockerfile
+      dockerfile: src/ContactRegister.Api/Dockerfile
     ports:
-      - "8080:80"
+      - '8080:80'
     depends_on:
       - sqlserver
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=YourDatabase;User Id=sa;Password=Password123;TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=master;User Id=sa;Password=Password123;TrustServerCertificate=True;
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -19,11 +19,15 @@ services:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=Password123
     ports:
-      - "1433:1433"
+      - '1433:1433'
     volumes:
       - sqlserverdata:/var/opt/mssql
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Password123 -Q 'SELECT 1'"]
+      test:
+        [
+          'CMD-SHELL',
+          "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Password123 -Q 'SELECT 1'",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5

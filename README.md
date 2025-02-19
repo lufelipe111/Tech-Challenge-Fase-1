@@ -5,7 +5,7 @@ This section provides instructions on how to build and run the application using
 ## Prerequisites
 
 - **Docker**: Ensure that Docker is installed and running on your system.
-    - [Install Docker Desktop](https://www.docker.com/products/docker-desktop) for your operating system.
+  - [Install Docker Desktop](https://www.docker.com/products/docker-desktop) for your operating system.
 - **Docker Compose**: Comes bundled with Docker Desktop. No additional installation is required.
 
 ## Steps to Run the Application
@@ -38,8 +38,8 @@ This command does the following:
 
 - **Builds** the Docker image for the application using the provided `Dockerfile`.
 - **Starts** the containers defined in the `docker-compose.yml` file:
-    - **Application Container**: Runs the .NET 8 API.
-    - **SQL Server Container**: Hosts the SQL Server database.
+  - **Application Container**: Runs the .NET 8 API.
+  - **SQL Server Container**: Hosts the SQL Server database.
 
 ### 4. Verify the Containers are Running
 
@@ -62,7 +62,9 @@ The application documentation should now be accessible at `http://localhost:8080
   For example, to get all contacts:
 
   ```bash
-  curl -X 'GET' 'http://localhost:8080/Contact/Get' -H 'accept: */*'
+  curl -X 'GET' \
+  'http://localhost:8080/Contact/GetContacts?dddCode=0&skip=0&take=50' \
+  -H 'accept: */*'
   ```
 
 ### 6. Stopping the Application
@@ -113,7 +115,7 @@ You can connect to the SQL Server instance using SQL Server Management Studio (S
 
 - **Server**: `localhost:1433`
 - **Username**: `sa`
-- **Password**: `Password_123`
+- **Password**: `Password123`
 
 Ensure that the SQL client is configured to allow connections to localhost on port 1433.
 
@@ -155,7 +157,7 @@ docker system prune
   services:
     Contact.Register.Api:
       ports:
-        - "<your_desired_port>:80"
+        - '<your_desired_port>:80'
   ```
 
   Replace `your_desired_port` with an available port number.
@@ -188,12 +190,12 @@ If you prefer to run the application without Docker, follow these steps:
 
 1. **Set Up the Database**:
 
-    - Update the `ConnectionStrings` in `appsettings.json` or `appsettings.Development.json` with your SQL Server instance details.
-    - Apply migrations to create the database schema:
+   - Update the `ConnectionStrings` in `appsettings.json` or `appsettings.Development.json` with your SQL Server instance details.
+   - Apply migrations to create the database schema:
 
-      ```bash
-      dotnet ef database update --project src/Contact.Register.Infrastructure --startup-project src/Contact.Register.Api
-      ```
+     ```bash
+     dotnet ef database update --project src/Contact.Register.Infrastructure --startup-project src/Contact.Register.Api
+     ```
 
 2. **Restore Dependencies**:
 
