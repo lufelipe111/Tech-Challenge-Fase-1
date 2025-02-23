@@ -4,28 +4,33 @@ WORKDIR /app
 
 # Copy the solution and project files
 COPY *.sln .
-COPY src/Contact.Register.Domain/*.csproj ./src/Contact.Register.Domain/
-COPY src/Contact.Register.Application/*.csproj ./src/Contact.Register.Application/
-COPY src/Contact.Register.Infrastructure/*.csproj ./src/Contact.Register.Infrastructure/
-COPY src/Contact.Register.Api/*.csproj ./src/Contact.Register.Api/
-COPY shared/Contact.Register.Shared/*.csproj ./src/Contact.Register.Shared/
+COPY src/ContactRegister.Domain/*.csproj ./src/ContactRegister.Domain/
+COPY src/ContactRegister.Application/*.csproj ./src/ContactRegister.Application/
+COPY src/ContactRegister.Infrastructure/*.csproj ./src/ContactRegister.Infrastructure/
+COPY src/ContactRegister.Api/*.csproj ./src/ContactRegister.Api/
+COPY shared/ContactRegister.Shared/*.csproj ./src/ContactRegister.Shared/
 
 # Restore dependencies
-RUN dotnet restore ./src/Contact.Register.Api/Contact.Register.Api.csproj
+RUN dotnet restore ./src/ContactRegister.Api/ContactRegister.Api.csproj
 
 # Copy the entire source code
 COPY . .
 
 # Build the application
-WORKDIR /app/src/Contact.Register.Api
-RUN dotnet publish Contact.Register.Api.csproj -c Release -o out
+WORKDIR /app/src/ContactRegister.Api
+RUN dotnet publish ContactRegister.Api.csproj -c Release -o out
+
+## Run migrations
+# RUN dotnet tool install --version 8 --global dotnet-ef
+# ENV PATH="$PATH:/root/.dotnet/tools"
+# ENTRYPOINT dotnet-ef database update
 
 # Stage 2: Create the runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
 # Copy the published application from the build stage
-COPY --from=build /app/src/Contact.Register.Api/out ./
+COPY --from=build /app/src/ContactRegister.Api/out ./
 
 # Environment variables
 ENV ASPNETCORE_HTTP_PORTS=80
@@ -34,4 +39,4 @@ ENV ASPNETCORE_HTTP_PORTS=80
 EXPOSE 80 443
 
 # Start the application
-ENTRYPOINT ["dotnet", "Contact.Register.Api.dll"]
+ENTRYPOINT ["dotnet", "ContactRegister.Api.dll"]
