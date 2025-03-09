@@ -23,10 +23,8 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-    - name: Main
-      run: ls
-    # - name: Install dependencies
-    #   run: dotnet restore
+    - name: Install dependencies
+      run: dotnet ./Contact-Register restore
     # - name: Build
     #   run: dotnet build --no-restore
     # - name: Test with the dotnet CLI
