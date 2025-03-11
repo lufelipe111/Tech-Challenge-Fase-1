@@ -26,4 +26,8 @@
       <ProjectReference Include="..\ContactRegister.Infrastructure\ContactRegister.Infrastructure.csproj" />
     </ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="ContactRegister.Tests"/>
+	</ItemGroup>
+
 </Project>
