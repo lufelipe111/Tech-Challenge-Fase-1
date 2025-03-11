@@ -1,5 +1,6 @@
 using ContactRegister.Application.Inputs;
 using ContactRegister.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ContactRegister.API.Controllers;
@@ -285,7 +286,7 @@ public class ContactController : ControllerBase
         if (result.IsError)
             return BadRequest(null);
 
-        return Created();
+		return Created(HttpContext.Request.GetDisplayUrl(), new { Id = Guid.NewGuid() });
     }
 
     /// <summary>

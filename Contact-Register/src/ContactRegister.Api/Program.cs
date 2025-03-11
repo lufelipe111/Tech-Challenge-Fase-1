@@ -36,3 +36,5 @@ app.MapControllers();
 app.UseHttpsRedirection();
 
 await app.RunAsync();
+
+public partial class Program { }
