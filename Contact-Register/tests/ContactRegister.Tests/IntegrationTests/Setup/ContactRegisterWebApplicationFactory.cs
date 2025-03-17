@@ -10,7 +10,6 @@ namespace ContactRegister.Tests.IntegrationTests.Setup
 {
     public class ContactRegisterWebApplicationFactory : WebApplicationFactory<Program>
     {
-        //private readonly DbFixture _fixture;
 
         public IConfiguration Configuration { get; private set; }
 
