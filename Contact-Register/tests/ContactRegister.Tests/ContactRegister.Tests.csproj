@@ -14,6 +14,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="FluentAssertions" Version="[7.2.0]" /> <!--A partir da versão 8.X.X é pago--> 
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.13" />
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
       <PackageReference Include="Moq" Version="4.20.72" />
       <PackageReference Include="xunit" Version="2.9.2" />
@@ -21,6 +23,11 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="IntegrationTests\obj\Debug\" />
+      <Folder Include="IntegrationTests\obj\Release\" />
     </ItemGroup>
 
 </Project>
