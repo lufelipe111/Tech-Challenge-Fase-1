@@ -6,12 +6,13 @@ services:
       context: .
       dockerfile: src/ContactRegister.Api/Dockerfile
     ports:
-      - '8080:80'
+      - '8080:8080'
     depends_on:
       - sqlserver
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=contact_db;User Id=sa;Password=Password123;TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;User Id=sa;Password=Password123;TrustServerCertificate=True;
+      - ASPNETCORE_HTTP_PORTS=80
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
