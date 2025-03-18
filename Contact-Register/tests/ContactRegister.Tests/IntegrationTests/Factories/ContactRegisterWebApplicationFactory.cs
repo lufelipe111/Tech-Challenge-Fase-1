@@ -1,11 +1,8 @@
-﻿using ContactRegister.Infrastructure.Persistence;
-using ContactRegister.Tests.IntegrationTests.Fixtures;
+﻿using ContactRegister.Tests.IntegrationTests.Fixtures;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Xunit;
 
 namespace ContactRegister.Tests.IntegrationTests.Factories
@@ -30,10 +27,9 @@ namespace ContactRegister.Tests.IntegrationTests.Factories
 
             builder.ConfigureAppConfiguration((context, configuration) =>
             {
-                configuration.AddInMemoryCollection(new[]
-                {
-                    new KeyValuePair<string, string>("ConnectionStrings:DefaultConnection", _fixture.ConnectionString),
-                });
+                configuration.AddInMemoryCollection([
+                    new KeyValuePair<string, string?>("ConnectionStrings:DefaultConnection", _fixture.ConnectionString)
+                ]);
             });
         }
     }

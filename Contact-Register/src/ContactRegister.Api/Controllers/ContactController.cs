@@ -17,10 +17,10 @@ public class ContactController : ControllerBase
 	}
 
 	/// <summary>
-	/// Busca as informaÁıes de um Contato a partir do seu ID ˙nico informado.
+	/// Busca as informa√ß√µes de um Contato a partir do seu ID √∫nico informado.
 	/// </summary>
-	/// <param name="id">Identificador ˙nico (ID) do contato a ser pesquisado.</param>
-	/// <returns>As informaÁıes do Contato, ou uma lista de erros.</returns>
+	/// <param name="id">Identificador √∫nico (ID) do contato a ser pesquisado.</param>
+	/// <returns>As informa√ß√µes do Contato, ou uma lista de erros.</returns>
 	/// <response code="200">
 	/// Busca realizada com sucesso. Exemplo de retorno:
 	/// 
@@ -28,7 +28,7 @@ public class ContactController : ControllerBase
 	///     {
 	///       "id": 1,
 	///       "firstName": "Sebastiana",
-	///       "lastName": "Agatha GonÁalves",
+	///       "lastName": "Agatha Gon√ßalves",
 	///       "email": "sebastianaagathagoncalves@sfreitasadvogados.com.br",
 	///       "address": {
 	///         "addressLine1": "Rua Peroba 367 Eldorado",
@@ -46,11 +46,11 @@ public class ContactController : ControllerBase
 	///       "ddd": {
 	///         "code": 69,
 	///         "state": "RO",
-	///         "region": "ALTO ALEGRE DO PARECIS, VALE DO PARAÕSO, VALE DO ANARI, URUP¡, THEOBROMA, TEIXEIR”POLIS, SERINGUEIRAS, S√O FRANCISCO DO GUAPOR…, S√O FELIPE D'OESTE, PRIMAVERA DE ROND‘NIA, PIMENTEIRAS DO OESTE, PARECIS, NOVA UNI√O, MONTE NEGRO, MIRANTE DA SERRA, MINISTRO ANDREAZZA, ITAPU√ DO OESTE, GOVERNADOR JORGE TEIXEIRA, CUJUBIM, CHUPINGUAIA, CASTANHEIRAS, CANDEIAS DO JAMARI, CAMPO NOVO DE ROND‘NIA, CACAUL¬NDIA, NOVO HORIZONTE DO OESTE, BURITIS, ALTO PARAÕSO, ALVORADA D'OESTE, NOVA MAMOR…, S√O MIGUEL DO GUAPOR…, VILHENA, SANTA LUZIA D'OESTE, ROLIM DE MOURA, RIO CRESPO, PRESIDENTE M…DICI, PORTO VELHO, PIMENTA BUENO, OURO PRETO DO OESTE, NOVA BRASIL¬NDIA D'OESTE, MACHADINHO D'OESTE, JI-PARAN¡, JARU, GUAJAR¡-MIRIM, ESPIG√O D'OESTE, COSTA MARQUES, CORUMBIARA, COLORADO DO OESTE, CEREJEIRAS, CACOAL, CABIXI, ARIQUEMES, ALTA FLORESTA D'OESTE"
+	///         "region": "ALTO ALEGRE DO PARECIS, VALE DO PARA√çSO, VALE DO ANARI, URUP√Å, THEOBROMA, TEIXEIR√ìPOLIS, SERINGUEIRAS, S√ÉO FRANCISCO DO GUAPOR√â, S√ÉO FELIPE D'OESTE, PRIMAVERA DE ROND√îNIA, PIMENTEIRAS DO OESTE, PARECIS, NOVA UNI√ÉO, MONTE NEGRO, MIRANTE DA SERRA, MINISTRO ANDREAZZA, ITAPU√É DO OESTE, GOVERNADOR JORGE TEIXEIRA, CUJUBIM, CHUPINGUAIA, CASTANHEIRAS, CANDEIAS DO JAMARI, CAMPO NOVO DE ROND√îNIA, CACAUL√ÇNDIA, NOVO HORIZONTE DO OESTE, BURITIS, ALTO PARA√çSO, ALVORADA D'OESTE, NOVA MAMOR√â, S√ÉO MIGUEL DO GUAPOR√â, VILHENA, SANTA LUZIA D'OESTE, ROLIM DE MOURA, RIO CRESPO, PRESIDENTE M√âDICI, PORTO VELHO, PIMENTA BUENO, OURO PRETO DO OESTE, NOVA BRASIL√ÇNDIA D'OESTE, MACHADINHO D'OESTE, JI-PARAN√Å, JARU, GUAJAR√Å-MIRIM, ESPIG√ÉO D'OESTE, COSTA MARQUES, CORUMBIARA, COLORADO DO OESTE, CEREJEIRAS, CACOAL, CABIXI, ARIQUEMES, ALTA FLORESTA D'OESTE"
 	///       }
 	///     }
 	/// </response>
-	/// <response code="404">Contato n„o encontrado</response>
+	/// <response code="404">Contato n√£o encontrado</response>
 	[HttpGet("[action]/{id:int}")]
     public async Task<IActionResult> GetContact([FromRoute] int id)
     {
@@ -66,11 +66,11 @@ public class ContactController : ControllerBase
     }
 
 	/// <summary>
-	/// Busca as informaÁıes de Contatos a partir de uma lista de DDDs.
+	/// Busca as informa√ß√µes de Contatos a partir de uma lista de DDDs.
 	/// </summary>
 	/// <param name="dddCodes">List de DDDs a serem pesquisados.</param>
 	/// <remarks>
-	/// Exemplo de requisiÁ„o:
+	/// Exemplo de requisi√ß√£o:
 	///
 	///     POST /Contact/GetContactsByDddCodes
 	///     [
@@ -80,7 +80,7 @@ public class ContactController : ControllerBase
 	///     ]
 	///
 	/// </remarks>
-	/// <returns>A lista com as informaÁıes dos Contatos, ou uma lista de erros.</returns>
+	/// <returns>A lista com as informa√ß√µes dos Contatos, ou uma lista de erros.</returns>
 	/// <response code="200">
 	/// Busca realizada com sucesso. Exemplo de retorno:
 	/// 
@@ -89,7 +89,7 @@ public class ContactController : ControllerBase
 	///		  {
 	///			"id": 1,
 	///			"firstName": "Sebastiana",
-	///			"lastName": "Agatha GonÁalves",
+	///			"lastName": "Agatha Gon√ßalves",
 	///			"email": "sebastianaagathagoncalves@sfreitasadvogados.com.br",
 	///			"address": {
 	///				"addressLine1": "Rua Peroba 367 Eldorado",
@@ -107,7 +107,7 @@ public class ContactController : ControllerBase
 	///			"ddd": {
 	///				"code": 69,
 	///				"state": "RO",
-	///				"region": "ALTO ALEGRE DO PARECIS, VALE DO PARAÕSO, VALE DO ANARI, URUP¡, THEOBROMA, TEIXEIR”POLIS, SERINGUEIRAS, S√O FRANCISCO DO GUAPOR…, S√O FELIPE D'OESTE, PRIMAVERA DE ROND‘NIA, PIMENTEIRAS DO OESTE, PARECIS, NOVA UNI√O, MONTE NEGRO, MIRANTE DA SERRA, MINISTRO ANDREAZZA, ITAPU√ DO OESTE, GOVERNADOR JORGE TEIXEIRA, CUJUBIM, CHUPINGUAIA, CASTANHEIRAS, CANDEIAS DO JAMARI, CAMPO NOVO DE ROND‘NIA, CACAUL¬NDIA, NOVO HORIZONTE DO OESTE, BURITIS, ALTO PARAÕSO, ALVORADA D'OESTE, NOVA MAMOR…, S√O MIGUEL DO GUAPOR…, VILHENA, SANTA LUZIA D'OESTE, ROLIM DE MOURA, RIO CRESPO, PRESIDENTE M…DICI, PORTO VELHO, PIMENTA BUENO, OURO PRETO DO OESTE, NOVA BRASIL¬NDIA D'OESTE, MACHADINHO D'OESTE, JI-PARAN¡, JARU, GUAJAR¡-MIRIM, ESPIG√O D'OESTE, COSTA MARQUES, CORUMBIARA, COLORADO DO OESTE, CEREJEIRAS, CACOAL, CABIXI, ARIQUEMES, ALTA FLORESTA D'OESTE"
+	///				"region": "ALTO ALEGRE DO PARECIS, VALE DO PARA√çSO, VALE DO ANARI, URUP√Å, THEOBROMA, TEIXEIR√ìPOLIS, SERINGUEIRAS, S√ÉO FRANCISCO DO GUAPOR√â, S√ÉO FELIPE D'OESTE, PRIMAVERA DE ROND√îNIA, PIMENTEIRAS DO OESTE, PARECIS, NOVA UNI√ÉO, MONTE NEGRO, MIRANTE DA SERRA, MINISTRO ANDREAZZA, ITAPU√É DO OESTE, GOVERNADOR JORGE TEIXEIRA, CUJUBIM, CHUPINGUAIA, CASTANHEIRAS, CANDEIAS DO JAMARI, CAMPO NOVO DE ROND√îNIA, CACAUL√ÇNDIA, NOVO HORIZONTE DO OESTE, BURITIS, ALTO PARA√çSO, ALVORADA D'OESTE, NOVA MAMOR√â, S√ÉO MIGUEL DO GUAPOR√â, VILHENA, SANTA LUZIA D'OESTE, ROLIM DE MOURA, RIO CRESPO, PRESIDENTE M√âDICI, PORTO VELHO, PIMENTA BUENO, OURO PRETO DO OESTE, NOVA BRASIL√ÇNDIA D'OESTE, MACHADINHO D'OESTE, JI-PARAN√Å, JARU, GUAJAR√Å-MIRIM, ESPIG√ÉO D'OESTE, COSTA MARQUES, CORUMBIARA, COLORADO DO OESTE, CEREJEIRAS, CACOAL, CABIXI, ARIQUEMES, ALTA FLORESTA D'OESTE"
 	///			}
 	///		},
 	///		{
@@ -116,7 +116,7 @@ public class ContactController : ControllerBase
 	///			"lastName": "Carolina Jesus",
 	///			"email": "rebeca_jesus@truran.com.br",
 	///			"address": {
-	///				"addressLine1": "Travessa S„o Francisco 558 Belo Jardim II",
+	///				"addressLine1": "Travessa S√£o Francisco 558 Belo Jardim II",
 	///				"addressLine2": "",
 	///				"city": "Rio Branco",
 	///				"state": "AC",
@@ -131,12 +131,12 @@ public class ContactController : ControllerBase
 	///			"ddd": {
 	///				"code": 68,
 	///				"state": "AC",
-	///				"region": "PORTO ACRE, XAPURI, TARAUAC¡, SENA MADUREIRA, SENADOR GUIOMARD, SANTA ROSA DO PURUS, RODRIGUES ALVES, RIO BRANCO, PORTO WALTER, PL¡CIDO DE CASTRO, MARECHAL THAUMATURGO, MANOEL URBANO, M¬NCIO LIMA, JORD√O, FEIJ”, EPITACIOL¬NDIA, CRUZEIRO DO SUL, CAPIXABA, BUJARI, BRASIL…IA, ASSIS BRASIL, ACREL¬NDIA"
+	///				"region": "PORTO ACRE, XAPURI, TARAUAC√Å, SENA MADUREIRA, SENADOR GUIOMARD, SANTA ROSA DO PURUS, RODRIGUES ALVES, RIO BRANCO, PORTO WALTER, PL√ÅCIDO DE CASTRO, MARECHAL THAUMATURGO, MANOEL URBANO, M√ÇNCIO LIMA, JORD√ÉO, FEIJ√ì, EPITACIOL√ÇNDIA, CRUZEIRO DO SUL, CAPIXABA, BUJARI, BRASIL√âIA, ASSIS BRASIL, ACREL√ÇNDIA"
 	///			}
 	///		}
 	///	]
 	/// </response>
-	/// <response code="404">Contato n„o encontrado</response>
+	/// <response code="404">Contato n√£o encontrado</response>
 	/// <response code="400">Erro ao realizar a busca</response>
 	[HttpPost("[action]")]
     public async Task<IActionResult> GetContactsByDddCodes([FromBody] int[] dddCodes)
@@ -151,22 +151,22 @@ public class ContactController : ControllerBase
     }
 
 	/// <summary>
-	/// Busca as informaÁıes de Contatos a partir de um filtro informado.
+	/// Busca as informa√ß√µes de Contatos a partir de um filtro informado.
 	/// </summary>
 	/// <param name="firstName">Primeiro nome do Contato.</param>
 	/// <param name="lastName">Sobrenome do Contato.</param>
-	/// <param name="email">E-mail do Contato. Precisa estar no padr„o xx@xx.xx</param>
+	/// <param name="email">E-mail do Contato. Precisa estar no padr√£o xx@xx.xx</param>
 	/// <param name="city">A cidade do Contato.</param>
 	/// <param name="state">O Estado do Contato.</param>
 	/// <param name="postalCode">O CEP do Contato.</param>
-	/// <param name="addressLine1">Primeiro linha do endereÁo do Contato.</param>
-	/// <param name="addressLine2">Segunda linha do endereÁo do Contato, se aplic·vel.</param>
-	/// <param name="homeNumber">N˙mero de telefone fixo do Contato.</param>
-	/// <param name="mobileNumber">N˙mero de celular do Contato.</param>
+	/// <param name="addressLine1">Primeiro linha do endere√ßo do Contato.</param>
+	/// <param name="addressLine2">Segunda linha do endere√ßo do Contato, se aplic√°vel.</param>
+	/// <param name="homeNumber">N√∫mero de telefone fixo do Contato.</param>
+	/// <param name="mobileNumber">N√∫mero de celular do Contato.</param>
 	/// <param name="dddCode">DDD do Contato.</param>
-	/// <param name="skip">Para busca paginada. P·gina a ser pesquisada. O padr„o È 0 (primeira p·gina).</param>
-	/// <param name="take">Quantidade de contatos a serem retornados. O padr„o È 50.</param>
-	/// <returns>A lista com as informaÁıes dos Contatos, ou vazio.</returns>
+	/// <param name="skip">Para busca paginada. P√°gina a ser pesquisada. O padr√£o √© 0 (primeira p√°gina).</param>
+	/// <param name="take">Quantidade de contatos a serem retornados. O padr√£o √© 50.</param>
+	/// <returns>A lista com as informa√ß√µes dos Contatos, ou vazio.</returns>
 	/// <response code="200">
 	/// Busca realizada com sucesso. Exemplo de retorno:
 	/// 
@@ -175,7 +175,7 @@ public class ContactController : ControllerBase
 	///		  {
 	///			"id": 1,
 	///			"firstName": "Sebastiana",
-	///			"lastName": "Agatha GonÁalves",
+	///			"lastName": "Agatha Gon√ßalves",
 	///			"email": "sebastianaagathagoncalves@sfreitasadvogados.com.br",
 	///			"address": {
 	///				"addressLine1": "Rua Peroba 367 Eldorado",
@@ -193,7 +193,7 @@ public class ContactController : ControllerBase
 	///			"ddd": {
 	///				"code": 69,
 	///				"state": "RO",
-	///				"region": "ALTO ALEGRE DO PARECIS, VALE DO PARAÕSO, VALE DO ANARI, URUP¡, THEOBROMA, TEIXEIR”POLIS, SERINGUEIRAS, S√O FRANCISCO DO GUAPOR…, S√O FELIPE D'OESTE, PRIMAVERA DE ROND‘NIA, PIMENTEIRAS DO OESTE, PARECIS, NOVA UNI√O, MONTE NEGRO, MIRANTE DA SERRA, MINISTRO ANDREAZZA, ITAPU√ DO OESTE, GOVERNADOR JORGE TEIXEIRA, CUJUBIM, CHUPINGUAIA, CASTANHEIRAS, CANDEIAS DO JAMARI, CAMPO NOVO DE ROND‘NIA, CACAUL¬NDIA, NOVO HORIZONTE DO OESTE, BURITIS, ALTO PARAÕSO, ALVORADA D'OESTE, NOVA MAMOR…, S√O MIGUEL DO GUAPOR…, VILHENA, SANTA LUZIA D'OESTE, ROLIM DE MOURA, RIO CRESPO, PRESIDENTE M…DICI, PORTO VELHO, PIMENTA BUENO, OURO PRETO DO OESTE, NOVA BRASIL¬NDIA D'OESTE, MACHADINHO D'OESTE, JI-PARAN¡, JARU, GUAJAR¡-MIRIM, ESPIG√O D'OESTE, COSTA MARQUES, CORUMBIARA, COLORADO DO OESTE, CEREJEIRAS, CACOAL, CABIXI, ARIQUEMES, ALTA FLORESTA D'OESTE"
+	///				"region": "ALTO ALEGRE DO PARECIS, VALE DO PARA√çSO, VALE DO ANARI, URUP√Å, THEOBROMA, TEIXEIR√ìPOLIS, SERINGUEIRAS, S√ÉO FRANCISCO DO GUAPOR√â, S√ÉO FELIPE D'OESTE, PRIMAVERA DE ROND√îNIA, PIMENTEIRAS DO OESTE, PARECIS, NOVA UNI√ÉO, MONTE NEGRO, MIRANTE DA SERRA, MINISTRO ANDREAZZA, ITAPU√É DO OESTE, GOVERNADOR JORGE TEIXEIRA, CUJUBIM, CHUPINGUAIA, CASTANHEIRAS, CANDEIAS DO JAMARI, CAMPO NOVO DE ROND√îNIA, CACAUL√ÇNDIA, NOVO HORIZONTE DO OESTE, BURITIS, ALTO PARA√çSO, ALVORADA D'OESTE, NOVA MAMOR√â, S√ÉO MIGUEL DO GUAPOR√â, VILHENA, SANTA LUZIA D'OESTE, ROLIM DE MOURA, RIO CRESPO, PRESIDENTE M√âDICI, PORTO VELHO, PIMENTA BUENO, OURO PRETO DO OESTE, NOVA BRASIL√ÇNDIA D'OESTE, MACHADINHO D'OESTE, JI-PARAN√Å, JARU, GUAJAR√Å-MIRIM, ESPIG√ÉO D'OESTE, COSTA MARQUES, CORUMBIARA, COLORADO DO OESTE, CEREJEIRAS, CACOAL, CABIXI, ARIQUEMES, ALTA FLORESTA D'OESTE"
 	///			}
 	///		},
 	///		{
@@ -202,7 +202,7 @@ public class ContactController : ControllerBase
 	///			"lastName": "Carolina Jesus",
 	///			"email": "rebeca_jesus@truran.com.br",
 	///			"address": {
-	///				"addressLine1": "Travessa S„o Francisco 558 Belo Jardim II",
+	///				"addressLine1": "Travessa S√£o Francisco 558 Belo Jardim II",
 	///				"addressLine2": "",
 	///				"city": "Rio Branco",
 	///				"state": "AC",
@@ -217,12 +217,12 @@ public class ContactController : ControllerBase
 	///			"ddd": {
 	///				"code": 68,
 	///				"state": "AC",
-	///				"region": "PORTO ACRE, XAPURI, TARAUAC¡, SENA MADUREIRA, SENADOR GUIOMARD, SANTA ROSA DO PURUS, RODRIGUES ALVES, RIO BRANCO, PORTO WALTER, PL¡CIDO DE CASTRO, MARECHAL THAUMATURGO, MANOEL URBANO, M¬NCIO LIMA, JORD√O, FEIJ”, EPITACIOL¬NDIA, CRUZEIRO DO SUL, CAPIXABA, BUJARI, BRASIL…IA, ASSIS BRASIL, ACREL¬NDIA"
+	///				"region": "PORTO ACRE, XAPURI, TARAUAC√Å, SENA MADUREIRA, SENADOR GUIOMARD, SANTA ROSA DO PURUS, RODRIGUES ALVES, RIO BRANCO, PORTO WALTER, PL√ÅCIDO DE CASTRO, MARECHAL THAUMATURGO, MANOEL URBANO, M√ÇNCIO LIMA, JORD√ÉO, FEIJ√ì, EPITACIOL√ÇNDIA, CRUZEIRO DO SUL, CAPIXABA, BUJARI, BRASIL√âIA, ASSIS BRASIL, ACREL√ÇNDIA"
 	///			}
 	///		}
 	///	]
 	/// </response>
-	/// <response code="404">Contato n„o encontrado</response>
+	/// <response code="404">Contato n√£o encontrado</response>
 	[HttpGet("[action]")]
     public async Task<IActionResult> GetContacts(
         [FromQuery] string? firstName,
@@ -271,7 +271,7 @@ public class ContactController : ControllerBase
     ///     [
     ///       {
     ///         "code": "Ddd.ExternalApi",
-    ///         "description": "DDD n„o encontrado",
+    ///         "description": "DDD n√£o encontrado",
     ///         "type": 0,
     ///         "numericType": 0,
     ///         "metadata": null
@@ -290,10 +290,10 @@ public class ContactController : ControllerBase
     }
 
     /// <summary>
-    /// Atualiza um Contato a partir do seu ID ˙nico informado.
+    /// Atualiza um Contato a partir do seu ID √∫nico informado.
     /// </summary>
-    /// <param name="id">Identificador ˙nico (ID) do contato a ser excluÌdo.</param>
-    /// <response code="204">AtualizaÁ„o realizada com sucesso</response>
+    /// <param name="id">Identificador √∫nico (ID) do contato a ser exclu√≠do.</param>
+    /// <response code="204">Atualiza√ß√£o realizada com sucesso</response>
     /// <response code="400">
     /// Exemplo de erro ao atualizar o contato:
     /// 
@@ -301,7 +301,7 @@ public class ContactController : ControllerBase
     ///     [
     ///       {
     ///         "code": "Ddd.ExternalApi",
-    ///         "description": "DDD n„o encontrado",
+    ///         "description": "DDD n√£o encontrado",
     ///         "type": 0,
     ///         "numericType": 0,
     ///         "metadata": null
@@ -320,11 +320,11 @@ public class ContactController : ControllerBase
 	}
 
 	/// <summary>
-	/// Exclui um Contato a partir do seu ID ˙nico informado.
+	/// Exclui um Contato a partir do seu ID √∫nico informado.
 	/// </summary>
-	/// <param name="id">Identificador ˙nico (ID) do contato a ser excluÌdo.</param>
-	/// <returns>A confirmaÁ„o de exclus„o do Contato, ou uma lista de erros.</returns>
-	/// <response code="204">Exclus„o realizada com sucesso</response>
+	/// <param name="id">Identificador √∫nico (ID) do contato a ser exclu√≠do.</param>
+	/// <returns>A confirma√ß√£o de exclus√£o do Contato, ou uma lista de erros.</returns>
+	/// <response code="204">Exclus√£o realizada com sucesso</response>
 	/// <response code="400">
 	/// Erro ao excluir contato. Exemplo de retorno:
 	/// 
