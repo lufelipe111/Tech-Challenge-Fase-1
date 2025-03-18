@@ -2,6 +2,7 @@ using ContactRegister.Application.Inputs;
 using ContactRegister.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ContactRegister.API.Controllers;
 
@@ -253,9 +254,9 @@ public class ContactController : ControllerBase
             homeNumber,
             mobileNumber);
         
-        if (contact.Value == null)
+        if (contact.Value.IsNullOrEmpty())
         {
-            return NotFound(null);
+            return NotFound();
         }
         return Ok(contact.Value.Skip(skip).Take(take));
     }
@@ -284,7 +285,7 @@ public class ContactController : ControllerBase
         var result = await _contactService.AddContactAsync(contact);
 
         if (result.IsError)
-            return BadRequest(null);
+            return BadRequest(result.Errors);
 
 		return Created(HttpContext.Request.GetDisplayUrl(), new { Id = Guid.NewGuid() });
     }
@@ -314,7 +315,7 @@ public class ContactController : ControllerBase
 		var result = await _contactService.UpdateContactAsync(id, contact);
 
 		if (result.IsError)
-			return BadRequest(null);
+			return BadRequest(result.Errors);
 
 		return NoContent();
 	}
@@ -345,7 +346,7 @@ public class ContactController : ControllerBase
         var result = await _contactService.DeleteContactAsync(id);
 
         if (result.IsError)
-            return BadRequest(null);
+            return BadRequest(result.Errors);
 
         return NoContent();
     }
