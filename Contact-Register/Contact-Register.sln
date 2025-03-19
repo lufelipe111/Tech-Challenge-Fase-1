@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Dockerfile.sqlserver = Dockerfile.sqlserver
 		.env = .env
 		prometheus.yml = prometheus.yml
+		contact-register-grafana-dashboard.json = contact-register-grafana-dashboard.json
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactRegister.Shared", "shared\ContactRegister.Shared\ContactRegister.Shared.csproj", "{684C7F9C-B44B-4293-A7A3-373943D1D802}"
