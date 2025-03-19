@@ -350,4 +350,10 @@ public class ContactController : ControllerBase
 
         return NoContent();
     }
+
+	[HttpGet("[action]")]
+	public async Task<IActionResult> TestException()
+	{
+		throw new Exception("TestException");
+	}
 }
