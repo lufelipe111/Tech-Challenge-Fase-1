@@ -98,7 +98,6 @@ public class ContactTest : BaseIntegrationTests, IClassFixture<TestContainerCont
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
-
     [Fact]
     public async Task GetContacts_ShouldReturn_ArrayStringNotEmpty()
     {
@@ -157,7 +156,7 @@ public class ContactTest : BaseIntegrationTests, IClassFixture<TestContainerCont
 	{
 		// Arrange
 		var client = GetClient();
-		int[] request = [11];
+		int[] request = [68];
 
 		// Act
 		var response = await client.PostAsJsonAsync($"{resource}/GetContactsByDddCodes", request);
@@ -184,13 +183,13 @@ public class ContactTest : BaseIntegrationTests, IClassFixture<TestContainerCont
 			{
 				AddressLine1 = "Rua teste, 123",
 				AddressLine2 = "Predio A, Apartamento 42",
-				City = "São Paulo",
-				State = "SP",
+				City = "BRASILÉIA",
+				State = "AC",
 				PostalCode = "012345-678"
 			},
 			HomeNumber = "11111111",
 			MobileNumber = "922222222",
-			Ddd = 11
+			Ddd = 68
 		};
 
 		// Act

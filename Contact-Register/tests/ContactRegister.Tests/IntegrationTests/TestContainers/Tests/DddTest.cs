@@ -56,7 +56,7 @@ public class DddTest : BaseIntegrationTests, IClassFixture<TestContainerContactR
 	{
 		// Arrange
 		var client = GetClient();
-		var dddCode = 11;
+		var dddCode = 68;
 
 		// Act
 		var response = await client.GetAsync($"{resource}/GetDdd");
