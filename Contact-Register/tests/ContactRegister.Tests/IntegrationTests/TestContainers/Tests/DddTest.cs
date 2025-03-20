@@ -17,8 +17,9 @@ public class DddTest : BaseIntegrationTests, IClassFixture<TestContainerContactR
     public DddTest(TestContainerContactRegisterFactory factory) : base(factory)
     {
         var context = factory.Services.GetRequiredService<AppDbContext>();
-        context.Database.Migrate();
-    }
+		if (context.Database.GetPendingMigrations().Any())
+			context.Database.Migrate();
+	}
     
     [Fact]
     public async Task GetDddByCode_ShouldReturn_Ok()

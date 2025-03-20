@@ -18,7 +18,8 @@ public class ContactTest : BaseIntegrationTests, IClassFixture<TestContainerCont
     public ContactTest(TestContainerContactRegisterFactory factory) : base(factory)
     {
         var context = factory.Services.GetRequiredService<AppDbContext>();
-        context.Database.Migrate();
+        if (context.Database.GetPendingMigrations().Any())
+            context.Database.Migrate();
     }
 
     [Fact(DisplayName = "Create simple contact")]
