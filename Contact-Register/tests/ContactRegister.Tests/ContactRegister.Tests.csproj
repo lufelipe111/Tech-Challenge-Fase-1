@@ -18,16 +18,18 @@
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.13" />
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
       <PackageReference Include="Moq" Version="4.20.72" />
-      <PackageReference Include="xunit" Version="2.9.2" />
-      <PackageReference Include="xunit.runner.visualstudio" Version="3.0.0">
+      <PackageReference Include="Testcontainers" Version="4.3.0" />
+      <PackageReference Include="Testcontainers.MsSql" Version="4.3.0" />
+      <PackageReference Include="Testcontainers.Xunit" Version="4.3.0" />
+      <PackageReference Include="xunit" Version="2.9.3" />
+      <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="IntegrationTests\obj\Debug\" />
-      <Folder Include="IntegrationTests\obj\Release\" />
+      <Folder Include="IntegrationTests\InMemory\" />
     </ItemGroup>
 
 </Project>

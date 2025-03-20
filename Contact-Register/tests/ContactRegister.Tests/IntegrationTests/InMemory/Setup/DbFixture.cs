@@ -1,7 +1,7 @@
 ﻿using ContactRegister.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace ContactRegister.Tests.IntegrationTests.Setup;
+namespace ContactRegister.Tests.IntegrationTests.InMemory.Setup;
 
 // TODO: Entendi esta Fixture, mas acho que não precisa. Tudo pode ser configurado no WebApplicationFactory
 public class DbFixture : IDisposable

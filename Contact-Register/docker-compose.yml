@@ -21,7 +21,7 @@ services:
       retries: 3
 
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:2022-CU17-ubuntu-22.04
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=Password123

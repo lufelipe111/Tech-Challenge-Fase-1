@@ -1,11 +1,11 @@
-﻿using ContactRegister.Tests.IntegrationTests.Fixtures;
+﻿using ContactRegister.Tests.IntegrationTests.InMemory.Fixtures;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Xunit;
 
-namespace ContactRegister.Tests.IntegrationTests.Factories
+namespace ContactRegister.Tests.IntegrationTests.InMemory.Factories
 {
     [Collection("Database")]
     public class ContactRegisterWebApplicationFactory : WebApplicationFactory<Program>

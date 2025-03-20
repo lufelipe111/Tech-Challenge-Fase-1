@@ -2,39 +2,53 @@ using ContactRegister.Application;
 using ContactRegister.Application.Interfaces.Services;
 using ContactRegister.Infrastructure;
 using ContactRegister.Infrastructure.Cache;
+using ContactRegister.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 using Prometheus;
 
-var builder = WebApplication.CreateBuilder(args);
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
-builder.Services.AddMemoryCache();
-builder.Services.AddTransient<ICacheService, MemCacheService>();
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddMemoryCache();
+        // Add services to the container.
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+        builder.Services.AddControllers();
+        builder.Services.AddMemoryCache();
+        builder.Services.AddTransient<ICacheService, MemCacheService>();
+        builder.Services.AddApplication();
+        builder.Services.AddInfrastructure(builder.Configuration);
+        builder.Services.AddMemoryCache();
 
-builder.Services.AddMetrics();
-builder.Services.UseHttpClientMetrics();
+        builder.Services.AddMetrics();
+        builder.Services.UseHttpClientMetrics();
 
 
-var app = builder.Build();
+        var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-app.UseSwagger();
-app.UseSwaggerUI();
+        if (app.Environment.IsEnvironment("Testing"))
+        {
+            var dbContext = app.Services.GetRequiredService<AppDbContext>();
+            dbContext.Database.Migrate();
+        }
 
-app.UseRouting();
-app.UseHttpMetrics(); // Exposes /metrics
-app.UseMetricServer();
-app.UseHttpMetrics();
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
-app.MapControllers();
-app.MapMetrics();
+        // Configure the HTTP request pipeline.
+        app.UseRouting();
+        app.UseHttpMetrics(); // Exposes /metrics
+        app.UseMetricServer();
+        app.UseHttpMetrics();
 
-app.UseHttpsRedirection();
+        app.MapControllers();
+        app.MapMetrics();
 
-app.Run();
+        app.UseHttpsRedirection();
+
+        app.Run();
+    }
+}
