@@ -1,3 +1,5 @@
+using ContactRegister.Domain.Entities;
+using ContactRegister.Domain.ValueObjects;
 using ContactRegister.Infrastructure.Persistence;
 using DotNet.Testcontainers.Builders;
 using Microsoft.AspNetCore.Hosting;
@@ -44,7 +46,20 @@ public class TestContainerContactRegisterFactory : WebApplicationFactory<Program
             services.AddDbContext<AppDbContext>(b =>
             {
                 var connectionString = _msSqlContainer.GetConnectionString();
-                b.UseSqlServer(connectionString);
+                b.UseSqlServer(connectionString).UseSeeding((context, _) =>
+				{
+					var ddd = new Ddd(68, "AC", "PORTO ACRE, XAPURI, TARAUACÁ, SENA MADUREIRA, SENADOR GUIOMARD, SANTA ROSA DO PURUS, RODRIGUES ALVES, RIO BRANCO, PORTO WALTER, PLÁCIDO DE CASTRO, MARECHAL THAUMATURGO, MANOEL URBANO, MÂNCIO LIMA, JORDÃO, FEIJÓ, EPITACIOLÂNDIA, CRUZEIRO DO SUL, CAPIXABA, BUJARI, BRASILÉIA, ASSIS BRASIL, ACRELÂNDIA");
+                    var dddEntity = context.Set<Ddd>().Add(ddd);
+                    context.SaveChanges();
+
+					var contato1 = new Contact("John", "Doe", "john.doe@example.com", new Address("Rua teste, 123", "Predio A, Apartamento 42", "BRASILÉIA", "AC", "012345-678"), new Phone("11111111"), new Phone("922222222"), dddEntity.Entity);
+					context.Set<Contact>().Add(contato1);
+
+					var contato2 = new Contact("Jane", "Doe", "jane.doe@example.com", new Address("Rua teste, 123", "Predio A, Apartamento 42", "BRASILÉIA", "AC", "012345-678"), new Phone("11111111"), new Phone("922222222"), dddEntity.Entity);
+					context.Set<Contact>().Add(contato2);
+
+					context.SaveChanges();
+				});
             });
         });
     }

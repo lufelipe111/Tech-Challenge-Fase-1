@@ -1,11 +1,11 @@
 using System.Net;
 using System.Net.Http.Json;
+using ContactRegister.Application.DTOs;
 using ContactRegister.Application.Inputs;
 using ContactRegister.Infrastructure.Persistence;
 using ContactRegister.Tests.IntegrationTests.Common;
 using ContactRegister.Tests.IntegrationTests.TestContainers.Factories;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -18,7 +18,8 @@ public class ContactTest : BaseIntegrationTests, IClassFixture<TestContainerCont
     public ContactTest(TestContainerContactRegisterFactory factory) : base(factory)
     {
         var context = factory.Services.GetRequiredService<AppDbContext>();
-        context.Database.Migrate();
+        if (context.Database.GetPendingMigrations().Any())
+            context.Database.Migrate();
     }
 
     [Fact(DisplayName = "Create simple contact")]
@@ -98,7 +99,6 @@ public class ContactTest : BaseIntegrationTests, IClassFixture<TestContainerCont
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
-
     [Fact]
     public async Task GetContacts_ShouldReturn_ArrayStringNotEmpty()
     {
@@ -127,9 +127,90 @@ public class ContactTest : BaseIntegrationTests, IClassFixture<TestContainerCont
         await client.PostAsJsonAsync($"{resource}/CreateContact", request);
 
         // Act
-        var response = await client.GetStringAsync($"{resource}/GetContacts?firstName=Silvana%2082653898&dddCode=0&skip=0&take=50");
+        var response = await client.GetAsync($"{resource}/GetContacts?firstName=Silvana%2082653898&dddCode=0&skip=0&take=50");
 
-        // Assert
-        response.Should().NotBe("[]");
+		// Assert
+		response.StatusCode.Should().Be(HttpStatusCode.OK);
+		var contactDtos = await response.Content.ReadFromJsonAsync<List<ContactDto>>();
+		contactDtos?.Should().NotBeEmpty();
+		contactDtos?.Should().Contain(c => c.MobileNumber!.Number == request.MobileNumber && c.Ddd!.Code == request.Ddd);
     }
+
+	[Fact]
+	public async Task GetContactShouldReturnContactDto()
+	{
+		// Arrange
+		var client = GetClient();
+		int request = 1;
+
+		// Act
+		var response = await client.GetAsync($"{resource}/GetContact/{request}");
+
+		// Assert
+		response.StatusCode.Should().Be(HttpStatusCode.OK);
+		var contactDto = await response.Content.ReadFromJsonAsync<ContactDto>();
+		contactDto?.Id.Should().Be(request);
+	}
+
+	[Fact]
+	public async Task GetContactsByDddCodes_ShouldReturn_List()
+	{
+		// Arrange
+		var client = GetClient();
+		int[] request = [68];
+
+		// Act
+		var response = await client.PostAsJsonAsync($"{resource}/GetContactsByDddCodes", request);
+
+		// Assert
+		response.StatusCode.Should().Be(HttpStatusCode.OK);
+		var contactDtos = await response.Content.ReadFromJsonAsync<List<ContactDto>>();
+		contactDtos?.Should().NotBeEmpty();
+		contactDtos?.Should().Contain(c => c.Ddd!.Code == request[0]);
+	}
+
+	[Fact]
+	public async Task UpdateContact_ShouldReturn_NoContent()
+	{
+		// Arrange
+		var client = GetClient();
+		int requestId = 1;
+		ContactInput requestBody = new()
+		{
+			FirstName = "Joana",
+			LastName = "Defoe",
+			Email = "joana.defoe@example.com",
+			Address = new AddressInput
+			{
+				AddressLine1 = "Rua teste, 123",
+				AddressLine2 = "Predio A, Apartamento 42",
+				City = "BRASILÉIA",
+				State = "AC",
+				PostalCode = "012345-678"
+			},
+			HomeNumber = "11111111",
+			MobileNumber = "922222222",
+			Ddd = 68
+		};
+
+		// Act
+		var response = await client.PutAsJsonAsync($"{resource}/UpdateContact/{requestId}", requestBody);
+
+		// Assert
+		response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+	}
+
+	[Fact]
+	public async Task DeleteContact_ShouldReturn_NoContent()
+	{
+		// Arrange
+		var client = GetClient();
+		int request = 1;
+
+		// Act
+		var response = await client.DeleteAsync($"{resource}/DeleteContact/{request}");
+
+		// Assert
+		response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+	}
 }
