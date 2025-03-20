@@ -144,7 +144,7 @@ public class ContactTest : BaseIntegrationTests, IClassFixture<TestContainerCont
 		int request = 1;
 
 		// Act
-		var response = await client.GetAsync(string.Format("/Contact/GetContact/{0}", request));
+		var response = await client.GetAsync(string.Format($"{resource}/GetContact/{0}", request));
 
 		// Assert
 		response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -160,7 +160,7 @@ public class ContactTest : BaseIntegrationTests, IClassFixture<TestContainerCont
 		int[] request = [11];
 
 		// Act
-		var response = await client.PostAsJsonAsync("/Contact/GetContactsByDddCodes", request);
+		var response = await client.PostAsJsonAsync($"{resource}/GetContactsByDddCodes", request);
 
 		// Assert
 		response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -194,7 +194,7 @@ public class ContactTest : BaseIntegrationTests, IClassFixture<TestContainerCont
 		};
 
 		// Act
-		var response = await client.PutAsJsonAsync(string.Format("/Contact/UpdateContact/{0}", requestId), requestBody);
+		var response = await client.PutAsJsonAsync(string.Format($"{resource}/UpdateContact/{0}", requestId), requestBody);
 
 		// Assert
 		response.StatusCode.Should().Be(HttpStatusCode.NoContent);
@@ -208,7 +208,7 @@ public class ContactTest : BaseIntegrationTests, IClassFixture<TestContainerCont
 		int request = 1;
 
 		// Act
-		var response = await client.DeleteAsync(string.Format("/Contact/DeleteContact/{0}", request));
+		var response = await client.DeleteAsync(string.Format($"{resource}/DeleteContact/{0}", request));
 
 		// Assert
 		response.StatusCode.Should().Be(HttpStatusCode.NoContent);
