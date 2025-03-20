@@ -20,13 +20,13 @@ jobs:
           dotnet-version: "8.0.x"
 
       - name: Install dependencies
-        run: dotnet restore .\Contact-Register\
+        run: dotnet restore Contact-Register/
 
       - name: Build project
-        run: dotnet build .\Contact-Register\ --no-restore --configuration Release
+        run: dotnet build Contact-Register/ --no-restore --configuration Release
 
       - name: Run tests with TestContainers
-        run: dotnet test .\Contact-Register\ --no-build --configuration Release
+        run: dotnet test Contact-Register/ --no-build --configuration Release
         env:
           DOCKER_HOST: unix:///var/run/docker.sock
           SA_PASSWORD: "Password123"
