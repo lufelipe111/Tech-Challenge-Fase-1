@@ -1,15 +1,15 @@
-﻿using Xunit;
-using ContactRegister.Tests.IntegrationTests.Setup;
+﻿using System.Net;
+using ContactRegister.Tests.IntegrationTests.Common;
+using ContactRegister.Tests.IntegrationTests.InMemory.Setup;
 using FluentAssertions;
-using ContactRegister.Tests.IntegrationTests._Common;
-using System.Net.Http.Json;
-using System.Net;
+using Microsoft.Extensions.DependencyInjection;
+using Xunit;
 
-namespace ContactRegister.Tests.IntegrationTests.Controllers
+namespace ContactRegister.Tests.IntegrationTests.InMemory.Controllers
 {
     public class DddControllerTests : BaseIntegrationTests
     {
-        private const string CommonUri = "Ddd";
+        private const string resource = "Ddd";
 
         public DddControllerTests(ContactRegisterWebApplicationFactory factory) : base(factory) { }
 
@@ -17,10 +17,11 @@ namespace ContactRegister.Tests.IntegrationTests.Controllers
         public async Task GetDddByCode_ShouldReturn_Ok()
         {
             // Arrange
+            var client = GetClient();
             var dddCode = 11;
 
             // Act
-            var response = await Client.GetAsync($"{CommonUri}/GetDdd/{dddCode}");
+            var response = await client.GetAsync($"{resource}/GetDdd/{dddCode}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -30,10 +31,11 @@ namespace ContactRegister.Tests.IntegrationTests.Controllers
         public async Task GetDddByCode_ShouldReturn_BadRequest()
         {
             // Arrange
+            var client = GetClient();
             var dddCode = 999;
 
             // Act
-            var response = await Client.GetAsync($"{CommonUri}/GetDdd/{dddCode}");
+            var response = await client.GetAsync($"{resource}/GetDdd/{dddCode}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);

@@ -1,8 +1,7 @@
-﻿
-using ContactRegister.Infrastructure.Persistence;
+﻿using ContactRegister.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace ContactRegister.Tests.IntegrationTests.Fixtures;
+namespace ContactRegister.Tests.IntegrationTests.InMemory.Fixtures;
 
 public class DbFixture : IDisposable
 {

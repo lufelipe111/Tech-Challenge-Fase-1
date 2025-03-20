@@ -1,17 +1,18 @@
-﻿using ContactRegister.Application.Inputs;
+﻿using System.Net;
 using System.Net.Http.Json;
-using System.Net;
-using Xunit;
-using ContactRegister.Tests.IntegrationTests.Setup;
-using ContactRegister.Tests.IntegrationTests._Common;
-using FluentAssertions;
+using ContactRegister.Application.Inputs;
 using ContactRegister.Infrastructure.Persistence;
+using ContactRegister.Tests.IntegrationTests.Common;
+using ContactRegister.Tests.IntegrationTests.InMemory.Setup;
+using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
+using Xunit;
 
-namespace ContactRegister.Tests.IntegrationTests.Controllers;
+namespace ContactRegister.Tests.IntegrationTests.InMemory.Controllers;
 
 public class ContactControllerTests : BaseIntegrationTests
 {
-    private const string CommonUri = "Contact";
+    private const string resource = "Contact";
 
     public ContactControllerTests(ContactRegisterWebApplicationFactory factory) : base(factory) { }
 
@@ -19,6 +20,7 @@ public class ContactControllerTests : BaseIntegrationTests
     public async Task CreateContact_ShouldReturn_OK()
     {
         // Arrange
+        var client = GetClient();
         var request = new ContactInput
         {
             FirstName = "Silvana",
@@ -38,7 +40,7 @@ public class ContactControllerTests : BaseIntegrationTests
         };
 
         // Act
-        var response = await Client.PostAsJsonAsync($"{CommonUri}/CreateContact", request);
+        var response = await client.PostAsJsonAsync($"{resource}/CreateContact", request);
 
         // Assert
         response.Should().NotBeNull();
@@ -49,10 +51,11 @@ public class ContactControllerTests : BaseIntegrationTests
     public async Task CreateContact_ShouldReturn_BadRequest()
     {
         // Arrange
+        var client = GetClient();
         var request = new ContactInput();
 
         // Act
-        var response = await Client.PostAsJsonAsync($"{CommonUri}/CreateContact", request);
+        var response = await client.PostAsJsonAsync($"{resource}/CreateContact", request);
         
         // Assert
         response.Should().NotBeNull();
@@ -64,6 +67,7 @@ public class ContactControllerTests : BaseIntegrationTests
     public async Task GetContacts_ShouldReturn_ArrayStringNotEmpty()
     {
         // Arrange
+        var client = GetClient();
         var dbContext = InjectServiceInstance<AppDbContext>();
         dbContext.Dispose();
 
@@ -84,10 +88,10 @@ public class ContactControllerTests : BaseIntegrationTests
             MobileNumber = "(81) 99682-5038",
             Ddd = 21
         };
-        await Client.PostAsJsonAsync($"{CommonUri}/CreateContact", request);
+        await client.PostAsJsonAsync($"{resource}/CreateContact", request);
 
         // Act
-        var response = await Client.GetStringAsync($"{CommonUri}/GetContacts?firstName=Silvana%2082653898&dddCode=0&skip=0&take=50");
+        var response = await client.GetStringAsync($"{resource}/GetContacts?firstName=Silvana%2082653898&dddCode=0&skip=0&take=50");
 
         // Assert
         response.Should().NotBe("[]");

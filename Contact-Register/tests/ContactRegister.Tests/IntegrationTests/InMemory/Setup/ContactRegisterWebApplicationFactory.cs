@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 
-namespace ContactRegister.Tests.IntegrationTests.Setup
+namespace ContactRegister.Tests.IntegrationTests.InMemory.Setup
 {
     public class ContactRegisterWebApplicationFactory : WebApplicationFactory<Program>
     {
