@@ -13,7 +13,7 @@ namespace ContactRegister.Tests.IntegrationTests.TestContainers.Factories;
 public class TestContainerContactRegisterFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder()
-        .WithName("sql-server-test")
+        .WithName($"sql-server-test-{Guid.NewGuid()}")
         .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
         .WithPortBinding("1433", "1433")
         .WithPassword("Password123")
