@@ -1,7 +1,6 @@
 name: Run Tests with TestContainers and InMemory
 
 on:
-  push:
   pull_request:
     branches:
       - main
