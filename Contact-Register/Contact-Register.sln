@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactRegister.Infrastruct
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactRegister.Tests", "Contact-Register-Service\tests\ContactRegister.Tests\ContactRegister.Tests.csproj", "{DD1979E3-0E2F-4E46-A4EE-8614A3564FD7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactRegister.Storage.Worker", "ContactRegister.Storage.Worker\ContactRegister.Storage.Worker.csproj", "{168771D5-2EDA-4CDF-A19C-A94B20E3C5A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,7 @@ Global
 		{1DD638AE-E85D-4482-8462-C1A311573432} = {96D01227-96A1-497F-94C6-3D267081F47E}
 		{703622A0-C47B-4686-A6A0-6D731F320914} = {3B581EB1-C95B-4C63-9DDE-D93556FF9925}
 		{DD1979E3-0E2F-4E46-A4EE-8614A3564FD7} = {703622A0-C47B-4686-A6A0-6D731F320914}
+		{168771D5-2EDA-4CDF-A19C-A94B20E3C5A5} = {591DDA52-3849-4657-AF1B-8656B3AFDD8E}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{684C7F9C-B44B-4293-A7A3-373943D1D802}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -77,5 +80,9 @@ Global
 		{DD1979E3-0E2F-4E46-A4EE-8614A3564FD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD1979E3-0E2F-4E46-A4EE-8614A3564FD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD1979E3-0E2F-4E46-A4EE-8614A3564FD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{168771D5-2EDA-4CDF-A19C-A94B20E3C5A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{168771D5-2EDA-4CDF-A19C-A94B20E3C5A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{168771D5-2EDA-4CDF-A19C-A94B20E3C5A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{168771D5-2EDA-4CDF-A19C-A94B20E3C5A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
