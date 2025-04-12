@@ -1,5 +1,5 @@
-using ContactRegister.Application.Interfaces.Repositories;
 using ContactRegister.Domain.Entities;
+using ContactRegister.Shared.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ContactRegister.Infrastructure.Persistence.Repositories;

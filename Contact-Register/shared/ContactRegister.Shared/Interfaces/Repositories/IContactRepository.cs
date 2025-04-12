@@ -1,6 +1,6 @@
 using ContactRegister.Domain.Entities;
 
-namespace ContactRegister.Application.Interfaces.Repositories;
+namespace ContactRegister.Shared.Interfaces.Repositories;
 
 public interface IContactRepository
 {

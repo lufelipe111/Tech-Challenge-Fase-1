@@ -1,9 +1,9 @@
 ﻿using ContactRegister.Application.DTOs;
 using ContactRegister.Application.DTOs.BrasilApiDTOs;
-using ContactRegister.Application.Interfaces.Repositories;
 using ContactRegister.Application.Interfaces.Services;
 using ContactRegister.Application.Services;
 using ContactRegister.Domain.Entities;
+using ContactRegister.Shared.Interfaces.Repositories;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;

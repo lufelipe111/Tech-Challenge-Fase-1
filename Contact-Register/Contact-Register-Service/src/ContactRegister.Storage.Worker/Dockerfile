@@ -4,18 +4,19 @@ WORKDIR /app
 
 # Copy the solution and project files
 COPY *.sln .
-COPY Contact-Register-Service/src/ContactRegister.Domain/ ./Contact-Register-Service/src/ContactRegister.Domain/
-COPY Contact-Register-Service/src/ContactRegister.Application/ ./Contact-Register-Service/src/ContactRegister.Application/
+COPY Contact-Register-Service/src/ContactRegister.Storage.Worker/ ./Contact-Register-Service/src/ContactRegister.Storage.Worker/
 COPY Contact-Register-Service/src/ContactRegister.Infrastructure/ ./Contact-Register-Service/src/ContactRegister.Infrastructure/
-COPY Contact-Register-Service/src/ContactRegister.Api/ ./Contact-Register-Service/src/ContactRegister.Api/
 COPY shared/ContactRegister.Shared/ ./shared/ContactRegister.Shared/
 
 # Restore dependencies
-RUN dotnet restore ./Contact-Register-Service/src/ContactRegister.Api/ContactRegister.Api.csproj
+RUN dotnet restore ./Contact-Register-Service/src/ContactRegister.Storage.Worker/ContactRegister.Storage.Worker.csproj
+
+# Copy the entire source code
+COPY . .
 
 # Build the application
-WORKDIR /app/Contact-Register-Service/src/ContactRegister.Api
-RUN dotnet publish ContactRegister.Api.csproj -c Release -o out --no-restore
+WORKDIR /app/src/ContactRegister.Storage.Worker
+RUN dotnet publish ContactRegister.Storage.Worker.csproj -c Release -o out --no-restore
 
 ## Run migrations
 # RUN dotnet tool install --version 8 --global dotnet-ef
@@ -27,10 +28,11 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
 # Copy the published application from the build stage
-COPY --from=build /app/src/ContactRegister.Api/out ./
+COPY --from=build /app/src/ContactRegister.Storage.Worker/out ./
 
 # Environment variables
 ENV ASPNETCORE_HTTP_PORTS=80
+ENV ASPNETCORE_ENVIRONMENT=Release
 
 # Expose port 80
 EXPOSE 80 443

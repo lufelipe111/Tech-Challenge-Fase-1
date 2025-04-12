@@ -28,6 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Messaging\Interfaces\" />
       <Folder Include="Migrations\" />
     </ItemGroup>
 

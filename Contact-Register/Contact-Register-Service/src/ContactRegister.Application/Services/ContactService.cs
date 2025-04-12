@@ -1,7 +1,9 @@
+using System.Text.Json;
 using ContactRegister.Application.DTOs;
 using ContactRegister.Application.Inputs;
-using ContactRegister.Application.Interfaces.Repositories;
+using ContactRegister.Application.Interfaces.Messaging;
 using ContactRegister.Application.Interfaces.Services;
+using ContactRegister.Shared.Interfaces.Repositories;
 using ErrorOr;
 using Microsoft.Extensions.Logging;
 
@@ -13,17 +15,20 @@ public class ContactService : IContactService
     private readonly IContactRepository _contactRepository;
     private readonly IDddService _dddService;
     private readonly ICacheService _cacheService;
+    private readonly IPublisher _publisher;
 
 	public ContactService(
         ILogger<ContactService> logger,
         IContactRepository contactRepository,
         IDddService dddService,
-        ICacheService cacheService)
+        ICacheService cacheService, 
+        IPublisher publisher)
 	{
 		_logger = logger;
 		_contactRepository = contactRepository;
 		_dddService = dddService;
         _cacheService = cacheService;
+        _publisher = publisher;
     }
 
 	public async Task<ErrorOr<Success>> AddContactAsync(ContactInput contactInput)
@@ -47,7 +52,8 @@ public class ContactService : IContactService
                     .ToList();
             }
             
-            await _contactRepository.AddContactAsync(contactEntity);
+            //await _contactRepository.AddContactAsync(contactEntity);
+            await _publisher.PublishMessage(JsonSerializer.Serialize(contact), "ContactRegister.Store.Add");
 
             return Result.Success;
         }

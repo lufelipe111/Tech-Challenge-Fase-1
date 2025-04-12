@@ -6,4 +6,12 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Interfaces\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Contact-Register-Service\src\ContactRegister.Domain\ContactRegister.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

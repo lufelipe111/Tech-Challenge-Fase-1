@@ -2,21 +2,27 @@
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using ContactRegister.Infrastructure.Messaging.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace ContactRegister.Infrastructure.Messaging.Service
 {
     public class RabbitMqInitHostedService : IHostedService
     {
+        private readonly ILogger<RabbitMqInitHostedService> _logger;
         private readonly IOptions<RabbitMqConfiguration> _config;
         private IConnection _connection;
 
-        public RabbitMqInitHostedService(IOptions<RabbitMqConfiguration> config)
+        public RabbitMqInitHostedService(
+            ILogger<RabbitMqInitHostedService> logger, 
+            IOptions<RabbitMqConfiguration> config)
         {
+            _logger = logger;
             _config = config;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
+            _logger.LogInformation("Connecting on RabbitMQ: {HostName}", _config.Value.HostName);
             var factory = new ConnectionFactory
             {
                 HostName = _config.Value.HostName,
@@ -26,8 +32,9 @@ namespace ContactRegister.Infrastructure.Messaging.Service
 
             _connection = await factory.CreateConnectionAsync(cancellationToken);
 
-            await using var channel = await _connection.CreateChannelAsync(null, cancellationToken);
-                
+            await using var channel = await _connection.CreateChannelAsync(cancellationToken: cancellationToken);
+            _logger.LogInformation("Connected to RabbitMQ");
+            
             if (!string.IsNullOrEmpty(_config.Value.ExchangeName))
             {
                 await channel.ExchangeDeclareAsync(
@@ -38,6 +45,7 @@ namespace ContactRegister.Infrastructure.Messaging.Service
                     arguments: null,
                     cancellationToken: cancellationToken
                 );
+                _logger.LogInformation("Exchange created: {ExchangeName} - {ExchangeType}", _config.Value.ExchangeName, _config.Value.ExchangeType);
             }
         }
 

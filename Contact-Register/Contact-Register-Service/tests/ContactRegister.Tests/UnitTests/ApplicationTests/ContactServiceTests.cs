@@ -1,10 +1,11 @@
 using ContactRegister.Application.DTOs;
 using ContactRegister.Application.Inputs;
-using ContactRegister.Application.Interfaces.Repositories;
+using ContactRegister.Application.Interfaces.Messaging;
 using ContactRegister.Application.Interfaces.Services;
 using ContactRegister.Application.Services;
 using ContactRegister.Domain.Entities;
 using ContactRegister.Domain.ValueObjects;
+using ContactRegister.Shared.Interfaces.Repositories;
 using ErrorOr;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -18,6 +19,7 @@ public class ContactServiceTests
 	private readonly Mock<IContactRepository> _contactRepositoryMock = new();
 	private readonly Mock<IDddService> _dddServiceMock = new();
 	private readonly Mock<ICacheService> _cacheServiceMock = new();
+	private readonly Mock<IPublisher> _publisherMock = new();
 	private readonly ContactService _contactService;
 	private readonly ContactInput _contactInput;
 	private readonly DddDto _dddDto;
@@ -26,7 +28,12 @@ public class ContactServiceTests
 
 	public ContactServiceTests()
 	{
-		_contactService = new(_loggerMock.Object, _contactRepositoryMock.Object, _dddServiceMock.Object, _cacheServiceMock.Object);
+		_contactService = new(
+			_loggerMock.Object,
+			_contactRepositoryMock.Object,
+			_dddServiceMock.Object,
+			_cacheServiceMock.Object,
+			_publisherMock.Object);
 		_contactInput = new ContactInput
 		{
 			FirstName = "Silvana",

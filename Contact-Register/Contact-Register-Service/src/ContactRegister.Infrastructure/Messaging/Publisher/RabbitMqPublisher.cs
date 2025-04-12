@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using System.Text;
+using ContactRegister.Application.Interfaces.Messaging;
 using ContactRegister.Infrastructure.Messaging.Configuration;
 
 namespace ContactRegister.Infrastructure.Messaging.Publisher
@@ -18,17 +19,17 @@ namespace ContactRegister.Infrastructure.Messaging.Publisher
             _config = config?.Value ?? throw new ArgumentNullException(nameof(config));
         }
 
-        public async Task PublishMessage(string message, CancellationToken cancellationToken)
+        public async Task PublishMessage(string message, string routingKey, CancellationToken? cancellationToken = default)
         {
-            await using var channel = await _connection.CreateChannelAsync(cancellationToken: cancellationToken);
+            await using var channel = await _connection.CreateChannelAsync(cancellationToken: cancellationToken ?? default);
             var body = Encoding.UTF8.GetBytes(message);
 
             await channel.BasicPublishAsync(
                 _config.ExchangeName, 
-                _config.RoutingKey, 
+                routingKey, 
                 false, 
                 body, 
-                cancellationToken);
+                cancellationToken ?? default);
         }
 
         public void Dispose()
