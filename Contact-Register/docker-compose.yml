@@ -34,6 +34,8 @@ services:
         condition: service_healthy
       sqlserver:
         condition: service_started
+      api:
+        condition: service_started
     environment:
       - ASPNETCORE_ENVIRONMENT=prod
       - ConnectionStrings__DefaultConnection=Server=sqlserver;User Id=sa;Password=Password123;TrustServerCertificate=True;

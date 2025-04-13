@@ -53,6 +53,8 @@ public class RabbitMqConsumer : IConsumer, IAsyncDisposable
                 var contact = JsonSerializer.Deserialize<Contact>(message);
                 if (contact != null)
                     await _contactRepository.AddContactAsync(contact);
+                
+                await _channel.BasicAckAsync(ea.DeliveryTag, false);
             }
             catch (Exception ex)
             {
@@ -60,7 +62,7 @@ public class RabbitMqConsumer : IConsumer, IAsyncDisposable
             }
         };
         
-        _consumerTag = await _channel.BasicConsumeAsync(_config.QueueName, true, consumer, cancellationToken);
+        _consumerTag = await _channel.BasicConsumeAsync(_config.QueueName, false, consumer, cancellationToken);
     }
 
     public void Dispose()

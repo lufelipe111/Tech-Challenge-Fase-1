@@ -23,11 +23,15 @@ namespace ContactRegister.Infrastructure.Messaging.Publisher
         {
             await using var channel = await _connection.CreateChannelAsync(cancellationToken: cancellationToken ?? default);
             var body = Encoding.UTF8.GetBytes(message);
-
+            var basicProperties = new BasicProperties
+            {
+                DeliveryMode = DeliveryModes.Persistent
+            };
             await channel.BasicPublishAsync(
                 _config.ExchangeName, 
-                routingKey, 
-                false, 
+                routingKey,
+                false,
+                basicProperties,
                 body, 
                 cancellationToken ?? default);
         }

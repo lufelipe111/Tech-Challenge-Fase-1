@@ -5,17 +5,16 @@ WORKDIR /app
 # Copy the solution and project files
 COPY *.sln .
 COPY Contact-Register-Service/src/ContactRegister.Storage.Worker/ ./Contact-Register-Service/src/ContactRegister.Storage.Worker/
+COPY Contact-Register-Service/src/ContactRegister.Application/ ./Contact-Register-Service/src/ContactRegister.Application/
+COPY Contact-Register-Service/src/ContactRegister.Domain/ ./Contact-Register-Service/src/ContactRegister.Domain/
 COPY Contact-Register-Service/src/ContactRegister.Infrastructure/ ./Contact-Register-Service/src/ContactRegister.Infrastructure/
 COPY shared/ContactRegister.Shared/ ./shared/ContactRegister.Shared/
 
 # Restore dependencies
 RUN dotnet restore ./Contact-Register-Service/src/ContactRegister.Storage.Worker/ContactRegister.Storage.Worker.csproj
 
-# Copy the entire source code
-COPY . .
-
 # Build the application
-WORKDIR /app/src/ContactRegister.Storage.Worker
+WORKDIR /app/Contact-Register-Service/src/ContactRegister.Storage.Worker
 RUN dotnet publish ContactRegister.Storage.Worker.csproj -c Release -o out --no-restore
 
 ## Run migrations
