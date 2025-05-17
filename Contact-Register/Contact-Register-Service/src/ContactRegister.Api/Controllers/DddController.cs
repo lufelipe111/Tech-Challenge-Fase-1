@@ -8,11 +8,13 @@ namespace ContactRegister.API.Controllers;
 public class DddController : ControllerBase
 {
     private readonly IDddService _dddService;
+    private readonly IDddApiService _dddApiService;
 
-    public DddController(IDddService dddService)
+    public DddController(IDddService dddService, IDddApiService dddApiService)
     {
-        _dddService = dddService;
-	}
+	    _dddService = dddService;
+	    _dddApiService = dddApiService;
+    }
 
     /// <summary>
     /// Busca a lista com todos os DDDs cadastrados na base de dados.
@@ -26,12 +28,12 @@ public class DddController : ControllerBase
     ///			{
     ///				"code": 69,
     ///				"state": "RO",
-    ///				"region": "ALTO ALEGRE DO PARECIS, VALE DO PARAÍSO, ..."
+    ///				"region": "ALTO ALEGRE DO PARECIS, VALE DO PARAï¿½SO, ..."
     ///			},
     ///			{
     ///				"code": 68,
     ///				"state": "AC",
-    ///				"region": "PORTO ACRE, XAPURI, TARAUACÁ, SENA MADUREIRA, ..."
+    ///				"region": "PORTO ACRE, XAPURI, TARAUACï¿½, SENA MADUREIRA, ..."
     ///			}
     ///		]
     /// </response>
@@ -61,10 +63,10 @@ public class DddController : ControllerBase
 	}
 
 	/// <summary>
-	/// Busca as informações regionais (estado e lista de cidades) a partir de um DDD informado.
+	/// Busca as informaï¿½ï¿½es regionais (estado e lista de cidades) a partir de um DDD informado.
 	/// </summary>
-	/// <param name="code">Código DDD a ser pesquisado.</param>
-	/// <returns>A informação sobre o DDD, ou uma lista de erros.</returns>
+	/// <param name="code">Cï¿½digo DDD a ser pesquisado.</param>
+	/// <returns>A informaï¿½ï¿½o sobre o DDD, ou uma lista de erros.</returns>
 	/// <response code="200">
 	///	Busca realizada com sucesso. Exemplo de retorno:
 	///		
@@ -72,7 +74,7 @@ public class DddController : ControllerBase
 	///		{
 	///			"code": 68,
 	///			"state": "AC",
-	///			"region": "PORTO ACRE, XAPURI, TARAUACÁ, ..."
+	///			"region": "PORTO ACRE, XAPURI, TARAUACï¿½, ..."
 	///		}
 	/// </response>
 	/// <response code="400">
@@ -82,7 +84,7 @@ public class DddController : ControllerBase
 	///		[
 	///			{
 	///				"code": "Ddd.ExternalApi",
-	///				"description": "DDD não encontrado",
+	///				"description": "DDD nï¿½o encontrado",
 	///				"type": 0,
 	///				"numericType": 0,
 	///				"metadata": null
@@ -98,5 +100,12 @@ public class DddController : ControllerBase
 			return BadRequest(result.Errors);
 
 		return Ok(result.Value);
+	}
+
+	[HttpGet("[action]/{code:int}")]
+	public async Task<IActionResult> GetDddByCode(int code)
+	{
+		var result = await _dddApiService.GetByCode(code);
+		return Ok(result);
 	}
 }

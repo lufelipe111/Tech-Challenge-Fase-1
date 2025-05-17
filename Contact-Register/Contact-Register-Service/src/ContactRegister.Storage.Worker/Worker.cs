@@ -15,6 +15,8 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        _logger.LogInformation("Worker running at: {Time}", DateTimeOffset.Now);
         await _consumer.ConsumeAsync(stoppingToken);
+        _logger.LogInformation("Worker stopped at: {Time}", DateTimeOffset.Now);
     }
 }

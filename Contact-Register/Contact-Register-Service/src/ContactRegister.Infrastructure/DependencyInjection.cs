@@ -72,21 +72,28 @@ public static class DependencyInjection
 
     private static void AddMessaging(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<RabbitMqConfiguration>(configuration.GetSection("RabbitMq"));
-
-        services.AddHostedService<RabbitMqInitHostedService>();
-        services.AddSingleton<IConnection>(sp =>
+        try
         {
-            var config = sp.GetRequiredService<IOptions<RabbitMqConfiguration>>().Value;
-            var factory = new ConnectionFactory
-            {
-                HostName = config.HostName,
-                UserName = config.UserName,
-                Password = config.Password
-            };
+            services.Configure<RabbitMqConfiguration>(configuration.GetSection("RabbitMq"));
 
-            return factory.CreateConnectionAsync().GetAwaiter().GetResult();
-        });
-        services.AddSingleton<IPublisher, RabbitMqPublisher>();
+            services.AddHostedService<RabbitMqInitHostedService>();
+            services.AddSingleton<IConnection>(sp =>
+            {
+                var config = sp.GetRequiredService<IOptions<RabbitMqConfiguration>>().Value;
+                var factory = new ConnectionFactory
+                {
+                    HostName = config.HostName,
+                    UserName = config.UserName,
+                    Password = config.Password
+                };
+
+                return factory.CreateConnectionAsync().GetAwaiter().GetResult();
+            });
+            services.AddSingleton<IPublisher, RabbitMqPublisher>();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
 }

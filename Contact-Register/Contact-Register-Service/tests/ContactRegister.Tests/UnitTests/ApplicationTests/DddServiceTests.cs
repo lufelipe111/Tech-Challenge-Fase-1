@@ -1,11 +1,15 @@
-﻿using ContactRegister.Application.DTOs;
+﻿using ContactRegister.Application;
+using ContactRegister.Application.DTOs;
 using ContactRegister.Application.DTOs.BrasilApiDTOs;
 using ContactRegister.Application.Interfaces.Services;
 using ContactRegister.Application.Services;
 using ContactRegister.Domain.Entities;
 using ContactRegister.Shared.Interfaces.Repositories;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Polly.CircuitBreaker;
 using Xunit;
 
 namespace ContactRegister.Tests.UnitTests.ApplicationTests;
@@ -16,10 +20,14 @@ public class DddServiceTests
 	private readonly Mock<IDddRepository> _dddRepositoryMock = new();
 	private readonly Mock<IDddApiService> _dddApiServiceMock = new();
 	private readonly DddService _dddService;
+	private readonly ServiceCollection _serviceCollection = new();
 
 	public DddServiceTests()
 	{
 		_dddService = new(_loggerMock.Object, _dddRepositoryMock.Object, _dddApiServiceMock.Object);
+		IConfiguration config = new ConfigurationManager();
+		config["BrasilApi:Url"] = "https://brasilapi.com.br";
+		_serviceCollection.AddApplication(config);
 	}
 
 	[Fact]
@@ -238,5 +246,42 @@ public class DddServiceTests
 		Assert.Single(result.Errors);
 		Assert.Equal("Ddd.Get.Exception", result.FirstError.Code);
 		Assert.Equal(expectedError, result.FirstError.Description);
+	}
+
+	[Fact(DisplayName = "Get DDD By Code should throw BrokenCircuitException when it fails multiple times")]
+	public async Task GetDddByCode_ShouldThrowBrokenCircuitException_WhenMultipleFails()
+	{
+		// Arrange
+		var serviceProvider = _serviceCollection.BuildServiceProvider();
+		var dddApiService = serviceProvider.GetRequiredService<IDddApiService>();
+		var circuitBreakThroughput = 8;
+		Exception? ex = null;
+
+		// Act
+		try
+		{
+			// 50% right responses
+			for (int i = 0; i < circuitBreakThroughput; i++)
+			{
+				await dddApiService.GetByCode(11);
+			}
+
+			// 50% wrong responses - retry 3 times per error that counts on circuit break sample
+			dddApiService.SetRoute("WrongRoute/{0}");
+			for (int i = 0; i < 2; i++)
+			{
+				await dddApiService.GetByCode(11);
+			}
+			
+			// additional call that makes circuit open
+			await dddApiService.GetByCode(11);
+		}
+		catch (Exception e)
+		{
+			ex = e;
+		}
+
+		// Assert
+		Assert.True(ex is BrokenCircuitException);
 	}
 }

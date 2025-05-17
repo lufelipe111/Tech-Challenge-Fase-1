@@ -20,6 +20,8 @@ public class RabbitMqInitHostedService : IHostedService
     
     public async Task StartAsync(CancellationToken cancellationToken)
     {
+        _logger.LogInformation("RabbitMQ Service is starting.");
+        
         var connectionFactory = new ConnectionFactory
         {
             HostName = _config.HostName,
@@ -39,7 +41,11 @@ public class RabbitMqInitHostedService : IHostedService
                 _config.AutoDelete,
                 cancellationToken: cancellationToken);
             
-            await channel.QueueBindAsync(_config.QueueName, _config.ExchangeName, _config.RoutingKey, cancellationToken: cancellationToken);
+            await channel.QueueBindAsync(
+                _config.QueueName, 
+                _config.ExchangeName, 
+                _config.RoutingKey, 
+                cancellationToken: cancellationToken);
         }
         
         await channel.CloseAsync(cancellationToken);

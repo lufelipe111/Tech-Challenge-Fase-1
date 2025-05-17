@@ -17,9 +17,9 @@ public class RabbitMqConsumer : IConsumer, IAsyncDisposable
     private readonly RabbitMqConfiguration _config;
     private readonly IContactRepository _contactRepository;
     
-    private IChannel _channel;
     private bool _disposed;
-    private string _consumerTag;
+    private IChannel? _channel;
+    private string? _consumerTag;
     
     public RabbitMqConsumer(
         ILogger<RabbitMqConsumer> logger, 
@@ -54,7 +54,7 @@ public class RabbitMqConsumer : IConsumer, IAsyncDisposable
                 if (contact != null)
                     await _contactRepository.AddContactAsync(contact);
                 
-                await _channel.BasicAckAsync(ea.DeliveryTag, false);
+                await _channel.BasicAckAsync(ea.DeliveryTag, false, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -67,8 +67,9 @@ public class RabbitMqConsumer : IConsumer, IAsyncDisposable
 
     public void Dispose()
     {
-        _channel.CloseAsync().GetAwaiter().GetResult();
-        _channel.Dispose();
+        if (_channel?.IsOpen ?? false)
+            _channel.CloseAsync().GetAwaiter().GetResult();
+        _channel?.Dispose();
         _connection.Dispose();
         _disposed = true;
         GC.SuppressFinalize(this);
@@ -76,10 +77,9 @@ public class RabbitMqConsumer : IConsumer, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        await _channel.BasicCancelAsync(_consumerTag);
-        await _channel.CloseAsync();
-        _channel.Dispose();
-        await _connection.DisposeAsync();
+        await (_channel?.BasicCancelAsync(_consumerTag ?? "") ?? Task.CompletedTask);
+        await (_channel?.CloseAsync() ?? Task.CompletedTask);
+        Dispose();
         _disposed = true;
         GC.SuppressFinalize(this);
     }
