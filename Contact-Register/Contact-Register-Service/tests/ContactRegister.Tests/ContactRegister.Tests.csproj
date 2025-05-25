@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\shared\ContactRegister.Shared\ContactRegister.Shared.csproj" />
       <ProjectReference Include="..\..\src\ContactRegister.Api\ContactRegister.Api.csproj" />
       <ProjectReference Include="..\..\src\ContactRegister.Application\ContactRegister.Application.csproj" />
     </ItemGroup>

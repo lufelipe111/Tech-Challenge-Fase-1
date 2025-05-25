@@ -7,11 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ContactRegister.Domain\ContactRegister.Domain.csproj" />
-      <ProjectReference Include="..\ContactRegister.Application\ContactRegister.Application.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
         <PrivateAssets>all</PrivateAssets>
@@ -30,6 +25,11 @@
     <ItemGroup>
       <Folder Include="Messaging\Interfaces\" />
       <Folder Include="Migrations\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ContactRegister.Application\ContactRegister.Application.csproj" />
+      <ProjectReference Include="..\ContactRegister.Domain\ContactRegister.Domain.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
-using ContactRegister.Storage.Worker.Interfaces;
+using ContactRegister.Delete.Worker.Interfaces;
 
-namespace ContactRegister.Storage.Worker;
+namespace ContactRegister.Delete.Worker;
 
 public class Worker : BackgroundService
 {
@@ -15,8 +15,8 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("Storage worker running at: {Time}", DateTimeOffset.Now);
+        _logger.LogInformation("Delete worker running at: {Time}", DateTimeOffset.Now);
         await _consumer.ConsumeAsync(stoppingToken);
-        _logger.LogInformation("Storage worker stopped at: {Time}", DateTimeOffset.Now);
+        _logger.LogInformation("Delete worker stopped at: {Time}", DateTimeOffset.Now);
     }
 }

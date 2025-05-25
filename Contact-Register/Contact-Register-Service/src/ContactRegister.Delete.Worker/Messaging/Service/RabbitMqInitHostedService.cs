@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 
-namespace ContactRegister.Storage.Worker.Messaging.Service;
+namespace ContactRegister.Delete.Worker.Messaging.Service;
 
 public class RabbitMqInitHostedService : IHostedService
 {

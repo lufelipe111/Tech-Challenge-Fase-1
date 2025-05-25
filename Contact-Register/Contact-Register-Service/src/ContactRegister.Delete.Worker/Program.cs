@@ -1,9 +1,9 @@
+using ContactRegister.Delete.Worker;
+using ContactRegister.Delete.Worker.Interfaces;
+using ContactRegister.Delete.Worker.Messaging.Consumer;
+using ContactRegister.Delete.Worker.Messaging.Service;
 using ContactRegister.Infrastructure;
 using ContactRegister.Shared.Messaging.Configuration;
-using ContactRegister.Storage.Worker;
-using ContactRegister.Storage.Worker.Interfaces;
-using ContactRegister.Storage.Worker.Messaging.Consumer;
-using ContactRegister.Storage.Worker.Messaging.Service;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 

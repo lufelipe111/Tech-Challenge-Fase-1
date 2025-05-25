@@ -1,4 +1,4 @@
-﻿namespace ContactRegister.Storage.Worker.Messaging.Configuration;
+﻿namespace ContactRegister.Shared.Messaging.Configuration;
 
 public class RabbitMqConfiguration
 {

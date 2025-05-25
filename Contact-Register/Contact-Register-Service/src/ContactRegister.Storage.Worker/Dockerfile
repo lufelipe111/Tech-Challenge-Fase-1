@@ -8,7 +8,7 @@ COPY Contact-Register-Service/src/ContactRegister.Storage.Worker/ ./Contact-Regi
 COPY Contact-Register-Service/src/ContactRegister.Application/ ./Contact-Register-Service/src/ContactRegister.Application/
 COPY Contact-Register-Service/src/ContactRegister.Domain/ ./Contact-Register-Service/src/ContactRegister.Domain/
 COPY Contact-Register-Service/src/ContactRegister.Infrastructure/ ./Contact-Register-Service/src/ContactRegister.Infrastructure/
-COPY shared/ContactRegister.Shared/ ./shared/ContactRegister.Shared/
+COPY Contact-Register-Service/shared/ContactRegister.Shared/ ./Contact-Register-Service/shared/ContactRegister.Shared/
 
 # Restore dependencies
 RUN dotnet restore ./Contact-Register-Service/src/ContactRegister.Storage.Worker/ContactRegister.Storage.Worker.csproj
@@ -37,4 +37,4 @@ ENV ASPNETCORE_ENVIRONMENT=Release
 EXPOSE 80 443
 
 # Start the application
-ENTRYPOINT ["dotnet", "ContactRegister.Api.dll"]
+ENTRYPOINT ["dotnet", "ContactRegister.Storage.Worker.dll"]

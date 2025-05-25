@@ -8,10 +8,11 @@
 
     <ItemGroup>
       <Folder Include="Interfaces\" />
+      <Folder Include="Messaging\" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Contact-Register-Service\src\ContactRegister.Domain\ContactRegister.Domain.csproj" />
+      <ProjectReference Include="..\..\src\ContactRegister.Domain\ContactRegister.Domain.csproj" />
     </ItemGroup>
 
 </Project>

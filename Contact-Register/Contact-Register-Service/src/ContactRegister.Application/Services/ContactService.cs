@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using ContactRegister.Application.DTOs;
 using ContactRegister.Application.Inputs;
 using ContactRegister.Application.Interfaces.Messaging;
@@ -16,6 +17,11 @@ public class ContactService : IContactService
     private readonly IDddService _dddService;
     private readonly ICacheService _cacheService;
     private readonly IPublisher _publisher;
+    
+    private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions()
+    {
+        ReferenceHandler = ReferenceHandler.IgnoreCycles
+    };
 
 	public ContactService(
         ILogger<ContactService> logger,
@@ -132,9 +138,10 @@ public class ContactService : IContactService
             
             if (targetContact == null)
                 return Error.NotFound("Contact.NotFound", $"Contact {id} not found");
-			
-			targetContact.MobileNumber = contact.MobileNumber?.ToPhone();
-            targetContact.HomeNumber = contact.HomeNumber?.ToPhone();
+			if (contact.MobileNumber?.ToPhone() != null)
+			    targetContact.MobileNumber = contact.MobileNumber!.ToPhone();
+            
+            targetContact.HomeNumber = contact.HomeNumber!.ToPhone();
             targetContact.Address = contact.Address.ToAddress();
             targetContact.FirstName = contact.FirstName;
             targetContact.LastName = contact.LastName;
@@ -153,13 +160,14 @@ public class ContactService : IContactService
                     .ToList();
 			}
 
-			await _contactRepository.UpdateContactAsync(targetContact);
+            await _publisher.PublishMessage(JsonSerializer.Serialize(targetContact), "ContactRegister.Update");
+			// await _contactRepository.UpdateContactAsync(targetContact);
 
 			return Result.Success;
         }
         catch (Exception e)
         {
-            _logger.LogError(e, e.Message);
+            _logger.LogError(e, "{Message}", e.Message);
             return Error.Failure("Contact.Update.Exception", e.Message);
 		}
 	}
@@ -173,7 +181,8 @@ public class ContactService : IContactService
 			if (targetContact == null)
                 return Error.NotFound("Contact.NotFound", $"Contact {id} not found");
 
-            await _contactRepository.DeleteContactAsync(targetContact);
+            await _publisher.PublishMessage(JsonSerializer.Serialize(targetContact, _jsonOptions), "ContactRegister.Delete");
+            //await _contactRepository.DeleteContactAsync(targetContact);
 			return Result.Success;
         }
         catch (Exception e)

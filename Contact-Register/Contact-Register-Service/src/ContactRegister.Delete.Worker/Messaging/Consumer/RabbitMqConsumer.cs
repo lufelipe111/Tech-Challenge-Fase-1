@@ -1,14 +1,14 @@
 ﻿using System.Text;
 using System.Text.Json;
+using ContactRegister.Delete.Worker.Interfaces;
 using ContactRegister.Domain.Entities;
 using ContactRegister.Shared.Interfaces.Repositories;
 using ContactRegister.Shared.Messaging.Configuration;
-using ContactRegister.Storage.Worker.Interfaces;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace ContactRegister.Storage.Worker.Messaging.Consumer;
+namespace ContactRegister.Delete.Worker.Messaging.Consumer;
 
 public class RabbitMqConsumer : IConsumer, IAsyncDisposable
 {
@@ -49,10 +49,10 @@ public class RabbitMqConsumer : IConsumer, IAsyncDisposable
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
 
-                _logger.LogInformation("[x] Store message received: {Message}", message);
+                _logger.LogInformation("[x] Delete message received: {Message}", message);
                 var contact = JsonSerializer.Deserialize<Contact>(message);
                 if (contact != null)
-                    await _contactRepository.AddContactAsync(contact);
+                    await _contactRepository.DeleteContactAsync(contact);
                 
                 await _channel.BasicAckAsync(ea.DeliveryTag, false, cancellationToken);
             }

@@ -4,17 +4,23 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <UserSecretsId>dotnet-ContactRegiste.Storage-cd42bea2-1a74-408c-8f4b-cb161138c434</UserSecretsId>
+        <UserSecretsId>dotnet-ContactRegister.Delete.Worker-0204368b-2712-4936-b36c-a9a3bb8f39bd</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4"/>
         <PackageReference Include="RabbitMQ.Client" Version="7.1.2" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\shared\ContactRegister.Shared\ContactRegister.Shared.csproj" />
-      <ProjectReference Include="..\ContactRegister.Application\ContactRegister.Application.csproj" />
       <ProjectReference Include="..\ContactRegister.Infrastructure\ContactRegister.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+        <DependentUpon>Dockerfile</DependentUpon>
+      </Content>
     </ItemGroup>
 </Project>

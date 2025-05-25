@@ -1,9 +1,9 @@
 using ContactRegister.Infrastructure;
 using ContactRegister.Shared.Messaging.Configuration;
-using ContactRegister.Storage.Worker;
-using ContactRegister.Storage.Worker.Interfaces;
-using ContactRegister.Storage.Worker.Messaging.Consumer;
-using ContactRegister.Storage.Worker.Messaging.Service;
+using ContactRegister.Update.Worker;
+using ContactRegister.Update.Worker.Interfaces;
+using ContactRegister.Update.Worker.Messaging.Consumer;
+using ContactRegister.Update.Worker.Messaging.Service;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 
@@ -20,7 +20,8 @@ builder.Services.AddSingleton<IConnection>(sp =>
     {
         HostName = config.HostName,
         UserName = config.UserName,
-        Password = config.Password
+        Password = config.Password,
+        Port = 5672
     };
 
     return factory.CreateConnectionAsync().GetAwaiter().GetResult();

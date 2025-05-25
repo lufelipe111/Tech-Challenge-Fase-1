@@ -42,7 +42,8 @@ public class ContactRepository : IContactRepository
 
     public async Task DeleteContactAsync(Contact contact)
     {
-        _contacts.Remove(contact); 
+        var contactToDelete = await _contacts.SingleAsync(c => c.Id == contact.Id);
+        _contacts.Remove(contactToDelete); 
         await _context.SaveChangesAsync();
     }
 

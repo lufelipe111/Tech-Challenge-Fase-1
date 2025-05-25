@@ -1,6 +1,6 @@
-using ContactRegister.Storage.Worker.Interfaces;
+using ContactRegister.Update.Worker.Interfaces;
 
-namespace ContactRegister.Storage.Worker;
+namespace ContactRegister.Update.Worker;
 
 public class Worker : BackgroundService
 {
@@ -15,8 +15,8 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("Storage worker running at: {Time}", DateTimeOffset.Now);
+        _logger.LogInformation("Update worker running at: {Time}", DateTimeOffset.Now);
         await _consumer.ConsumeAsync(stoppingToken);
-        _logger.LogInformation("Storage worker stopped at: {Time}", DateTimeOffset.Now);
+        _logger.LogInformation("Update worker stopped at: {Time}", DateTimeOffset.Now);
     }
 }

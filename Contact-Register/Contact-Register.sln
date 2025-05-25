@@ -9,14 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-compose.yml = docker-compose.yml
 		.gitignore = .gitignore
 		..\README.md = ..\README.md
-		Dockerfile.sqlserver = Dockerfile.sqlserver
 		.env = .env
 		prometheus.yml = prometheus.yml
 		contact-register-grafana-dashboard.json = contact-register-grafana-dashboard.json
 		..\.github\workflows\dotnet.yml = ..\.github\workflows\dotnet.yml
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactRegister.Shared", "shared\ContactRegister.Shared\ContactRegister.Shared.csproj", "{684C7F9C-B44B-4293-A7A3-373943D1D802}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contact-Register-Service", "Contact-Register-Service", "{3B581EB1-C95B-4C63-9DDE-D93556FF9925}"
 EndProject
@@ -34,13 +31,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactRegister.Tests", "Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactRegister.Storage.Worker", "Contact-Register-Service\src\ContactRegister.Storage.Worker\ContactRegister.Storage.Worker.csproj", "{18D2A2C4-CDBF-4292-89FA-AB975C10D812}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactRegister.Update.Worker", "Contact-Register-Service\src\ContactRegister.Update.Worker\ContactRegister.Update.Worker.csproj", "{9DA020C7-B756-4175-A577-EA44D2B4D67E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactRegister.Shared", "Contact-Register-Service\shared\ContactRegister.Shared\ContactRegister.Shared.csproj", "{6C7B6038-DE22-432D-B853-B03A8EAC3041}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactRegister.Delete.Worker", "Contact-Register-Service\src\ContactRegister.Delete.Worker\ContactRegister.Delete.Worker.csproj", "{889AC049-38B9-4452-862A-753969990965}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{684C7F9C-B44B-4293-A7A3-373943D1D802} = {C7E4F661-F80D-4698-831B-0532BA4E8077}
 		{96D01227-96A1-497F-94C6-3D267081F47E} = {3B581EB1-C95B-4C63-9DDE-D93556FF9925}
 		{4706B096-2BD4-462B-AAD5-8A015A730FA6} = {96D01227-96A1-497F-94C6-3D267081F47E}
 		{EAC8EAE1-2003-4403-9858-27CFF361FC34} = {96D01227-96A1-497F-94C6-3D267081F47E}
@@ -49,12 +51,11 @@ Global
 		{703622A0-C47B-4686-A6A0-6D731F320914} = {3B581EB1-C95B-4C63-9DDE-D93556FF9925}
 		{DD1979E3-0E2F-4E46-A4EE-8614A3564FD7} = {703622A0-C47B-4686-A6A0-6D731F320914}
 		{18D2A2C4-CDBF-4292-89FA-AB975C10D812} = {96D01227-96A1-497F-94C6-3D267081F47E}
+		{9DA020C7-B756-4175-A577-EA44D2B4D67E} = {96D01227-96A1-497F-94C6-3D267081F47E}
+		{6C7B6038-DE22-432D-B853-B03A8EAC3041} = {C7E4F661-F80D-4698-831B-0532BA4E8077}
+		{889AC049-38B9-4452-862A-753969990965} = {96D01227-96A1-497F-94C6-3D267081F47E}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{684C7F9C-B44B-4293-A7A3-373943D1D802}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{684C7F9C-B44B-4293-A7A3-373943D1D802}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{684C7F9C-B44B-4293-A7A3-373943D1D802}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{684C7F9C-B44B-4293-A7A3-373943D1D802}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4706B096-2BD4-462B-AAD5-8A015A730FA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4706B096-2BD4-462B-AAD5-8A015A730FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4706B096-2BD4-462B-AAD5-8A015A730FA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -79,5 +80,17 @@ Global
 		{18D2A2C4-CDBF-4292-89FA-AB975C10D812}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18D2A2C4-CDBF-4292-89FA-AB975C10D812}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18D2A2C4-CDBF-4292-89FA-AB975C10D812}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DA020C7-B756-4175-A577-EA44D2B4D67E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DA020C7-B756-4175-A577-EA44D2B4D67E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DA020C7-B756-4175-A577-EA44D2B4D67E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DA020C7-B756-4175-A577-EA44D2B4D67E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C7B6038-DE22-432D-B853-B03A8EAC3041}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C7B6038-DE22-432D-B853-B03A8EAC3041}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C7B6038-DE22-432D-B853-B03A8EAC3041}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C7B6038-DE22-432D-B853-B03A8EAC3041}.Release|Any CPU.Build.0 = Release|Any CPU
+		{889AC049-38B9-4452-862A-753969990965}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{889AC049-38B9-4452-862A-753969990965}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{889AC049-38B9-4452-862A-753969990965}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{889AC049-38B9-4452-862A-753969990965}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
