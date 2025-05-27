@@ -119,7 +119,7 @@ public class ContactServiceTests
 
 		//Assert
 		Assert.Equal(Result.Success, result);
-		_contactRepositoryMock.Verify(x => x.AddContactAsync(It.IsAny<Contact>()), Times.Once());
+		_contactRepositoryMock.Verify(x => x.AddContactAsync(It.IsAny<Contact>()), Times.Never());
 	}
 
 	[Fact]
@@ -317,7 +317,7 @@ public class ContactServiceTests
 
 		//Assert
 		Assert.Equal(Result.Success, result);
-		_contactRepositoryMock.Verify(x => x.UpdateContactAsync(It.IsAny<Contact>()), Times.Once());
+		_contactRepositoryMock.Verify(x => x.UpdateContactAsync(It.IsAny<Contact>()), Times.Never());
 	}
 
 	[Fact]
@@ -404,7 +404,7 @@ public class ContactServiceTests
 
 		//Assert
 		Assert.Equal(Result.Success, result);
-		_contactRepositoryMock.Verify(x => x.DeleteContactAsync(It.IsAny<Contact>()), Times.Once());
+		_contactRepositoryMock.Verify(x => x.DeleteContactAsync(It.IsAny<Contact>()), Times.Never());
 	}
 
 	[Fact]

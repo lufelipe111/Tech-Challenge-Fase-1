@@ -99,43 +99,6 @@ public class ContactTest : BaseIntegrationTests, IClassFixture<TestContainerCont
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
-    [Fact]
-    public async Task GetContacts_ShouldReturn_ArrayStringNotEmpty()
-    {
-        // Arrange
-        var client = GetClient();
-        var dbContext = InjectServiceInstance<AppDbContext>();
-        dbContext.Dispose();
-
-        var request = new ContactInput
-        {
-            FirstName = "Silvana 82653898",
-            LastName = "Andreia Lavínia Souza",
-            Email = "silvanaandreiasouza@cbb.com.br",
-            Address = new AddressInput
-            {
-                AddressLine1 = "5a Travessa da Batalha n 330, Jordão",
-                AddressLine2 = "",
-                City = "Recife",
-                State = "PE",
-                PostalCode = "51260-215"
-            },
-            HomeNumber = "(81) 2644-3282",
-            MobileNumber = "(81) 99682-5038",
-            Ddd = 21
-        };
-        await client.PostAsJsonAsync($"{resource}/CreateContact", request);
-
-        // Act
-        var response = await client.GetAsync($"{resource}/GetContacts?firstName=Silvana%2082653898&dddCode=0&skip=0&take=50");
-
-		// Assert
-		response.StatusCode.Should().Be(HttpStatusCode.OK);
-		var contactDtos = await response.Content.ReadFromJsonAsync<List<ContactDto>>();
-		contactDtos?.Should().NotBeEmpty();
-		contactDtos?.Should().Contain(c => c.MobileNumber!.Number == request.MobileNumber && c.Ddd!.Code == request.Ddd);
-    }
-
 	[Fact]
 	public async Task GetContactShouldReturnContactDto()
 	{

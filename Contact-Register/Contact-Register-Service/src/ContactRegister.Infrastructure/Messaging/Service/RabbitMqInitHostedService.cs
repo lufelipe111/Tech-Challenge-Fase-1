@@ -58,7 +58,14 @@ namespace ContactRegister.Infrastructure.Messaging.Service
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            await _connection.CloseAsync(cancellationToken);
+            try
+            {
+                await _connection.CloseAsync(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "{Message}", e.Message);
+            }
             _connection.Dispose();
         }
     }

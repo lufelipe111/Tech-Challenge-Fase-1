@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.MsSql;
+using Testcontainers.RabbitMq;
 using Xunit;
 
 namespace ContactRegister.Tests.IntegrationTests.TestContainers.Factories;
@@ -23,14 +24,27 @@ public class TestContainerContactRegisterFactory : WebApplicationFactory<Program
         .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433))
         .Build();
     
+    private readonly RabbitMqContainer _rabbitMqContainer = new RabbitMqBuilder()
+        .WithImage("rabbitmq:3.12-management") 
+        .WithName("rabbitmq-test")
+        .WithUsername("guest")
+        .WithPassword("guest")
+        .WithPortBinding(5672) 
+        .WithPortBinding(15672) 
+        .Build();
+
+    
     public async Task InitializeAsync()
     {
         await _msSqlContainer.StartAsync();
+        await _rabbitMqContainer.StartAsync();
     }
 
     public new async Task DisposeAsync()
     {
         await _msSqlContainer.StopAsync();
+        await _rabbitMqContainer.StopAsync();
+        await _rabbitMqContainer.DisposeAsync();
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
