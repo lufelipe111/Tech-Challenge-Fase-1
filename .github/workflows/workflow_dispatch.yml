@@ -1,0 +1,28 @@
+name: Run Tests with TestContainers and InMemory
+
+on: workflow_dispatch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install dependencies
+        run: dotnet restore Contact-Register/
+
+      - name: Build project
+        run: dotnet build Contact-Register/ --no-restore --configuration Release
+
+      - name: Run tests with TestContainers
+        run: dotnet test Contact-Register/ --no-build --configuration Release
+        env:
+          DOCKER_HOST: unix:///var/run/docker.sock
+          SA_PASSWORD: "Password123"
