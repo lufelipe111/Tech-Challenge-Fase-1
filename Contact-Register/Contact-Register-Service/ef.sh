@@ -1,0 +1,1 @@
+dotnet ef $1 $2 --project 'src\ContactRegister.Infrastructure\ContactRegister.Infrastructure.csproj' --startup-project 'src\ContactRegister.Api\ContactRegister.Api.csproj' --no-build
