@@ -4,17 +4,17 @@ WORKDIR /app
 
 # Copy the solution and project files
 COPY *.sln .
-COPY Contact-Register-Service/src/ContactRegister.Domain/ ./Contact-Register-Service/src/ContactRegister.Domain/
-COPY Contact-Register-Service/src/ContactRegister.Application/ ./Contact-Register-Service/src/ContactRegister.Application/
-COPY Contact-Register-Service/src/ContactRegister.Infrastructure/ ./Contact-Register-Service/src/ContactRegister.Infrastructure/
-COPY Contact-Register-Service/src/ContactRegister.Api/ ./Contact-Register-Service/src/ContactRegister.Api/
-COPY Contact-Register-Service/shared/ContactRegister.Shared/ ./Contact-Register-Service/shared/ContactRegister.Shared/
+COPY src/ContactRegister.Domain/ ./src/ContactRegister.Domain/
+COPY src/ContactRegister.Application/ ./src/ContactRegister.Application/
+COPY src/ContactRegister.Infrastructure/ ./src/ContactRegister.Infrastructure/
+COPY src/ContactRegister.Api/ ./src/ContactRegister.Api/
+COPY shared/ContactRegister.Shared/ ./shared/ContactRegister.Shared/
 
 # Restore dependencies
-RUN dotnet restore ./Contact-Register-Service/src/ContactRegister.Api/ContactRegister.Api.csproj
+RUN dotnet restore ./src/ContactRegister.Api/ContactRegister.Api.csproj
 
 # Build the application
-WORKDIR /app/Contact-Register-Service/src/ContactRegister.Api
+WORKDIR /app/src/ContactRegister.Api
 RUN dotnet publish ContactRegister.Api.csproj -c Release -o out --no-restore
 
 ## Run migrations

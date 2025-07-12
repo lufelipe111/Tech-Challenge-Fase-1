@@ -10,11 +10,11 @@ namespace ContactRegister.API.Controllers;
 [Route("[controller]")]
 public class ContactController : ControllerBase
 {
-    private readonly IContactService _contactService;
+	private readonly IContactService _contactService;
 
-    public ContactController(IContactService contactService)
-    {
-        _contactService = contactService;
+	public ContactController(IContactService contactService)
+	{
+		_contactService = contactService;
 	}
 
 	/// <summary>
@@ -53,18 +53,18 @@ public class ContactController : ControllerBase
 	/// </response>
 	/// <response code="404">Contato não encontrado</response>
 	[HttpGet("[action]/{id:int}")]
-    public async Task<IActionResult> GetContact([FromRoute] int id)
-    {
+	public async Task<IActionResult> GetContact([FromRoute] int id)
+	{
 
-        var contact = await _contactService.GetContactByIdAsync(id);
+		var contact = await _contactService.GetContactByIdAsync(id);
 
-        if(contact.Value == null)
-        {
-            return NotFound(null);
-        }
+		if (contact.Value == null)
+		{
+			return NotFound(null);
+		}
 
-        return Ok(contact.Value);
-    }
+		return Ok(contact.Value);
+	}
 
 	/// <summary>
 	/// Busca as informações de Contatos a partir de uma lista de DDDs.
@@ -140,16 +140,16 @@ public class ContactController : ControllerBase
 	/// <response code="404">Contato não encontrado</response>
 	/// <response code="400">Erro ao realizar a busca</response>
 	[HttpPost("[action]")]
-    public async Task<IActionResult> GetContactsByDddCodes([FromBody] int[] dddCodes)
-    {
-        var contacts = await _contactService.GetContactsByDdd(dddCodes);
-        
-        return contacts.Match<IActionResult>(
-            c => c.Any() 
-                ? Ok(c) 
-                : NotFound(null)
-            , BadRequest);
-    }
+	public async Task<IActionResult> GetContactsByDddCodes([FromBody] int[] dddCodes)
+	{
+		var contacts = await _contactService.GetContactsByDdd(dddCodes);
+
+		return contacts.Match<IActionResult>(
+				c => c.Any()
+						? Ok(c)
+						: NotFound(null)
+				, BadRequest);
+	}
 
 	/// <summary>
 	/// Busca as informações de Contatos a partir de um filtro informado.
@@ -225,91 +225,91 @@ public class ContactController : ControllerBase
 	/// </response>
 	/// <response code="404">Contato não encontrado</response>
 	[HttpGet("[action]")]
-    public async Task<IActionResult> GetContacts(
-        [FromQuery] string? firstName,
-        [FromQuery] string? lastName,
-        [FromQuery] string? email,
-        [FromQuery] string? city,
-        [FromQuery] string? state,
-        [FromQuery] string? postalCode,
-        [FromQuery] string? addressLine1,
-        [FromQuery] string? addressLine2,
-        [FromQuery] string? homeNumber,
-        [FromQuery] string? mobileNumber,
-        [FromQuery] int dddCode = 0,
-        [FromQuery] int skip = 0,
-        [FromQuery] int take = 50)
-    {
+	public async Task<IActionResult> GetContacts(
+				[FromQuery] string? firstName,
+				[FromQuery] string? lastName,
+				[FromQuery] string? email,
+				[FromQuery] string? city,
+				[FromQuery] string? state,
+				[FromQuery] string? postalCode,
+				[FromQuery] string? addressLine1,
+				[FromQuery] string? addressLine2,
+				[FromQuery] string? homeNumber,
+				[FromQuery] string? mobileNumber,
+				[FromQuery] int dddCode = 0,
+				[FromQuery] int skip = 0,
+				[FromQuery] int take = 50)
+	{
 
-        var contact = await _contactService.GetContactsAsync(
-			dddCode,
-			firstName,
-            lastName,
-            email,
-            city,
-            state,
-            postalCode,
-            addressLine1,
-            addressLine2,
-            homeNumber,
-            mobileNumber);
-        
-        if (contact.Value.IsNullOrEmpty())
-        {
-            return NotFound();
-        }
-        return Ok(contact.Value.Skip(skip).Take(take));
-    }
+		var contact = await _contactService.GetContactsAsync(
+	dddCode,
+	firstName,
+				lastName,
+				email,
+				city,
+				state,
+				postalCode,
+				addressLine1,
+				addressLine2,
+				homeNumber,
+				mobileNumber);
 
-    /// <summary>
-    /// Cria um novo contato.
-    /// </summary>
-    /// <response code="201">Criado com sucesso</response>
-    /// <response code="400">
-    /// Exemplo de erro ao criar um contato:
-    /// 
-    ///     POST /Contact/UpdateContact
-    ///     [
-    ///       {
-    ///         "code": "Ddd.ExternalApi",
-    ///         "description": "DDD não encontrado",
-    ///         "type": 0,
-    ///         "numericType": 0,
-    ///         "metadata": null
-    ///       }
-    ///     ]
-    /// </response>
-    [HttpPost("[action]")]
-    public async Task<IActionResult> CreateContact([FromBody] ContactInput contact)
-    {
-        var result = await _contactService.AddContactAsync(contact);
+		if (contact.Value.IsNullOrEmpty())
+		{
+			return NotFound();
+		}
+		return Ok(contact.Value.Skip(skip).Take(take));
+	}
 
-        if (result.IsError)
-            return BadRequest(result.Errors);
+	/// <summary>
+	/// Cria um novo contato.
+	/// </summary>
+	/// <response code="201">Criado com sucesso</response>
+	/// <response code="400">
+	/// Exemplo de erro ao criar um contato:
+	/// 
+	///     POST /Contact/UpdateContact
+	///     [
+	///       {
+	///         "code": "Ddd.ExternalApi",
+	///         "description": "DDD não encontrado",
+	///         "type": 0,
+	///         "numericType": 0,
+	///         "metadata": null
+	///       }
+	///     ]
+	/// </response>
+	[HttpPost("[action]")]
+	public async Task<IActionResult> CreateContact([FromBody] ContactInput contact)
+	{
+		var result = await _contactService.AddContactAsync(contact);
+
+		if (result.IsError)
+			return BadRequest(result.Errors);
 
 		return Created(HttpContext.Request.GetDisplayUrl(), new { Id = Guid.NewGuid() });
-    }
+	}
 
-    /// <summary>
-    /// Atualiza um Contato a partir do seu ID único informado.
-    /// </summary>
-    /// <param name="id">Identificador único (ID) do contato a ser excluído.</param>
-    /// <response code="204">Atualização realizada com sucesso</response>
-    /// <response code="400">
-    /// Exemplo de erro ao atualizar o contato:
-    /// 
-    ///     PUT /Contact/UpdateContact/{id}
-    ///     [
-    ///       {
-    ///         "code": "Ddd.ExternalApi",
-    ///         "description": "DDD não encontrado",
-    ///         "type": 0,
-    ///         "numericType": 0,
-    ///         "metadata": null
-    ///       }
-    ///     ]
-    /// </response>
-    [HttpPut("[action]/{id:int}")]
+	/// <summary>
+	/// Atualiza um Contato a partir do seu ID único informado.
+	/// </summary>
+	/// <param name="id">Identificador único (ID) do contato a ser excluído.</param>
+	/// <response code="204">Atualização realizada com sucesso</response>
+	/// <response code="400">
+	/// Exemplo de erro ao atualizar o contato:
+	/// 
+	///     PUT /Contact/UpdateContact/{id}
+	///     [
+	///       {
+	///         "code": "Ddd.ExternalApi",
+	///         "description": "DDD não encontrado",
+	///         "type": 0,
+	///         "numericType": 0,
+	///         "metadata": null
+	///       }
+	///     ]
+	/// </response>
+	[HttpPut("[action]/{id:int}")]
 	public async Task<IActionResult> UpdateContact([FromRoute] int id, [FromBody] ContactInput contact)
 	{
 		var result = await _contactService.UpdateContactAsync(id, contact);
@@ -341,19 +341,22 @@ public class ContactController : ControllerBase
 	///		]
 	/// </response>
 	[HttpDelete("[action]/{id:int}")]
-    public async Task<IActionResult> DeleteContact([FromRoute] int id)
-    {
-        var result = await _contactService.DeleteContactAsync(id);
+	public async Task<IActionResult> DeleteContact([FromRoute] int id)
+	{
+		var result = await _contactService.DeleteContactAsync(id);
 
-        if (result.IsError)
-            return BadRequest(result.Errors);
+		if (result.IsError)
+			return BadRequest(result.Errors);
 
-        return NoContent();
-    }
+		return NoContent();
+	}
 
 	[HttpGet("[action]")]
 	public async Task<IActionResult> TestException()
 	{
+		var chance = new Random().Next(0, 100);
+		if (chance <= 50)
+			return Ok("No exception thrown");
 		throw new Exception("TestException");
 	}
 }

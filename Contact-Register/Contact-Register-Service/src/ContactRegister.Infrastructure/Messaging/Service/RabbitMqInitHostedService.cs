@@ -13,7 +13,7 @@ namespace ContactRegister.Infrastructure.Messaging.Service
         private IConnection _connection;
 
         public RabbitMqInitHostedService(
-            ILogger<RabbitMqInitHostedService> logger, 
+            ILogger<RabbitMqInitHostedService> logger,
             IOptions<RabbitMqConfiguration> config)
         {
             _logger = logger;
@@ -22,37 +22,30 @@ namespace ContactRegister.Infrastructure.Messaging.Service
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            try
+            _logger.LogInformation("RabbitMQ Service is starting. Connecting to Host: {HostName}", _config.Value.HostName);
+            var factory = new ConnectionFactory
             {
-                _logger.LogInformation("Connecting on RabbitMQ: {HostName}", _config.Value.HostName);
-                var factory = new ConnectionFactory
-                {
-                    HostName = _config.Value.HostName,
-                    UserName = _config.Value.UserName,
-                    Password = _config.Value.Password
-                };
+                HostName = _config.Value.HostName,
+                UserName = _config.Value.UserName,
+                Password = _config.Value.Password
+            };
 
-                _connection = await factory.CreateConnectionAsync(cancellationToken);
+            _connection = await factory.CreateConnectionAsync(cancellationToken);
 
-                await using var channel = await _connection.CreateChannelAsync(cancellationToken: cancellationToken);
-                _logger.LogInformation("Connected to RabbitMQ");
-            
-                if (!string.IsNullOrEmpty(_config.Value.ExchangeName))
-                {
-                    await channel.ExchangeDeclareAsync(
-                        exchange: _config.Value.ExchangeName,
-                        type: _config.Value.ExchangeType,
-                        durable: _config.Value.Durable,
-                        autoDelete: _config.Value.AutoDelete,
-                        arguments: null,
-                        cancellationToken: cancellationToken
-                    );
-                    _logger.LogInformation("Exchange created: {ExchangeName} - {ExchangeType}", _config.Value.ExchangeName, _config.Value.ExchangeType);
-                }
-            }
-            catch (Exception e)
+            await using var channel = await _connection.CreateChannelAsync(cancellationToken: cancellationToken);
+            _logger.LogInformation("Connected to RabbitMQ");
+
+            if (!string.IsNullOrEmpty(_config.Value.ExchangeName))
             {
-                Console.WriteLine(e);
+                await channel.ExchangeDeclareAsync(
+                    exchange: _config.Value.ExchangeName,
+                    type: _config.Value.ExchangeType,
+                    durable: _config.Value.Durable,
+                    autoDelete: _config.Value.AutoDelete,
+                    arguments: null,
+                    cancellationToken: cancellationToken
+                );
+                _logger.LogInformation("Exchange created: {ExchangeName} - {ExchangeType}", _config.Value.ExchangeName, _config.Value.ExchangeType);
             }
         }
 

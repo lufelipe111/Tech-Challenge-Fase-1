@@ -11,43 +11,43 @@ public class RabbitMqInitHostedService : IHostedService
     private IConnection _connection;
 
     public RabbitMqInitHostedService(
-        ILogger<RabbitMqInitHostedService> logger, 
+        ILogger<RabbitMqInitHostedService> logger,
         IOptions<RabbitMqConfiguration> rabbitMqConfiguration)
     {
         _logger = logger;
         _config = rabbitMqConfiguration.Value;
     }
-    
+
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("RabbitMQ Service is starting.");
-        
+        _logger.LogInformation("RabbitMQ Service is starting. Connecting to Host: {HostName}", _config.HostName);
+
         var connectionFactory = new ConnectionFactory
         {
             HostName = _config.HostName,
             UserName = _config.UserName,
             Password = _config.Password
         };
-        
+
         _connection = await connectionFactory.CreateConnectionAsync(cancellationToken);
-        
+
         await using var channel = await _connection.CreateChannelAsync(cancellationToken: cancellationToken);
         if (!string.IsNullOrEmpty(_config.QueueName))
         {
             await channel.QueueDeclareAsync(
-                _config.QueueName, 
-                _config.Durable, 
-                _config.Exclusive, 
+                _config.QueueName,
+                _config.Durable,
+                _config.Exclusive,
                 _config.AutoDelete,
                 cancellationToken: cancellationToken);
-            
+
             await channel.QueueBindAsync(
-                _config.QueueName, 
-                _config.ExchangeName, 
-                _config.RoutingKey, 
+                _config.QueueName,
+                _config.ExchangeName,
+                _config.RoutingKey,
                 cancellationToken: cancellationToken);
         }
-        
+
         await channel.CloseAsync(cancellationToken);
     }
 

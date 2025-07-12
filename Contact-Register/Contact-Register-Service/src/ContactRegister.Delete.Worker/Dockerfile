@@ -3,12 +3,12 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 # Copy the solution and project files
-COPY *.sln .
-COPY Contact-Register-Service/src/ContactRegister.Delete.Worker/ ./Contact-Register-Service/src/ContactRegister.Delete.Worker/
-COPY Contact-Register-Service/src/ContactRegister.Application/ ./Contact-Register-Service/src/ContactRegister.Application/
-COPY Contact-Register-Service/src/ContactRegister.Domain/ ./Contact-Register-Service/src/ContactRegister.Domain/
-COPY Contact-Register-Service/src/ContactRegister.Infrastructure/ ./Contact-Register-Service/src/ContactRegister.Infrastructure/
-COPY Contact-Register-Service/shared/ContactRegister.Shared/ ./Contact-Register-Service/shared/ContactRegister.Shared/
+COPY Contact-Register/*.sln .
+COPY Contact-Register/Contact-Register-Service/src/ContactRegister.Delete.Worker/ ./Contact-Register-Service/src/ContactRegister.Delete.Worker/
+COPY Contact-Register/Contact-Register-Service/src/ContactRegister.Application/ ./Contact-Register-Service/src/ContactRegister.Application/
+COPY Contact-Register/Contact-Register-Service/src/ContactRegister.Domain/ ./Contact-Register-Service/src/ContactRegister.Domain/
+COPY Contact-Register/Contact-Register-Service/src/ContactRegister.Infrastructure/ ./Contact-Register-Service/src/ContactRegister.Infrastructure/
+COPY Contact-Register/Contact-Register-Service/shared/ContactRegister.Shared/ ./Contact-Register-Service/shared/ContactRegister.Shared/
 
 # Restore dependencies
 RUN dotnet restore ./Contact-Register-Service/src/ContactRegister.Delete.Worker/ContactRegister.Delete.Worker.csproj
@@ -27,7 +27,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
 # Copy the published application from the build stage
-COPY --from=build /app/src/ContactRegister.Delete.Worker/out ./
+COPY --from=build /app/Contact-Register-Service/src/ContactRegister.Delete.Worker/out ./
 
 # Environment variables
 ENV ASPNETCORE_HTTP_PORTS=80

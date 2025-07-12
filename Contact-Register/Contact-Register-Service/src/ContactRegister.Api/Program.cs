@@ -27,6 +27,7 @@ namespace ContactRegister.Api
 
             builder.Services.AddMetrics();
             builder.Services.UseHttpClientMetrics();
+            builder.Services.AddHealthChecks();
 
 
             var app = builder.Build();
@@ -48,8 +49,7 @@ namespace ContactRegister.Api
 
             app.MapControllers();
             app.MapMetrics();
-
-            app.UseHttpsRedirection();
+            app.MapHealthChecks("/health");
 
             app.Run();
         }
