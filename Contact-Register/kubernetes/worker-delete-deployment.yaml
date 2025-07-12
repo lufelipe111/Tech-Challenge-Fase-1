@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker-delete-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker-delete
+  template:
+    metadata:
+      labels:
+        app: worker-delete
+    spec:
+      initContainers:
+        - name: wait-for-api
+          image: busybox:1.28
+          command:
+            [
+              "sh",
+              "-c",
+              "until wget -q -T1 -O- http://api-service:8080/health; do echo waiting for api-service; sleep 2; done;",
+            ]
+      containers:
+        - name: worker-delete
+          image: contact-register-worker-delete
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8083
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "prod"
+            - name: ConnectionStrings__DefaultConnection
+              value: "Server=mssql-service;User Id=sa;Password=$(MSSQL_SA_PASSWORD);TrustServerCertificate=True;"
+            - name: ASPNETCORE_HTTP_PORTS
+              value: "8083"
+            - name: DOTNET_METRICS_EXPORTER
+              value: "prometheus"
+            - name: RabbitMq__HostName
+              value: "rabbitmq-service"
+          envFrom:
+            - secretRef:
+                name: mssql-secret
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "0.4"
+            requests:
+              memory: 256Mi
+              cpu: "0.2"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: worker-delete-service
+spec:
+  selector:
+    app: worker-delete
+  ports:
+    - protocol: TCP
+      port: 8083
+      targetPort: 8083

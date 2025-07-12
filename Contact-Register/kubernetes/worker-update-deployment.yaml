@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker-update-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker-update
+  template:
+    metadata:
+      labels:
+        app: worker-update
+    spec:
+      initContainers:
+        - name: wait-for-api
+          image: busybox:1.28
+          command:
+            [
+              "sh",
+              "-c",
+              "until wget -q -T1 -O- http://api-service:8080/health; do echo waiting for api-service; sleep 2; done;",
+            ]
+      containers:
+        - name: worker-update
+          image: contact-register-worker-update
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8082
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "prod"
+            - name: ConnectionStrings__DefaultConnection
+              value: "Server=mssql-service;User Id=sa;Password=$(MSSQL_SA_PASSWORD);TrustServerCertificate=True;"
+            - name: ASPNETCORE_HTTP_PORTS
+              value: "8082"
+            - name: DOTNET_METRICS_EXPORTER
+              value: "prometheus"
+            - name: RabbitMq__HostName
+              value: "rabbitmq-service"
+          envFrom:
+            - secretRef:
+                name: mssql-secret
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "0.4"
+            requests:
+              memory: 256Mi
+              cpu: "0.2"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: worker-update-service
+spec:
+  selector:
+    app: worker-update
+  ports:
+    - protocol: TCP
+      port: 8082
+      targetPort: 8082
