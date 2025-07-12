@@ -6,3 +6,4 @@ scrape_configs:
     metrics_path: '/metrics'
     static_configs:
       - targets: ['contact-register-api-1:8080']
+      - targets: ['contact-register-rabbitmq-1:15692']

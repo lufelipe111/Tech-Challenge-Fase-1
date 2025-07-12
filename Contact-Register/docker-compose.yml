@@ -60,6 +60,25 @@ services:
       - ConnectionStrings__DefaultConnection=Server=sqlserver;User Id=sa;Password=Password123;TrustServerCertificate=True;
       - ASPNETCORE_HTTP_PORTS=${WORKER_UPDATE_INTERNAL_PORT:-8082}
       - DOTNET_METRICS_EXPORTER=prometheus
+        
+  worker-delete:
+    build:
+      context: .
+      dockerfile: Contact-Register-Service/src/ContactRegister.Delete.Worker/Dockerfile
+    ports:
+      - '${WORKER_DELETE_PORT:-8083}:${WORKER_DELETE_INTERNAL_PORT:-8083}'
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      sqlserver:
+        condition: service_started
+      api:
+        condition: service_started
+    environment:
+      - ASPNETCORE_ENVIRONMENT=prod
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;User Id=sa;Password=Password123;TrustServerCertificate=True;
+      - ASPNETCORE_HTTP_PORTS=${WORKER_UPDATE_INTERNAL_PORT:-8083}
+      - DOTNET_METRICS_EXPORTER=prometheus
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-CU17-ubuntu-22.04
@@ -88,6 +107,7 @@ services:
       - "${PROMETHEUS_PORT:-9090}:9090"
     depends_on:
       - api
+      - rabbitmq
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9090/-/healthy"]
       interval: 30s
@@ -115,6 +135,7 @@ services:
     ports:
       - "${RABBIT_PORT:-5672}:5672" 
       - "${RABBIT_MANAGEMENT_PORT:-15672}:15672"
+      - "${RABBIT_PROMETHEUS_PORT:-15692}:15692"
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
