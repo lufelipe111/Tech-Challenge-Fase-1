@@ -17,11 +17,6 @@ RUN dotnet restore ./src/ContactRegister.Api/ContactRegister.Api.csproj
 WORKDIR /app/src/ContactRegister.Api
 RUN dotnet publish ContactRegister.Api.csproj -c Release -o out --no-restore
 
-## Run migrations
-# RUN dotnet tool install --version 8 --global dotnet-ef
-# ENV PATH="$PATH:/root/.dotnet/tools"
-# ENTRYPOINT dotnet-ef database update
-
 # Stage 2: Create the runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app

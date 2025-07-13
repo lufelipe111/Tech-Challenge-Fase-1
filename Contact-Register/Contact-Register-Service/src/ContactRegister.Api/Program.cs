@@ -32,9 +32,10 @@ namespace ContactRegister.Api
 
             var app = builder.Build();
 
-            if (app.Environment.IsEnvironment("Testing"))
+            // Apply migrations on startup
+            using (var scope = app.Services.CreateScope())
             {
-                var dbContext = app.Services.GetRequiredService<AppDbContext>();
+                var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 dbContext.Database.Migrate();
             }
 

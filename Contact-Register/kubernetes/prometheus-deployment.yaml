@@ -20,6 +20,8 @@ spec:
           volumeMounts:
             - name: prometheus-config
               mountPath: /etc/prometheus
+            - name: prometheus-storage
+              mountPath: /prometheus
           resources:
             limits:
               memory: 1Gi
@@ -31,6 +33,9 @@ spec:
         - name: prometheus-config
           configMap:
             name: prometheus-config
+        - name: prometheus-storage
+          persistentVolumeClaim:
+            claimName: prometheus-pvc
 ---
 apiVersion: v1
 kind: Service
