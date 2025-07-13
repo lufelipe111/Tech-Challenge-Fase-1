@@ -20,15 +20,15 @@ public static class DependencyInjection
         services.AddDatabase(configuration);
         services.AddRepositories();
         services.AddMessaging(configuration);
-        
+
         return services;
     }
-    
+
     public static IServiceCollection AddConsumerInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingletonDatabase(configuration);
         services.AddSingletonRepositories();
-        
+
         return services;
     }
 
@@ -36,15 +36,15 @@ public static class DependencyInjection
     {
         services.AddScoped<IDddRepository, DddRepository>();
         services.AddScoped<IContactRepository, ContactRepository>();
-        
+
         return services;
     }
-    
+
     private static IServiceCollection AddSingletonRepositories(this IServiceCollection services)
     {
         services.AddSingleton<IDddRepository, DddRepository>();
         services.AddSingleton<IContactRepository, ContactRepository>();
-        
+
         return services;
     }
 
@@ -52,18 +52,18 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection")
             ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-        
+
         services.AddDbContextFactory<AppDbContext>(opt =>
         {
             opt.UseSqlServer(connectionString);
         });
     }
-    
+
     private static void AddSingletonDatabase(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection")
                                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-        
+
         services.AddDbContext<AppDbContext>(opt =>
         {
             opt.UseSqlServer(connectionString);
@@ -83,6 +83,7 @@ public static class DependencyInjection
                 var factory = new ConnectionFactory
                 {
                     HostName = config.HostName,
+                    Port = config.Port,
                     UserName = config.UserName,
                     Password = config.Password
                 };

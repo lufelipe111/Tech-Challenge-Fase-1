@@ -28,6 +28,7 @@ namespace ContactRegister.Tests.IntegrationTests.InMemory.Setup
                 using var provider = services.BuildServiceProvider();
 
                 var dbContext = provider.GetService<AppDbContext>();
+                dbContext!.Database.EnsureDeleted();
                 dbContext!.Database.Migrate();
             });
         }

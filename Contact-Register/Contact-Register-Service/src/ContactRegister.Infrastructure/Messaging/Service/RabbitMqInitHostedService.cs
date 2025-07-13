@@ -26,6 +26,7 @@ namespace ContactRegister.Infrastructure.Messaging.Service
             var factory = new ConnectionFactory
             {
                 HostName = _config.Value.HostName,
+                Port = _config.Value.Port,
                 UserName = _config.Value.UserName,
                 Password = _config.Value.Password
             };

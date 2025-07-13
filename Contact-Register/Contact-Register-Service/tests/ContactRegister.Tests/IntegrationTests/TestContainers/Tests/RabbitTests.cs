@@ -1,14 +1,11 @@
-using System.Net;
-using System.Net.Http.Json;
 using System.Text;
-using ContactRegister.Application.DTOs;
-using ContactRegister.Application.Inputs;
-using ContactRegister.Infrastructure.Persistence;
+using System.Threading;
+using System.Threading.Tasks;
+using ContactRegister.Infrastructure.Messaging.Configuration;
 using ContactRegister.Tests.IntegrationTests.Common;
 using ContactRegister.Tests.IntegrationTests.TestContainers.Factories;
-using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Xunit;
@@ -17,59 +14,55 @@ namespace ContactRegister.Tests.IntegrationTests.TestContainers.Tests;
 
 public class RabbitTest : BaseIntegrationTests, IClassFixture<TestContainerContactRegisterFactory>
 {
-    public RabbitTest(TestContainerContactRegisterFactory factory) : base(factory)
-    {
-        var context = factory.Services.GetRequiredService<AppDbContext>();
-        if (context.Database.GetPendingMigrations().Any())
-            context.Database.Migrate();
-    }
+	private readonly TestContainerContactRegisterFactory _factory;
 
-    [Fact(Timeout = 600_000)] // 10 seconds timeout for the test itself
-    public async Task Should_Publish_And_Consume_Message()
-    {
-	    var factory = new ConnectionFactory
-	    {
-		    HostName = "localhost",
-		    Port = 5672,
-		    UserName = "guest",
-		    Password = "guest"
-	    };
+	public RabbitTest(TestContainerContactRegisterFactory factory) : base(factory)
+	{
+		_factory = factory;
+	}
 
-	    const string queueName = "test-queue";
-	    const string message = "Hello RabbitMQ!";
-	    string? receivedMessage = null;
+	[Fact]
+	public async Task Should_Publish_And_Consume_Message()
+	{
+		var rabbitMqConfig = _factory.Services.GetRequiredService<IOptions<RabbitMqConfiguration>>().Value;
+		var factory = new ConnectionFactory
+		{
+			HostName = rabbitMqConfig.HostName,
+			Port = rabbitMqConfig.Port,
+			UserName = rabbitMqConfig.UserName,
+			Password = rabbitMqConfig.Password
+		};
 
-	    using var connection = await factory.CreateConnectionAsync();
-	    using var channel = await connection.CreateChannelAsync();
+		const string queueName = "test-queue";
+		const string message = "Hello RabbitMQ!";
 
-	    await channel.QueueDeclareAsync(queue: queueName, durable: false, exclusive: false, autoDelete: false);
+		using var connection = await factory.CreateConnectionAsync();
+		using var channel = await connection.CreateChannelAsync();
 
-	    var body = Encoding.UTF8.GetBytes(message);
-	    await channel.BasicPublishAsync(exchange: "", routingKey: queueName, body: body);
+		await channel.QueueDeclareAsync(queue: queueName, durable: false, exclusive: false, autoDelete: false);
 
-	    var consumer = new AsyncEventingBasicConsumer(channel);
-	    var tcs = new TaskCompletionSource<string>();
+		var consumer = new AsyncEventingBasicConsumer(channel);
+		var autoResetEvent = new AutoResetEvent(false);
+		string receivedMessage = null;
 
-	    consumer.ReceivedAsync += async (_, ea) =>
-	    {
-		    receivedMessage = Encoding.UTF8.GetString(ea.Body.ToArray());
-		    tcs.TrySetResult(receivedMessage);
-	    };
+		consumer.ReceivedAsync += async (model, ea) =>
+		{
+			receivedMessage = Encoding.UTF8.GetString(ea.Body.ToArray());
+			autoResetEvent.Set();
+		};
 
-	    await channel.BasicConsumeAsync(queue: queueName, autoAck: true, consumer: consumer);
+		await channel.BasicConsumeAsync(queue: queueName, autoAck: true, consumer: consumer);
 
-	    using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-	    using (cts.Token.Register(() => tcs.TrySetCanceled()))
-	    {
-		    try
-		    {
-			    var result = await tcs.Task;
-			    Assert.Equal(message, result);
-		    }
-		    catch (TaskCanceledException)
-		    {
-			    Assert.False(true, "Timed out waiting for message.");
-		    }
-	    }
-    }
+		var body = Encoding.UTF8.GetBytes(message);
+		await channel.BasicPublishAsync(exchange: "", routingKey: queueName, body: body);
+
+		var timedOut = !autoResetEvent.WaitOne(TimeSpan.FromSeconds(30));
+
+		if (timedOut)
+		{
+			Assert.Fail("Timed out waiting for message.");
+		}
+
+		Assert.Equal(message, receivedMessage);
+	}
 }
