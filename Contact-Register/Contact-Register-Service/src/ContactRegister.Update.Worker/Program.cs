@@ -12,7 +12,7 @@ builder.Services.Configure<RabbitMqConfiguration>(builder.Configuration.GetSecti
 
 builder.Services.AddLogging();
 builder.Services.AddConsumerInfrastructure(builder.Configuration);
-builder.Services.AddSingleton<IConsumer, RabbitMqConsumer>();
+builder.Services.AddScoped<IConsumer, RabbitMqConsumer>();
 builder.Services.AddSingleton<IConnection>(sp =>
 {
     var config = sp.GetRequiredService<IOptions<RabbitMqConfiguration>>().Value;

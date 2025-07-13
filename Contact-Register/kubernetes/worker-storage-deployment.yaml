@@ -23,7 +23,7 @@ spec:
             ]
       containers:
         - name: worker-storage
-          image: contact-register-worker-storage
+          image: worker-storage
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8081

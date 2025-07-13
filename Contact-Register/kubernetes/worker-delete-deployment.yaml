@@ -23,7 +23,7 @@ spec:
             ]
       containers:
         - name: worker-delete
-          image: contact-register-worker-delete
+          image: worker-delete
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8083

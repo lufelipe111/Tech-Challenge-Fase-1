@@ -15,21 +15,21 @@ public class RabbitMqConsumer : IConsumer, IAsyncDisposable
     private readonly ILogger<RabbitMqConsumer> _logger;
     private readonly IConnection _connection;
     private readonly RabbitMqConfiguration _config;
-    private readonly IContactRepository _contactRepository;
-    
+    private readonly IServiceProvider _serviceProvider;
+
     private bool _disposed;
     private IChannel? _channel;
     private string? _consumerTag;
-    
+
     public RabbitMqConsumer(
-        ILogger<RabbitMqConsumer> logger, 
-        IConnection connection, 
-        IOptions<RabbitMqConfiguration> rabbitMqConfiguration, 
-        IContactRepository contactRepository)
+        ILogger<RabbitMqConsumer> logger,
+        IConnection connection,
+        IOptions<RabbitMqConfiguration> rabbitMqConfiguration,
+        IServiceProvider serviceProvider)
     {
         _logger = logger;
         _connection = connection ?? throw new ArgumentNullException(nameof(connection));
-        _contactRepository = contactRepository;
+        _serviceProvider = serviceProvider;
         _config = rabbitMqConfiguration.Value ?? throw new ArgumentNullException(nameof(rabbitMqConfiguration));
     }
 
@@ -52,7 +52,11 @@ public class RabbitMqConsumer : IConsumer, IAsyncDisposable
                 _logger.LogInformation("[x] Update message received: {Message}", message);
                 var contact = JsonSerializer.Deserialize<Contact>(message);
                 if (contact != null)
-                    await _contactRepository.UpdateContactAsync(contact);
+                {
+                    using var scope = _serviceProvider.CreateScope();
+                    var contactRepository = scope.ServiceProvider.GetRequiredService<IContactRepository>();
+                    await contactRepository.UpdateContactAsync(contact);
+                }
                 
                 await _channel.BasicAckAsync(ea.DeliveryTag, false, cancellationToken);
             }

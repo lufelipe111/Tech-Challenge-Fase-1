@@ -23,7 +23,7 @@ spec:
             ]
       containers:
         - name: worker-update
-          image: contact-register-worker-update
+          image: worker-update
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8082
